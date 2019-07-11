@@ -305,7 +305,11 @@ public class Battle extends Application {
 			restart(primaryStage);
 		});
 		
-		
+		pause.setOnAction(e -> {
+			
+			finalResultDisplay("Game Paused. Please Close click on Ok to Conitnue");
+			
+		});
 		
 		
 		primaryStage.show();
