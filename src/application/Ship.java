@@ -1,9 +1,11 @@
 package application;
 
 import javafx.scene.Parent;
-
+import application.Board.Cell;
 public class Ship extends Parent {
 	
+	
+	ArrayList<Cell> shotCellsOfShips = new ArrayList<Cell>();
 	
     public int type;
     public boolean direction = true;

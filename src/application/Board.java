@@ -260,11 +260,17 @@ public class Board extends Parent {
 
 
 				ship.shipPartHit();
+				ship.shotCellsOfShips.add(this);
 				setFill(new ImagePattern(hitFile));
 
 
 				if (!ship.shipIsAlive()) {
-					board.amountOfships--;
+					for (Cell c : ship.shotCellsOfShips) {
+						
+                		c.setFill(Color.RED);
+					}
+                    board.amountOfships--;
+                    ship.shotCellsOfShips.clear();
 				}
 				return true;
 			}

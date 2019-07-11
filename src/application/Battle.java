@@ -127,7 +127,15 @@ public class Battle extends Application {
 				opponentTurn = !cell.shoot();
 
 				if (opponentBoard.amountOfships == 0) {
-					ShowResult(personStage, "YOU WIN :) ");
+					
+					Alert playerWin = new Alert(AlertType.INFORMATION);
+					playerWin.setTitle("ALERT");
+					playerWin.setHeaderText("WINNER ANNOUCEMENT");
+					String s ="You Won This Game";
+					playerWin.setContentText(s);
+					playerWin.show();
+
+					//ShowResult(personStage, "YOU WIN :) ");
 					// System.out.println("YOU WIN");
 					// System.exit(0);
 				}
@@ -211,7 +219,15 @@ public class Battle extends Application {
 			opponentTurn = cell.shoot();
 
 			if (firstPlayerBoard.amountOfships == 0) {
-				ShowResult(personStage, "YOU LOSE :( ");
+
+				Alert opponentWin = new Alert(AlertType.INFORMATION);
+				opponentWin.setTitle("ALERT");
+				opponentWin.setHeaderText("WINNER ANNOUCEMENT");
+				String s ="You Lost This Game to the Computer";
+				opponentWin.setContentText(s);
+				opponentWin.show();
+
+				// ShowResult(personStage, "YOU LOSE :( ");
 				
 			}
 		}
