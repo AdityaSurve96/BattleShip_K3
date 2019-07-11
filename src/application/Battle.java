@@ -130,12 +130,9 @@ public class Battle extends Application {
 
 				if (opponentBoard.amountOfships == 0) {
 					
-					Alert playerWin = new Alert(AlertType.INFORMATION);
-					playerWin.setTitle("ALERT");
-					playerWin.setHeaderText("WINNER ANNOUCEMENT");
 					String s ="You Won This Game";
-					playerWin.setContentText(s);
-					playerWin.show();
+					
+					finalResultDisplay(s);
 
 					//ShowResult(personStage, "YOU WIN :) ");
 					// System.out.println("YOU WIN");
@@ -222,17 +219,23 @@ public class Battle extends Application {
 
 			if (firstPlayerBoard.amountOfships == 0) {
 
-				Alert opponentWin = new Alert(AlertType.INFORMATION);
-				opponentWin.setTitle("ALERT");
-				opponentWin.setHeaderText("WINNER ANNOUCEMENT");
 				String s ="You Lost This Game to the Computer";
-				opponentWin.setContentText(s);
-				opponentWin.show();
+				finalResultDisplay(s);
 
 				// ShowResult(personStage, "YOU LOSE :( ");
 				
 			}
 		}
+	}
+
+	private void finalResultDisplay(String s) {
+		// TODO Auto-generated method stub
+		Alert opponentWin = new Alert(AlertType.INFORMATION);
+		opponentWin.setTitle("ALERT");
+		opponentWin.setHeaderText("WINNER ANNOUCEMENT");
+		
+		opponentWin.setContentText(s);
+		opponentWin.show();
 	}
 
 	/**
