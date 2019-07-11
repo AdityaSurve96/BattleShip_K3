@@ -9,8 +9,7 @@ import application.Board.Cell;
 /**
  * 
  * This is a POJO class which will help us build the ship Object that needs to be placed on the Board.
- * @author K3
- *
+
  */
 public class Ship extends Parent {
 	
@@ -48,7 +47,7 @@ public class Ship extends Parent {
 
     /**
      * This Method will help to check if the ship is still Alive or not.
-     * @return true or false depending upon the if it is alive or not
+     * @return true or false and destroyed percentage 
      */
     public boolean shipIsAlive() {
         return percentageDestroyed > 0;
