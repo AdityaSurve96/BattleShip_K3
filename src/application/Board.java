@@ -16,6 +16,11 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 
+/**
+ * Class where the Board is being Created and all the Cells are Placed.
+ * @author K3
+ *
+ */
 
 public class Board extends Parent {
 
@@ -28,6 +33,7 @@ public class Board extends Parent {
 	public int amountOfships = 5;
 
 	/**
+	 * This Constructor will help 
 	 * 
 	 * @param opponent
 	 * @param EventHandler
@@ -54,7 +60,7 @@ public class Board extends Parent {
 	}
 
 	/**
-	 * 
+	 * Method that help to Position the Ship
 	 * @param ship
 	 * @param x
 	 * @param y
@@ -103,7 +109,7 @@ public class Board extends Parent {
 	}
 
 	/**
-	 * 
+	 * This will get the Cell Object for a particular Coordinate
 	 * @param x
 	 * @param y
 	 * @return
@@ -115,7 +121,13 @@ public class Board extends Parent {
 	}
 
 
-
+	/**
+	 * This method will take the neighbors and checks for validity. 
+	 * 
+	 * @param x
+	 * @param y
+	 * @return
+	 */
 	private Cell[] checkAndGetNeighbors(int x, int y) {
 
 		Point2D[] points = new Point2D[] {
@@ -190,7 +202,7 @@ public class Board extends Parent {
 	}
 
 	/**
-	 * 
+	 * Same method OverLoading Technique used as the parameters is a point Object
 	 * @param point takes x and y coordinate of the ship together as a 2D point and checks their placement validity i.e if they are properly placed within the grid,two ships coordinates do not interfere etc.
 	 * @return
 	 */
@@ -199,7 +211,7 @@ public class Board extends Parent {
 	}
 
 	/**
-	 * 
+	 * Method that will help to validate the Point if it is in the Board
 	 * @param x X coordinate of ship
 	 * @param y Y coordinate of ship
 	 * @return
@@ -238,8 +250,8 @@ public class Board extends Parent {
 		}
 
 		/**
-		 * 
-		 * @return
+		 * This will help to check if the Shot was on target or not 
+		 * @return boolean
 		 */
 		public boolean shoot() {
 			File hitRate = new File(".");

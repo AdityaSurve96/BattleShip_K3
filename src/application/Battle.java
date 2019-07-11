@@ -13,7 +13,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
-import javafx.scene.control.SplitPane;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
@@ -29,10 +28,16 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 //Initialize Variables.
+/**
+ * 
+ * This is the Main Class which will help us to play the game . Method which will startGame , Create Boards
+ * and Many More
+ * @author K3
+ *
+ */
 
 public class Battle extends Application {
 
@@ -53,7 +58,10 @@ public class Battle extends Application {
 	private Button pause = new Button("PAUSE");
 	
 	private Button load = new Button("LOAD");
+	
+	
 
+	
 	/**
 	 * Adding styles and layout to the output screen i.e titles ,grid layout,mouse effects etc.
 	 * @param personStage
@@ -203,7 +211,7 @@ public class Battle extends Application {
 	}
 
 	/**
-	 * 
+	 * This method is AI which will detect the move on Player 1 Board.
 	 * @param personStage
 	 */
 	private void opponentMove(Stage personStage) {
@@ -228,6 +236,10 @@ public class Battle extends Application {
 		}
 	}
 
+	/**
+	 * This method will Display the final result on the pop showing who the winner.
+	 * @param s
+	 */
 	private void finalResultDisplay(String s) {
 		// TODO Auto-generated method stub
 		Alert opponentWin = new Alert(AlertType.INFORMATION);
@@ -238,32 +250,11 @@ public class Battle extends Application {
 		opponentWin.show();
 	}
 
-	/**
-	 * 
-	 * @param personStage
-	 * @param result 
-	 */
-	private void ShowResult(Stage personStage, String result) {
-		final Stage dialog = new Stage();
-		dialog.initModality(Modality.APPLICATION_MODAL);
-
-		dialog.initOwner(personStage);
-
-		Text t = new Text(result);
-		t.setFont(Font.font("Verdana", 50));
-
-		t.setFill(Color.GREEN);
-
-		BorderPane bp = new BorderPane();
-		bp.setCenter(t);
-
-		Scene dialogScene = new Scene(bp, 300, 200);
-		dialog.setScene(dialogScene);
-		dialog.show();
-
-	}
-
 	
+	/**
+	 * This method will Start the Game once the Player Click the start button and Player 1 has set up 
+	 * all his ships.
+	 */
 	private void startGame() {
 		// place enemy ships
 		int type = 5;
@@ -281,7 +272,7 @@ public class Battle extends Application {
 	}
 
 	/**
-	 * 
+	 * This Method setup the Stage ,Scene and Design Boards on the Scene.   
 	 * @param primaryStage
 	 */
 	private void intialise(Stage primaryStage) {
@@ -313,11 +304,15 @@ public class Battle extends Application {
 		reset.setOnAction(e -> {
 			restart(primaryStage);
 		});
+		
+		
+		
+		
 		primaryStage.show();
 	}
 
 	/**
-	 * 
+	 * Method will reset the Game by intitalising all the related Nodes.
 	 * @param primaryStage
 	 */
 	private void restart(Stage primaryStage) {
@@ -335,7 +330,10 @@ public class Battle extends Application {
 
 	}
 
-	
+	/**
+	 * This Method Will call the Initialise to set up the Stage
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 
@@ -343,6 +341,10 @@ public class Battle extends Application {
 
 	}
 
+	/**
+	 * Launches the application
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		launch(args);
 	}
