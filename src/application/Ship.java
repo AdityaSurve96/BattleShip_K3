@@ -1,6 +1,9 @@
 package application;
 
 import javafx.scene.Parent;
+
+import java.util.ArrayList;
+
 import application.Board.Cell;
 public class Ship extends Parent {
 	
