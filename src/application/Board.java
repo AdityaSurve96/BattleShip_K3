@@ -121,7 +121,7 @@ public class Board extends Parent {
 
 
 	/**
-	 * This method will take the neighbors and checks for validity. 
+	 * This method will check and get the neighbors and checks for validity. 
 	 * 
 	 * @param x
 	 * @param y
@@ -247,6 +247,7 @@ public class Board extends Parent {
 			setStroke(Color.BLACK);
 
 		}
+		
 
 		/**
 		 * This will help to check if the Shot was on target or not 
@@ -255,9 +256,16 @@ public class Board extends Parent {
 		public boolean shoot() {
 			File hitRate = new File(".");
 
+			/**
+		 * prints new image of hitship
+		 */
+			
 			Image hitFile=null;
 			try {
 				hitFile = new Image("file:///"+hitRate.getCanonicalFile()+"/hitShip.png");
+				
+				/** throws io exception
+				*/
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -289,4 +297,5 @@ public class Board extends Parent {
 			return false;
 		}
 	}
+	
 }
