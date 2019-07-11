@@ -33,7 +33,7 @@ public class Board extends Parent {
 	public int amountOfships = 5;
 
 	/**
-	 * This Constructor will help 
+	 * This Constructor will help in the following
 	 * 
 	 * @param opponent - Boolean to keep the track of Opponent Board or Player Board
 	 * @param handler - Handler registration  for each cell
@@ -59,14 +59,15 @@ public class Board extends Parent {
 	}
 
 	/**
-	 * Method that help to Position the Ship
+	 * Method that helps to Position the Ship
 	 * @param ship - Ship Object which will be placed
 	 * @param x - Coordinate X 
 	 * @param y - Coordinate Y
 	 * @return if the ship is placed correctly or not
 	 */
 	public boolean positionShip(Ship ship, int x, int y) {
-		//Considering the direction for placement if true then placement of ship is vertical else its in the horizontal direction.
+		//Considering the direction for placement.
+		//If true then placement of ship is vertical else its in the horizontal direction.
 
 		if (validPlacementShip(ship, x, y)) {
 			int length = ship.type;
@@ -219,7 +220,7 @@ public class Board extends Parent {
 		return x >= 0 && x < 10 && y >= 0 && y < 10;
 	}
 
-	
+
 	public class Cell extends Rectangle {
 
 		public int row, col;
@@ -247,7 +248,7 @@ public class Board extends Parent {
 			setStroke(Color.BLACK);
 
 		}
-		
+
 
 		/**
 		 * This will help to check if the Shot was on target or not 
@@ -257,15 +258,15 @@ public class Board extends Parent {
 			File hitRate = new File(".");
 
 			/**
-		 * prints new image of hitship
-		 */
-			
+			 * prints new image of hitship
+			 */
+
 			Image hitFile=null;
 			try {
 				hitFile = new Image("file:///"+hitRate.getCanonicalFile()+"/hitShip.png");
-				
+
 				/** throws io exception
-				*/
+				 */
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -285,11 +286,11 @@ public class Board extends Parent {
 
 				if (!ship.shipIsAlive()) {
 					for (Cell c : ship.shotCellsOfShips) {
-						
-                		c.setFill(Color.RED);
+
+						c.setFill(Color.RED);
 					}
-                    board.amountOfships--;
-                    ship.shotCellsOfShips.clear();
+					board.amountOfships--;
+					ship.shotCellsOfShips.clear();
 				}
 				return true;
 			}
@@ -297,5 +298,5 @@ public class Board extends Parent {
 			return false;
 		}
 	}
-	
+
 }

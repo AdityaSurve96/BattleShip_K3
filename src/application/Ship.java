@@ -12,44 +12,44 @@ import application.Board.Cell;
 
  */
 public class Ship extends Parent {
-	
-	
+
+
 	ArrayList<Cell> shotCellsOfShips = new ArrayList<Cell>();
-	
-    public int type;
-    public boolean direction = true;
 
-    private int percentageDestroyed;
+	public int type;
+	public boolean direction = true;
 
-    /**
-     * Constructor for initializing the Object
-     * @param type - Length of the Ship
-     * @param vertical - Checks for Vertical or Horizontal
-     */
-    public Ship(int type, boolean vertical) {
-    	
-    	
-        this.type = type;
-        this.direction = vertical;
-        percentageDestroyed = type;
-        
-    }
+	private int percentageDestroyed;
 
-    /**
-     * This Method will reduce the health of the ship if the ship has been hit
-     */
-    public void shipPartHit() {
-    	
-    	percentageDestroyed--;
-    	
-    }
-    
+	/**
+	 * Constructor for initializing the Object
+	 * @param type - Length of the Ship
+	 * @param vertical - Checks for Vertical or Horizontal
+	 */
+	public Ship(int type, boolean vertical) {
 
-    /**
-     * This Method will help to check if the ship is still Alive or not.
-     * @return true or false and destroyed percentage 
-     */
-    public boolean shipIsAlive() {
-        return percentageDestroyed > 0;
-    }
+
+		this.type = type;
+		this.direction = vertical;
+		percentageDestroyed = type;
+
+	}
+
+	/**
+	 * This Method will reduce the health of the ship if the ship has been hit
+	 */
+	public void shipPartHit() {
+
+		percentageDestroyed--;
+
+	}
+
+
+	/**
+	 * This Method will help to check if the ship is still Alive or not.
+	 * @return true if the ship is alive or false if the ship has been destroyed
+	 */
+	public boolean shipIsAlive() {
+		return percentageDestroyed > 0;
+	}
 }
