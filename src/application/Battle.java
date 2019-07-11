@@ -30,6 +30,7 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+// Handles the  Mouse events with  player and opponent moves.
 //Initialize Variables.
 /**
  * 
@@ -63,7 +64,7 @@ public class Battle extends Application {
 
 	
 	/**
-	 * Adding styles and layout to the output screen i.e titles ,grid layout,mouse effects etc.
+	 * Adding styles and layout to the output screen i.e titles ,grid layout,mouse effects and movement etc.
 	 * @param personStage
 	 * @param background
 	 * @return
@@ -83,6 +84,9 @@ public class Battle extends Application {
 		battle.setStrokeWidth(2);
 		battle.setStroke(Color.WHITE);
 		battle.setFont(Font.font("Verdana", FontWeight.BOLD, FontPosture.REGULAR, 30));
+		
+		private Parent designBoard(Stage personStage, Background background) {
+			
 		battle.setX(500);
 		battle.setY(30);
 		battle.setUnderline(true);
@@ -204,6 +208,8 @@ public class Battle extends Application {
 		st.setMinWidth(150);
 		reset.setMinHeight(80);
 		reset.setMinWidth(150);
+		
+		//Adding rectangles as ships near PLayerBoard
 		pause.setMinHeight(80);
 		pause.setMinWidth(150);
 		load.setMinHeight(80);
