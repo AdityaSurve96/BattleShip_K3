@@ -22,7 +22,12 @@ public class Ship extends Parent {
 	private int percentageDestroyed;
 
 	/**
-	 * Constructor for initializing the Object
+	 * Constructor for initializing the Object.
+	 * Other tasks carried out here are:
+	 * <ol>
+	 * <li>shipPartHit() to check for health of ship</li>
+	 * <li> shipIsAlive() to check ship is alive or not</li>
+	 * </ol>
 	 * @param type - Length of the Ship
 	 * @param vertical - Checks for Vertical or Horizontal
 	 */
@@ -35,9 +40,6 @@ public class Ship extends Parent {
 
 	}
 
-	/**
-	 * This Method will reduce the health of the ship if the ship has been hit
-	 */
 	public void shipPartHit() {
 
 		percentageDestroyed--;
@@ -46,7 +48,6 @@ public class Ship extends Parent {
 
 
 	/**
-	 * This Method will help to check if the ship is still Alive or not.
 	 * @return true if the ship is alive or false if the ship has been destroyed
 	 */
 	public boolean shipIsAlive() {

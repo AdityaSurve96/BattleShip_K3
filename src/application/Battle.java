@@ -30,12 +30,16 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-// Handles the  Mouse events with  player and opponent moves.
-//Initialize Variables.
+
 /**
  * 
- * This is the Main Class which will help us to play the game . Method which will startGame , Create Boards
- * and Many More
+ * This is the Main Class which will help us to play the game . Method which will startGame , Create Boards.
+ * <p>
+ * Other tasks are like:</p>
+ * <ol>
+ * <li>Handles the  Mouse events with  player and opponent moves.</li>
+ * <li>Initialize Variables.</li>
+ * </ol>
  * @author K3
  *
  */
@@ -64,9 +68,17 @@ public class Battle extends Application {
 
 
 	/**
-	 * Adding styles and layout to the output screen i.e titles ,grid layout,mouse effects and movement etc.
-	 * @param personStage
-	 * @param background
+	 * In general adding styles and layout to the output screen i.e titles ,grid layout,mouse effects and movement etc.
+	 * <p>
+	 * In Detail tasks carried out for board design.</p>
+	 * <ol type="1">
+	 * <li>Setting the title for the game.</li>
+	 * <li>Giving heading to grid1 and grid2 i.e player 1 grid and opponent grid</li>
+	 * <li>Create HBox i.e icons to specify different functionalities in game like start,reset,pause and load</li>
+	 * <li>Mouse handler events for opponent and player 1</li>
+		</ol>
+	 * @param personStage Stage that holds the board, grids and ships on it.
+	 * @param background 
 	 * @return	
 	 */
 	private Parent designBoard(Stage personStage, Background background) {
@@ -75,8 +87,6 @@ public class Battle extends Application {
 
 		BorderPane root = new BorderPane();
 		root.setPrefSize(1300, 800);
-
-		//Setting the title for the game.
 
 		Text battle = new Text();
 		battle.setText("BATTLESHIP GAME");
@@ -91,23 +101,17 @@ public class Battle extends Application {
 		battle.setY(30);
 		battle.setUnderline(true);
 
-		//giving heading to the grid1 i.e player 1 grid
-
 		Text player1 = new Text();
 		player1.setText("PLAYER 1 GRID");
 		player1.setX(300);
 		player1.setY(100);
 		player1.setFont(Font.font("Verdana", FontWeight.BOLD, FontPosture.REGULAR, 20));
 
-		//giving heading to the grid2 i.e opponent grid
-
 		Text Opponent = new Text();
 		Opponent.setText("OPPONENT GRID");
 		Opponent.setX(800);
 		Opponent.setY(100);
 		Opponent.setFont(Font.font("Verdana", FontWeight.BOLD, FontPosture.REGULAR, 20));
-
-		//Create HBox i.e icons to specify different functionalities in game like start,reset,pause and load. 
 
 		HBox actions = new HBox(30, st, reset,pause,load,exit);
 		actions.setAlignment(Pos.CENTER);
@@ -116,16 +120,10 @@ public class Battle extends Application {
 		actions.setTranslateX(650);
 		actions.setTranslateY(750);
 
-		//adding all functionalities in root.
-
 		root.getChildren().add(battle);
 		root.getChildren().add(player1);
 		root.getChildren().add(Opponent);
 		root.getChildren().add(actions);
-
-
-
-		// Mouse event for opponent
 
 		EventHandler<MouseEvent> event = new EventHandler<MouseEvent>() {
 
@@ -156,7 +154,6 @@ public class Battle extends Application {
 		};
 
 
-		//Mouse event for player 1
 		EventHandler<MouseEvent> playerEvent = new EventHandler<MouseEvent>() {
 
 			@Override
@@ -192,7 +189,13 @@ public class Battle extends Application {
 	}
 
 	/**
-	 * setting styling effects for different buttons like pause,start,rest,load on output screen
+	 * <p>setting styling effects for different buttons like pause,start,rest,load on output screen.
+	 * Showing code for start button.Done similarly for other buttons defined in program.</p>
+	 * <code>
+	 * st.setStyle("-fx-background-color: #000000;-fx-font-size: 2em;-fx-text-fill:#ffffff;");
+	 * st.setMinHeight(80);
+	 * st.setMinWidth(150);
+	 * </code>
 	 */
 	private void buttonGeometry() {
 
@@ -220,7 +223,7 @@ public class Battle extends Application {
 
 	/**
 	 * This method is AI which will detect the move on Player 1 Board.
-	 * @param personStage
+	 * @param personStage 
 	 */
 	private void opponentMove(Stage personStage) {
 		while (opponentTurn) {
@@ -246,7 +249,7 @@ public class Battle extends Application {
 	
 	/**
 	 * This method will Display the final result on the pop showing who the winner.
-	 * @param s
+	 * @param s String that specifies a text notifying when one player wins.
 	 */
 	private void finalResultDisplay(String s) {
 		// TODO Auto-generated method stub
@@ -343,7 +346,7 @@ public class Battle extends Application {
 	}
 
 	/**
-	 * This Method Will call the initialise method to set up the Stage
+	 * This Method Will call the initialise method to set up the Stage.
 	 * {@inheritDoc}
 	 */
 	@Override
