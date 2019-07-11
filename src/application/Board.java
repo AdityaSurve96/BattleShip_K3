@@ -17,7 +17,8 @@ import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 
 /**
- * Class where the Board is being Created and all the Cells are Placed.
+ * <p>Class where the Board is being Created and all the Cells are Placed.
+ * </p>
  * @author K3
  *
  */
@@ -33,7 +34,8 @@ public class Board extends Parent {
 	public int amountOfships = 5;
 
 	/**
-	 * This Constructor will help in the following
+	 * <p>This Constructor will help in the following
+	 * </p>
 	 * 
 	 * @param opponent - Boolean to keep the track of Opponent Board or Player Board
 	 * @param handler - Handler registration  for each cell
@@ -59,26 +61,33 @@ public class Board extends Parent {
 	}
 
 	/**
-	 * Method that helps to Position the Ship
+	 * <p>Method that helps to Position the Ship.</p>
+	 * <p>Tasks carried out here are as follows :</p>
+	 * <ol>
+	 * <li>Considering the direction for placement.If true then placement of ship is vertical else its in the horizontal direction</li>
+	 * <li>Horizontal thus considering X coordinates and Y if vertical are considered for ship placement of various type.</li>
+	 * <li>Appropriate Placement of ships i.e Checking if the placement is on opponent grid then placement should not happen else place the type of ship specified on player 1 grid.</li>
+	 * <li>Checking the ship placement validity for horizontal ships.</li>
+	 * </ol>
+	 * 
 	 * @param ship - Ship Object which will be placed
-	 * @param x - Coordinate X 
-	 * @param y - Coordinate Y
+	 * @param x - Coordinate X of ship
+	 * @param y - Coordinate Y of ship
 	 * @return if the ship is placed correctly or not
 	 */
 	public boolean positionShip(Ship ship, int x, int y) {
-		//Considering the direction for placement.
-		//If true then placement of ship is vertical else its in the horizontal direction.
+
 
 		if (validPlacementShip(ship, x, y)) {
 			int length = ship.type;
 
 			if (ship.direction) {
-				//horizontal thus considering Y coordinates for ship placement of various type.
+				
 				for (int i = y; i < y + length; i++) {
 
 					Cell cell = getCell(x, i);
 					cell.ship = ship;
-					// Appropriate Placement of ships i.e Checking if the placement is on opponent grid then placement should not happen else place the type of ship specified on player 1 grid.
+					
 					if (!opponent) {
 						cell.setFill(Color.GREEN);
 						cell.setStroke(Color.BLACK);
@@ -86,7 +95,6 @@ public class Board extends Parent {
 				}
 			}
 			else {
-				//horizontal thus considering X coordinates for ship placement of various type.
 
 				for (int i = x; i < x + length; i++) {
 
@@ -179,7 +187,7 @@ public class Board extends Parent {
 			}
 		}
 		else {
-			//Checking the ship placement validity for horizontal ships.
+			
 			for (int i = x; i < x + length; i++) {
 				if (!isValidPoint(i, y))
 					return false;
@@ -251,21 +259,32 @@ public class Board extends Parent {
 
 
 		/**
-		 * This will help to check if the Shot was on target or not 
+		 * This will help to check if the  was on target or not 
 		 * @return boolean
 		 */
 		public boolean shoot() {
 			File hitRate = new File(".");
 
 			/**
-			 * prints new image of hitship
+			 * Prints new image of hitship.
+			 * <p>If one ship is destroyed completely it gets highlighted.
+			 * This is done by:
+			 * <code>
+			 * if (!ship.shipIsAlive()) {
+			 * for (Cell c : ship.shotCellsOfShips) {
+			 * c.setFill(Color.RED);
+			 * }
+			 * board.amountOfships--;
+			 * ship.shotCellsOfShips.clear();
+			 * </p>
 			 */
 
 			Image hitFile=null;
 			try {
 				hitFile = new Image("file:///"+hitRate.getCanonicalFile()+"/hitShip.png");
 
-				/** throws io exception
+				/** 
+				 @throws io exception
 				 */
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
