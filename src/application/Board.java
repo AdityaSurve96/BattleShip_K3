@@ -35,10 +35,9 @@ public class Board extends Parent {
 	/**
 	 * This Constructor will help 
 	 * 
-	 * @param opponent
-	 * @param EventHandler
+	 * @param opponent - Boolean to keep the track of Opponent Board or Player Board
+	 * @param EventHandler - Handler registration  for each cell
 	 */
-
 	public Board(boolean opponent, EventHandler<? super MouseEvent> handler) {
 
 		this.opponent = opponent;
@@ -61,10 +60,10 @@ public class Board extends Parent {
 
 	/**
 	 * Method that help to Position the Ship
-	 * @param ship
-	 * @param x
-	 * @param y
-	 * @return
+	 * @param ship - Ship Object which will be placed
+	 * @param x - Coordinate X 
+	 * @param y - Coordinate Y
+	 * @return if the ship is placed correctly or not
 	 */
 	public boolean positionShip(Ship ship, int x, int y) {
 		//Considering the direction for placement if true then placement of ship is vertical else its in the horizontal direction.
@@ -110,9 +109,9 @@ public class Board extends Parent {
 
 	/**
 	 * This will get the Cell Object for a particular Coordinate
-	 * @param x
-	 * @param y
-	 * @return
+	 * @param x -Coordinate X
+	 * @param y -Coordinate Y
+	 * @return -gets the Cell Object
 	 */
 	public Cell getCell(int x, int y) {
 

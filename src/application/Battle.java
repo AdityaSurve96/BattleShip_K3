@@ -343,7 +343,7 @@ public class Battle extends Application {
 
 	/**
 	 * Launches the application
-	 * @param args
+	 * @param args-takes the default Arguments
 	 */
 	public static void main(String[] args) {
 		launch(args);
