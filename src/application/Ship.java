@@ -24,8 +24,8 @@ public class Ship extends Parent {
 
     /**
      * Constructor for initializing the Object
-     * @param type
-     * @param vertical
+     * @param type - Length of the Ship
+     * @param vertical - Checks for Vertical or Horizontal
      */
     public Ship(int type, boolean vertical) {
     	
@@ -47,8 +47,8 @@ public class Ship extends Parent {
     
 
     /**
-     * This Method will help to check if the ship is still Avlive or not.
-     * @return
+     * This Method will help to check if the ship is still Alive or not.
+     * @return true or false depending upon the if it is alive or not
      */
     public boolean shipIsAlive() {
         return percentageDestroyed > 0;

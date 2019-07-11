@@ -36,7 +36,7 @@ public class Board extends Parent {
 	 * This Constructor will help 
 	 * 
 	 * @param opponent - Boolean to keep the track of Opponent Board or Player Board
-	 * @param EventHandler - Handler registration  for each cell
+	 * @param handler - Handler registration  for each cell
 	 */
 	public Board(boolean opponent, EventHandler<? super MouseEvent> handler) {
 
