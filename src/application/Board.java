@@ -8,6 +8,8 @@ import java.util.List;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.scene.Parent;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
@@ -308,6 +310,7 @@ public class Board extends Parent {
 
 						c.setFill(Color.RED);
 					}
+					shipDestructionMessage();
 					board.amountOfships--;
 					ship.shotCellsOfShips.clear();
 				}
@@ -316,6 +319,15 @@ public class Board extends Parent {
 
 			return false;
 		}
+		
+		
+	}
+	private void shipDestructionMessage() {
+	
+		Alert opponentWin = new Alert(AlertType.INFORMATION);
+		opponentWin.setTitle("ALERT");
+		opponentWin.setHeaderText("A ship has been Destroyed");
+		opponentWin.show();
 	}
 
 }
