@@ -4,8 +4,11 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Random;
 import application.Board.Cell;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
@@ -23,18 +26,22 @@ import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 //Initialize Variables.
 /**
  * 
- * This is the Main Class which will help us to play the game . Method which will startGame , Create Boards
- * and Many More
+ * This is the Main Class which will help us to play the game . Method which
+ * will startGame , Create Boards and Many More
+ * 
  * @author K3
  *
  */
@@ -54,28 +61,70 @@ public class Battle extends Application {
 	private Button st = new Button("START");
 
 	private Button reset = new Button("RESET");
-	
+
 	private Button pause = new Button("PAUSE");
-	
+
 	private Button load = new Button("LOAD");
 	
-	
+	VBox vBox,vBox1;
+	HBox hBox;
+	// Button sButton, rButton;
+	Text timer1, timer2;
+	Timeline timelinePlayer1, timelinePlayer2;
+	int mins = 0, secs = 0, millis = 0;
+	int mins1 = 0, secs1 = 0, millis1 = 0;
+	boolean player1Timer = true;
+	boolean player2Timer = true;
 
+
+	void change(Text text) {
+		if(millis == 1000) {
+			secs++;
+			millis = 0;
+		}
+		if(secs == 60) {
+			mins++;
+			secs = 0;
+		}
+		text.setText((((mins/10) == 0) ? "0" : "") + mins + ":"
+		 + (((secs/10) == 0) ? "0" : "") + secs + ":" 
+			+ (((millis/10) == 0) ? "00" : (((millis/100) == 0) ? "0" : "")) + millis++);
+    }
+	
+	
+	void change1(Text text) {
+		if(millis1 == 1000) {
+			secs1++;
+			millis1 = 0;
+		}
+		if(secs1 == 60) {
+			mins1++;
+			secs1 = 0;
+		}
+	//	text.setText((((mins1/10) == 0) ? "0" : "") + mins1 + ":"
+	//	 + (((secs1/10) == 0) ? "0" : "") + secs1 + ":" 
+	//		+ (((millis1/10) == 0) ? "00" : (((millis1/100) == 0) ? "0" : "")) + millis1++);
+		text.setText("OPPO");
+    }
+	
+	
+	
+	
 	
 	/**
-	 * Adding styles and layout to the output screen i.e titles ,grid layout,mouse effects etc.
+	 * Adding styles and layout to the output screen i.e titles ,grid layout,mouse
+	 * effects etc.
+	 * 
 	 * @param personStage
 	 * @param background
 	 * @return
 	 */
 	private Parent designBoard(Stage personStage, Background background) {
 
-		
-		
 		BorderPane root = new BorderPane();
 		root.setPrefSize(1300, 800);
-		
-		//Setting the title for the game.
+
+		// Setting the title for the game.
 
 		Text battle = new Text();
 		battle.setText("BATTLESHIP GAME");
@@ -86,41 +135,92 @@ public class Battle extends Application {
 		battle.setX(500);
 		battle.setY(30);
 		battle.setUnderline(true);
-		
-		//giving heading to the grid1 i.e player 1 grid
+
+		// giving heading to the grid1 i.e player 1 grid
 
 		Text player1 = new Text();
 		player1.setText("PLAYER 1 GRID");
 		player1.setX(300);
 		player1.setY(100);
 		player1.setFont(Font.font("Verdana", FontWeight.BOLD, FontPosture.REGULAR, 20));
-		
-		//giving heading to the grid2 i.e opponent grid
+
+		// giving heading to the grid2 i.e opponent grid
 
 		Text Opponent = new Text();
 		Opponent.setText("OPPONENT GRID");
 		Opponent.setX(800);
 		Opponent.setY(100);
 		Opponent.setFont(Font.font("Verdana", FontWeight.BOLD, FontPosture.REGULAR, 20));
-		
-		//Create HBox i.e icons to specify different functionalities in game like start,reset,pause and load. 
 
-		HBox actions = new HBox(30, st, reset,pause,load);
+		// Create HBox i.e icons to specify different functionalities in game like
+		// start,reset,pause and load.
+
+		HBox actions = new HBox(30, st, reset, pause, load);
 		actions.setAlignment(Pos.CENTER);
 		buttonGeometry();
-		
+
 		actions.setTranslateX(700);
 		actions.setTranslateY(750);
-		
-		//adding all functionalities in root.
+
+		// adding all functionalities in root.
 
 		root.getChildren().add(battle);
 		root.getChildren().add(player1);
 		root.getChildren().add(Opponent);
 		root.getChildren().add(actions);
 		// root.getChildren().add(actions);
+
 		
 		
+		timer1 = new Text("00:00:000");
+		timer1.setFill(Color.WHITE);
+		timer1.setFont(Font.font("Verdana", FontWeight.BOLD, FontPosture.REGULAR, 20));
+		hBox = new HBox(30);
+		hBox.setAlignment(Pos.CENTER);
+		
+		
+		
+		timelinePlayer1 = new Timeline(new KeyFrame(Duration.millis(1), new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+            	change(timer1);
+			}
+		}));
+		timelinePlayer1.setCycleCount(Timeline.INDEFINITE);
+		timelinePlayer1.setAutoReverse(false);
+
+		// hBox.getChildren().addAll(sButton, rButton);
+		hBox.setMinWidth(Region.USE_PREF_SIZE);
+		vBox = new VBox(30);
+		vBox.setAlignment(Pos.CENTER);
+		vBox.getChildren().addAll(timer1, hBox);
+		vBox.setTranslateX(100);
+		vBox.setTranslateY(200);
+		vBox.setMinWidth(Region.USE_PREF_SIZE);
+		root.getChildren().add(vBox);
+		
+		timer2 = new Text("00:00:000");
+		timer2.setFill(Color.WHITE);
+		timer2.setFont(Font.font("Verdana", FontWeight.BOLD, FontPosture.REGULAR, 20));
+		
+		timelinePlayer2 = new Timeline(new KeyFrame(Duration.millis(1), new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+            	change1(timer2);
+			}
+		}));
+		timelinePlayer2.setCycleCount(Timeline.INDEFINITE);
+		timelinePlayer2.setAutoReverse(false);
+		
+		
+		vBox1 = new VBox(30);
+		vBox1.setAlignment(Pos.CENTER);
+		vBox1.getChildren().addAll(timer2);
+		vBox1.setTranslateX(1200);
+		vBox1.setTranslateY(200);
+		vBox1.setMinWidth(Region.USE_PREF_SIZE);
+		root.getChildren().add(vBox1);
+
 		// Mouse event for opponent
 
 		EventHandler<MouseEvent> event = new EventHandler<MouseEvent>() {
@@ -130,31 +230,35 @@ public class Battle extends Application {
 				if (!executing)
 					return;
 
+				
 				Cell cell = (Cell) e.getSource();
 				if (cell.targetHit)
 					return;
 
 				opponentTurn = !cell.shoot();
-
+				
+				
+									
 				if (opponentBoard.amountOfships == 0) {
-					
-					String s ="You Won This Game";
-					
-					finalResultDisplay(s);
 
-					//ShowResult(personStage, "YOU WIN :) ");
-					// System.out.println("YOU WIN");
-					// System.exit(0);
+					String s = "You Won This Game";
+
+					finalResultDisplay("WINNER ANNOUCEMENT",s);
+
 				}
 
-				if (opponentTurn)
+				if (opponentTurn) {
+					timelinePlayer1.pause();
+					timelinePlayer2.play();
 					opponentMove(personStage);
+				}
 			}
 
 		};
-
 		
-		//Mouse event for player 1
+		
+		
+		// Mouse event for player 1
 		EventHandler<MouseEvent> playerEvent = new EventHandler<MouseEvent>() {
 
 			@Override
@@ -166,7 +270,7 @@ public class Battle extends Application {
 				if (firstPlayerBoard.positionShip(new Ship(numberOfShips, e.getButton() == MouseButton.PRIMARY),
 						cell.row, cell.col)) {
 					--numberOfShips;
-					
+
 				}
 			}
 
@@ -190,7 +294,8 @@ public class Battle extends Application {
 	}
 
 	/**
-	 * setting styling effects for different buttons like pause,start,rest,load on output screen
+	 * setting styling effects for different buttons like pause,start,rest,load on
+	 * output screen
 	 */
 	private void buttonGeometry() {
 		// TODO Auto-generated method stub
@@ -198,8 +303,7 @@ public class Battle extends Application {
 		reset.setStyle("-fx-background-color: #000000;-fx-font-size: 2em;-fx-text-fill:#ffffff;");
 		pause.setStyle("-fx-background-color: #000000;-fx-font-size: 2em;-fx-text-fill:#ffffff;");
 		load.setStyle("-fx-background-color: #000000;-fx-font-size: 2em;-fx-text-fill:#ffffff;");
-		
-		
+
 		st.setMinHeight(80);
 		st.setMinWidth(150);
 		reset.setMinHeight(80);
@@ -209,51 +313,60 @@ public class Battle extends Application {
 		load.setMinHeight(80);
 		load.setMinWidth(150);
 	}
+	
+	
 
 	/**
 	 * This method is AI which will detect the move on Player 1 Board.
+	 * 
 	 * @param personStage
 	 */
 	private void opponentMove(Stage personStage) {
+		
 		while (opponentTurn) {
 			int x = random.nextInt(10);
 			int y = random.nextInt(10);
-
+		
+			
 			Cell cell = firstPlayerBoard.getCell(x, y);
 			if (cell.targetHit)
 				continue;
-
-			opponentTurn = cell.shoot();
-
+				
+				opponentTurn = cell.shoot();
+				
+				if(!opponentTurn)
+				{
+					timelinePlayer2.pause();
+					
+				}
+					
 			if (firstPlayerBoard.amountOfships == 0) {
 
-				String s ="You Lost This Game to the Computer";
-				finalResultDisplay(s);
+				String s = "You Lost This Game to the Computer";
+				finalResultDisplay("WINNER ANNOUCEMENT",s);
 
-				// ShowResult(personStage, "YOU LOSE :( ");
-				
 			}
 		}
 	}
 
 	/**
 	 * This method will Display the final result on the pop showing who the winner.
+	 * 
 	 * @param s
 	 */
-	private void finalResultDisplay(String s) {
+	private void finalResultDisplay(String header, String s) {
 		// TODO Auto-generated method stub
 		Alert opponentWin = new Alert(AlertType.INFORMATION);
 		opponentWin.setTitle("ALERT");
-		opponentWin.setHeaderText("WINNER ANNOUCEMENT");
-		
+		opponentWin.setHeaderText(header);
+
 		opponentWin.setContentText(s);
 		opponentWin.show();
 	}
 
-	
 	/**
-	 * This method will Start the Game once the Player Click the start button and Player 1 has set up 
-	 * all his ships.
+	 * This method will Start the Game once the Player Click the start button and
+	 * Player 1 has set up all his ships.
 	 */
 	private void startGame() {
 		// place enemy ships
@@ -269,10 +382,12 @@ public class Battle extends Application {
 		}
 
 		executing = true;
+		timelinePlayer1.play();
 	}
 
 	/**
-	 * This Method setup the Stage ,Scene and Design Boards on the Scene.   
+	 * This Method setup the Stage ,Scene and Design Boards on the Scene.
+	 * 
 	 * @param primaryStage
 	 */
 	private void intialise(Stage primaryStage) {
@@ -304,19 +419,19 @@ public class Battle extends Application {
 		reset.setOnAction(e -> {
 			restart(primaryStage);
 		});
-		
+
 		pause.setOnAction(e -> {
-			
-			finalResultDisplay("Game Paused. Please Close click on Ok to Conitnue");
-			
+
+			finalResultDisplay("GAME PAUSED","Game Paused. Please Close click on Ok to Conitnue");
+
 		});
-		
-		
+
 		primaryStage.show();
 	}
 
 	/**
 	 * Method will reset the Game by intitalising all the related Nodes.
+	 * 
 	 * @param primaryStage
 	 */
 	private void restart(Stage primaryStage) {
@@ -335,8 +450,7 @@ public class Battle extends Application {
 	}
 
 	/**
-	 * This Method Will call the Initialise to set up the Stage
-	 * {@inheritDoc}
+	 * This Method Will call the Initialise to set up the Stage {@inheritDoc}
 	 */
 	@Override
 	public void start(Stage primaryStage) throws Exception {
@@ -347,7 +461,9 @@ public class Battle extends Application {
 
 	/**
 	 * Launches the application
-	 * @param args-takes the default Arguments
+	 * 
+	 * @param args-takes
+	 *            the default Arguments
 	 */
 	public static void main(String[] args) {
 		launch(args);
