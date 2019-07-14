@@ -1,11 +1,15 @@
 package application;
 
+
 import java.io.File;
 import java.io.IOException;
 import java.util.Random;
 import application.Board.Cell;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
@@ -23,13 +27,15 @@ import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-
+import javafx.util.Duration;
 
 /**
  * 
@@ -65,6 +71,47 @@ public class Battle extends Application {
 	private Button load = new Button("LOAD");
 
 	private Button exit = new Button("EXIT");
+	
+	
+	VBox vBox,vBox1;
+	HBox hBox;
+	// Button sButton, rButton;
+	Text timer1, timer2;
+	Timeline timelinePlayer1, timelinePlayer2;
+	int mins = 0, secs = 0, millis = 0;
+	int mins1 = 0, secs1 = 0, millis1 = 0;
+	boolean player1Timer = true;
+	boolean player2Timer = true;
+	
+	void change(Text text) {
+		if(millis == 1000) {
+			secs++;
+			millis = 0;
+		}
+		if(secs == 60) {
+			mins++;
+			secs = 0;
+		}
+		text.setText((((mins/10) == 0) ? "0" : "") + mins + ":"
+		 + (((secs/10) == 0) ? "0" : "") + secs + ":" 
+			+ (((millis/10) == 0) ? "00" : (((millis/100) == 0) ? "0" : "")) + millis++);
+    }
+	
+	
+	void change1(Text text) {
+		if(millis1 == 1000) {
+			secs1++;
+			millis1 = 0;
+		}
+		if(secs1 == 60) {
+			mins1++;
+			secs1 = 0;
+		}
+		text.setText((((mins1/10) == 0) ? "0" : "") + mins1 + ":"
+		 + (((secs1/10) == 0) ? "0" : "") + secs1 + ":" 
+			+ (((millis1/10) == 0) ? "00" : (((millis1/100) == 0) ? "0" : "")) + millis1++);
+		text.setText("OPPO");
+    }
 
 
 	/**
@@ -124,7 +171,58 @@ public class Battle extends Application {
 		root.getChildren().add(player1);
 		root.getChildren().add(Opponent);
 		root.getChildren().add(actions);
+		
+		
+		
+		timer1 = new Text("00:00:000");
+		timer1.setFill(Color.WHITE);
+		timer1.setFont(Font.font("Verdana", FontWeight.BOLD, FontPosture.REGULAR, 20));
+		hBox = new HBox(30);
+		hBox.setAlignment(Pos.CENTER);
+		
+		
+		
+		timelinePlayer1 = new Timeline(new KeyFrame(Duration.millis(1), new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+            	change(timer1);
+			}
+		}));
+		timelinePlayer1.setCycleCount(Timeline.INDEFINITE);
+		timelinePlayer1.setAutoReverse(false);
 
+		// hBox.getChildren().addAll(sButton, rButton);
+		hBox.setMinWidth(Region.USE_PREF_SIZE);
+		vBox = new VBox(30);
+		vBox.setAlignment(Pos.CENTER);
+		vBox.getChildren().addAll(timer1, hBox);
+		vBox.setTranslateX(100);
+		vBox.setTranslateY(200);
+		vBox.setMinWidth(Region.USE_PREF_SIZE);
+		root.getChildren().add(vBox);
+		
+		timer2 = new Text("00:00:000");
+		timer2.setFill(Color.WHITE);
+		timer2.setFont(Font.font("Verdana", FontWeight.BOLD, FontPosture.REGULAR, 20));
+		
+		timelinePlayer2 = new Timeline(new KeyFrame(Duration.millis(1), new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+            	change1(timer2);
+			}
+		}));
+		timelinePlayer2.setCycleCount(Timeline.INDEFINITE);
+		timelinePlayer2.setAutoReverse(false);
+		
+		
+		vBox1 = new VBox(30);
+		vBox1.setAlignment(Pos.CENTER);
+		vBox1.getChildren().addAll(timer2);
+		vBox1.setTranslateX(1200);
+		vBox1.setTranslateY(200);
+		vBox1.setMinWidth(Region.USE_PREF_SIZE);
+		root.getChildren().add(vBox1);
+		
 		EventHandler<MouseEvent> event = new EventHandler<MouseEvent>() {
 
 			@Override
@@ -147,8 +245,11 @@ public class Battle extends Application {
 
 				}
 
-				if (opponentTurn)
+				if (opponentTurn) {
+					timelinePlayer1.pause();
+					timelinePlayer2.play();
 					opponentMove(personStage);
+				}
 			}
 
 		};
@@ -235,6 +336,12 @@ public class Battle extends Application {
 				continue;
 
 			opponentTurn = cell.shoot();
+			
+			if(!opponentTurn)
+			{
+				timelinePlayer2.pause();
+				timelinePlayer1.play();
+			}
 
 			if (firstPlayerBoard.amountOfships == 0) {
 
@@ -280,6 +387,7 @@ public class Battle extends Application {
 		}
 
 		executing = true;
+		timelinePlayer1.play();
 	}
 
 	/**
