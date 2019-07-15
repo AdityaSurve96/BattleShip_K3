@@ -74,12 +74,19 @@ public class Battle extends Application {
 	
 	
 	VBox vBox,vBox1;
+	
 	HBox hBox;
+	
+	
+	
+	
 	// Button sButton, rButton;
 	Text timer1, timer2;
 	Timeline timelinePlayer1, timelinePlayer2;
+	
 	int mins = 0, secs = 0, millis = 0;
 	int mins1 = 0, secs1 = 0, millis1 = 0;
+	
 	boolean player1Timer = true;
 	boolean player2Timer = true;
 	
@@ -167,10 +174,36 @@ public class Battle extends Application {
 		actions.setTranslateX(650);
 		actions.setTranslateY(750);
 
+		
+		
 		root.getChildren().add(battle);
 		root.getChildren().add(player1);
 		root.getChildren().add(Opponent);
 		root.getChildren().add(actions);
+		
+		
+		Text player1TimerHeading = new Text(); 
+		player1TimerHeading.setText("Player 1 Timer");
+		player1TimerHeading.setFill(Color.WHITE);
+		player1TimerHeading.setFont(Font.font("Verdana", FontWeight.BOLD, FontPosture.REGULAR, 24));
+		
+		player1TimerHeading.setX(30);
+		player1TimerHeading.setY(150);
+		
+		Text player2TimerHeading = new Text(); 
+		player2TimerHeading.setText("Player 2 Timer");
+		player2TimerHeading.setFill(Color.WHITE);
+		player2TimerHeading.setFont(Font.font("Verdana", FontWeight.BOLD, FontPosture.REGULAR, 24));
+		
+		
+		player2TimerHeading.setX(1100);
+		player2TimerHeading.setY(150);
+		
+		
+		root.getChildren().add(player1TimerHeading);
+		root.getChildren().add(player2TimerHeading);
+		
+		
 		
 		
 		
@@ -188,6 +221,7 @@ public class Battle extends Application {
             	change(timer1);
 			}
 		}));
+		
 		timelinePlayer1.setCycleCount(Timeline.INDEFINITE);
 		timelinePlayer1.setAutoReverse(false);
 
@@ -195,7 +229,7 @@ public class Battle extends Application {
 		hBox.setMinWidth(Region.USE_PREF_SIZE);
 		vBox = new VBox(30);
 		vBox.setAlignment(Pos.CENTER);
-		vBox.getChildren().addAll(timer1, hBox);
+		vBox.getChildren().addAll(timer1);
 		vBox.setTranslateX(100);
 		vBox.setTranslateY(200);
 		vBox.setMinWidth(Region.USE_PREF_SIZE);
