@@ -71,16 +71,9 @@ public class Battle extends Application {
 	private Button load = new Button("LOAD");
 
 	private Button exit = new Button("EXIT");
-	
-	
-	VBox vBox,vBox1;
-	
-	HBox hBox;
-	
-	
-	
-	
-	// Button sButton, rButton;
+
+	HBox hBox,hBox1;
+		
 	Text timer1, timer2;
 	Timeline timelinePlayer1, timelinePlayer2;
 	
@@ -138,7 +131,6 @@ public class Battle extends Application {
 	private Parent designBoard(Stage personStage, Background background) {
 
 
-
 		BorderPane root = new BorderPane();
 		root.setPrefSize(1300, 800);
 
@@ -148,8 +140,6 @@ public class Battle extends Application {
 		battle.setStrokeWidth(2);
 		battle.setStroke(Color.WHITE);
 		battle.setFont(Font.font("Verdana", FontWeight.BOLD, FontPosture.REGULAR, 30));
-
-
 
 		battle.setX(500);
 		battle.setY(30);
@@ -182,38 +172,21 @@ public class Battle extends Application {
 		root.getChildren().add(actions);
 		
 		
+		//Player 1 
+		
+		Text player1Summary = new Text(); 
+		player1Summary.setText("Player 1");
+		player1Summary.setFill(Color.GOLD);
+		player1Summary.setFont(Font.font("Verdana", FontWeight.BOLD, FontPosture.REGULAR, 24));
+				
 		Text player1TimerHeading = new Text(); 
-		player1TimerHeading.setText("Player 1 Timer");
-		player1TimerHeading.setFill(Color.WHITE);
-		player1TimerHeading.setFont(Font.font("Verdana", FontWeight.BOLD, FontPosture.REGULAR, 24));
-		
-		player1TimerHeading.setX(30);
-		player1TimerHeading.setY(150);
-		
-		Text player2TimerHeading = new Text(); 
-		player2TimerHeading.setText("Player 2 Timer");
-		player2TimerHeading.setFill(Color.WHITE);
-		player2TimerHeading.setFont(Font.font("Verdana", FontWeight.BOLD, FontPosture.REGULAR, 24));
-		
-		
-		player2TimerHeading.setX(1100);
-		player2TimerHeading.setY(150);
-		
-		
-		root.getChildren().add(player1TimerHeading);
-		root.getChildren().add(player2TimerHeading);
-		
-		
-		
-		
+		player1TimerHeading.setText("Timer:");
+		player1TimerHeading.setFill(Color.RED);
+		player1TimerHeading.setFont(Font.font("Verdana", FontWeight.BOLD, FontPosture.REGULAR, 20));
 		
 		timer1 = new Text("00:00:000");
 		timer1.setFill(Color.WHITE);
 		timer1.setFont(Font.font("Verdana", FontWeight.BOLD, FontPosture.REGULAR, 20));
-		hBox = new HBox(30);
-		hBox.setAlignment(Pos.CENTER);
-		
-		
 		
 		timelinePlayer1 = new Timeline(new KeyFrame(Duration.millis(1), new EventHandler<ActionEvent>() {
 			@Override
@@ -224,16 +197,33 @@ public class Battle extends Application {
 		
 		timelinePlayer1.setCycleCount(Timeline.INDEFINITE);
 		timelinePlayer1.setAutoReverse(false);
+		
+		Text player1ScoreHeading = new Text(); 
+		player1ScoreHeading.setText("Score:");
+		player1ScoreHeading.setFill(Color.RED);
+		player1ScoreHeading.setFont(Font.font("Verdana", FontWeight.BOLD, FontPosture.REGULAR, 20));
+		
+		hBox = new HBox(10,player1TimerHeading,timer1);
+		hBox1 =new HBox(10,player1ScoreHeading);
+		
+		VBox player1Details= new VBox(20,player1Summary,hBox,hBox1);
+		player1Details.setLayoutX(50);
+		player1Details.setLayoutY(100);
 
-		// hBox.getChildren().addAll(sButton, rButton);
-		hBox.setMinWidth(Region.USE_PREF_SIZE);
-		vBox = new VBox(30);
-		vBox.setAlignment(Pos.CENTER);
-		vBox.getChildren().addAll(timer1);
-		vBox.setTranslateX(100);
-		vBox.setTranslateY(200);
-		vBox.setMinWidth(Region.USE_PREF_SIZE);
-		root.getChildren().add(vBox);
+		root.getChildren().add(player1Details);
+				
+		//Player 2
+		
+		Text player2Summary = new Text(); 
+		player2Summary.setText("Player 2");
+		player2Summary.setFill(Color.GOLD);
+		player2Summary.setFont(Font.font("Verdana", FontWeight.BOLD, FontPosture.REGULAR, 24));
+		
+		Text player2TimerHeading = new Text(); 
+		player2TimerHeading.setText("Timer:");
+		player2TimerHeading.setFill(Color.RED);
+		player2TimerHeading.setFont(Font.font("Verdana", FontWeight.BOLD, FontPosture.REGULAR, 20));
+		
 		
 		timer2 = new Text("00:00:000");
 		timer2.setFill(Color.WHITE);
@@ -249,13 +239,20 @@ public class Battle extends Application {
 		timelinePlayer2.setAutoReverse(false);
 		
 		
-		vBox1 = new VBox(30);
-		vBox1.setAlignment(Pos.CENTER);
-		vBox1.getChildren().addAll(timer2);
-		vBox1.setTranslateX(1200);
-		vBox1.setTranslateY(200);
-		vBox1.setMinWidth(Region.USE_PREF_SIZE);
-		root.getChildren().add(vBox1);
+		Text player2ScoreHeading = new Text(); 
+		player2ScoreHeading.setText("Score:");
+		player2ScoreHeading.setFill(Color.RED);
+		player2ScoreHeading.setFont(Font.font("Verdana", FontWeight.BOLD, FontPosture.REGULAR, 20));
+		
+		hBox = new HBox(10,player2TimerHeading,timer2);
+		hBox1 =new HBox(10,player2ScoreHeading);
+		VBox player2Details= new VBox(20,player2Summary,hBox,hBox1);
+		player2Details.setLayoutX(1100);
+		player2Details.setLayoutY(100);
+		
+		root.getChildren().add(player2Details);
+		
+		//End Graphics
 		
 		EventHandler<MouseEvent> event = new EventHandler<MouseEvent>() {
 
