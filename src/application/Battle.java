@@ -112,7 +112,7 @@ public class Battle extends Application {
 		text.setText((((mins1/10) == 0) ? "0" : "") + mins1 + ":"
 		 + (((secs1/10) == 0) ? "0" : "") + secs1 + ":" 
 			+ (((millis1/10) == 0) ? "00" : (((millis1/100) == 0) ? "0" : "")) + millis1++);
-		text.setText("OPPO");
+		//text.setText("OPPO");
     }
 
 
@@ -402,7 +402,7 @@ public class Battle extends Application {
 			
 			if(!opponentTurn)
 			{
-				timelinePlayer2.pause();
+				//timelinePlayer2.pause();
 				timelinePlayer1.play();
 			}else {
 				player2Score += 5;
