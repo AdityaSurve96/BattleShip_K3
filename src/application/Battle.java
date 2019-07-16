@@ -186,6 +186,8 @@ public class Battle extends Application {
 		player1TimerHeading.setFill(Color.RED);
 		player1TimerHeading.setFont(Font.font("Verdana", FontWeight.BOLD, FontPosture.REGULAR, 20));
 		
+		// timer 
+		
 		timer1 = new Text("00:00:000");
 		timer1.setFill(Color.WHITE);
 		timer1.setFont(Font.font("Verdana", FontWeight.BOLD, FontPosture.REGULAR, 20));
@@ -219,7 +221,7 @@ public class Battle extends Application {
 
 		root.getChildren().add(player1Details);
 				
-		//Player 2
+		//player 2
 		
 		Text player2Summary = new Text(); 
 		player2Summary.setText("Player 2");
@@ -231,6 +233,7 @@ public class Battle extends Application {
 		player2TimerHeading.setFill(Color.RED);
 		player2TimerHeading.setFont(Font.font("Verdana", FontWeight.BOLD, FontPosture.REGULAR, 20));
 		
+		// timer
 		
 		timer2 = new Text("00:00:000");
 		timer2.setFill(Color.WHITE);
