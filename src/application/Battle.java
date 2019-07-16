@@ -4,6 +4,7 @@ package application;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.Optional;
 import java.util.Random;
 import application.Board.Cell;
@@ -56,11 +57,24 @@ import javafx.util.Duration;
 public class Battle extends Application {
 
 	private boolean executing = false;
+	
+	private boolean isCheating = true;
 
 	private Board opponentBoard, firstPlayerBoard;
 
 	private int numberOfShips = 5;
-
+	
+	private ArrayList<Integer> shipLengths = new ArrayList<Integer>() { 
+			
+		{ add(5); 
+		  add(4); 
+		  add(3); 
+		  add(3); 
+		  add(2);   
+		}
+	};
+	
+	private int currentShip =0;
 	private boolean opponentTurn = false;
 
 	private Random random = new Random();
@@ -74,6 +88,8 @@ public class Battle extends Application {
 	private Button load = new Button("LOAD");
 
 	private Button exit = new Button("EXIT");
+	
+	private Button doNotCheat = new Button("DO NOT CHEAT");
 
 	HBox hBox,hBox1;
 	
@@ -162,11 +178,11 @@ public class Battle extends Application {
 		Opponent.setY(100);
 		Opponent.setFont(Font.font("Verdana", FontWeight.BOLD, FontPosture.REGULAR, 20));
 
-		HBox actions = new HBox(30, st, reset,pause,load,exit);
+		HBox actions = new HBox(30, st, reset,pause,load,exit,doNotCheat);
 		actions.setAlignment(Pos.CENTER);
 		buttonGeometry();
 
-		actions.setTranslateX(650);
+		actions.setTranslateX(630);
 		actions.setTranslateY(750);
 
 		
@@ -325,12 +341,17 @@ public class Battle extends Application {
 				if (executing)
 					return;
 
-				Cell cell = (Cell) e.getSource();
-				if (firstPlayerBoard.positionShip(new Ship(numberOfShips, e.getButton() == MouseButton.PRIMARY),
-						cell.row, cell.col)) {
-					--numberOfShips;
+				
+				
 
-				}
+					Cell cell = (Cell) e.getSource();
+					if (firstPlayerBoard.positionShip(new Ship(shipLengths.get(currentShip), e.getButton() == MouseButton.PRIMARY),
+							cell.row, cell.col)) {
+						--numberOfShips;
+						currentShip++;
+
+					}
+				
 			}
 
 		};
@@ -377,20 +398,26 @@ public class Battle extends Application {
 		pause.setStyle("-fx-background-color: #000000;-fx-font-size: 2em;-fx-text-fill:#ffffff;");
 		load.setStyle("-fx-background-color: #000000;-fx-font-size: 2em;-fx-text-fill:#ffffff;");
 		exit.setStyle("-fx-background-color: #000000;-fx-font-size: 2em;-fx-text-fill:#ffffff;");
+		doNotCheat.setStyle("-fx-background-color: #000000;-fx-font-size: 2em;-fx-text-fill:#ffffff;");
 
 		st.setMinHeight(80);
 		st.setMinWidth(150);
+		
 		reset.setMinHeight(80);
 		reset.setMinWidth(150);
 
 		
 		pause.setMinHeight(80);
 		pause.setMinWidth(150);
+		
 		load.setMinHeight(80);
 		load.setMinWidth(150);
 		
 		exit.setMinHeight(80);
 		exit.setMinWidth(150);
+		
+		doNotCheat.setMinHeight(80);
+		doNotCheat.setMinWidth(250);
 		
 	}
 	
@@ -426,9 +453,9 @@ public class Battle extends Application {
 			if(!opponentTurn)
 			{
 				timelinePlayer2.pause();
-//				System.out.println("Player 2 Timer paused");
+
 				timelinePlayer1.playFrom(Duration.minutes(1));
-//				System.out.println("Player 1 Timer resumed");
+
 			}else {
 				player2Score += 5;
 				displayScore("player2");
@@ -466,7 +493,7 @@ public class Battle extends Application {
 		} else if (result.get() == buttonTypeTwo) {
 		    System.exit(0);
 		}
-//		winOrLose.showAndWait();
+
 	}
 
 
@@ -476,23 +503,51 @@ public class Battle extends Application {
 	 */
 	private void startGame() {
 		// place enemy ships
-		int type = 5;
 
-		while (type > 0) {
+		numberOfShips =5;
+		for(int i =0; i< shipLengths.size(); i ++) {
+			
 			int x = random.nextInt(10);
 			int y = random.nextInt(10);
-
-			if (opponentBoard.positionShip(new Ship(type, Math.random() < 0.5), x, y)) {
-				type--;
+			
+			if (opponentBoard.positionShip(new Ship(shipLengths.get(i), Math.random() < 0.5), x, y)) {
+				
+				numberOfShips--;
+			}
+			else {
+				i-=1;
 			}
 		}
+
 		
 		executing = true;
 		timelinePlayer1.play();
 	
 		System.out.println("Player 1 Timer Started");
 	}
+	
+	private void seeOpponentShips(Board opponentBoard) {
+		for (int y = 0; y < 10; y++) {
 
+			for (int x = 0; x < 10; x++) {
+
+				Cell cell =opponentBoard.getCell(y,x);
+					if(cell.ship!=null) {
+						if(!cell.targetHit) {
+							if(isCheating)
+								cell.setFill(Color.GOLD);
+							else
+								cell.setFill(Color.WHITE);
+							
+						}
+					}
+				
+			}
+
+			
+		}
+	}
+	
 	/**
 	 * This Method will initialize the Primary stage with the necessary elements in it
 	 * @param primaryStage
@@ -532,7 +587,14 @@ public class Battle extends Application {
 			restart(primaryStage);
 		});
 
-
+		doNotCheat.setOnAction(e -> {
+			
+			seeOpponentShips(opponentBoard);
+			
+			isCheating =!isCheating;
+			
+		});
+		
 
 
 		primaryStage.show();
