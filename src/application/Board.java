@@ -311,6 +311,11 @@ public class Board extends Parent {
 						c.setFill(Color.RED);
 					}
 					shipDestructionMessage();
+					if(board.opponent)
+						Battle.player1Score +=20;
+					else
+						Battle.player2Score +=20;
+					
 					board.amountOfships--;
 					ship.shotCellsOfShips.clear();
 				}

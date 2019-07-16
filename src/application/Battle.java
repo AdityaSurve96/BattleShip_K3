@@ -73,8 +73,10 @@ public class Battle extends Application {
 	private Button exit = new Button("EXIT");
 
 	HBox hBox,hBox1;
+	
+	static int player1Score,player2Score;
 		
-	Text timer1, timer2;
+	Text timer1, timer2,player2ScoreDisplay,player1ScoreDisplay;
 	Timeline timelinePlayer1, timelinePlayer2;
 	
 	int mins = 0, secs = 0, millis = 0;
@@ -203,8 +205,13 @@ public class Battle extends Application {
 		player1ScoreHeading.setFill(Color.RED);
 		player1ScoreHeading.setFont(Font.font("Verdana", FontWeight.BOLD, FontPosture.REGULAR, 20));
 		
+		player1ScoreDisplay = new Text(); 
+		player1ScoreDisplay.setText("0");
+		player1ScoreDisplay.setFill(Color.WHITE);
+		player1ScoreDisplay.setFont(Font.font("Verdana", FontWeight.BOLD, FontPosture.REGULAR, 20));
+		
 		hBox = new HBox(10,player1TimerHeading,timer1);
-		hBox1 =new HBox(10,player1ScoreHeading);
+		hBox1 =new HBox(10,player1ScoreHeading,player1ScoreDisplay);
 		
 		VBox player1Details= new VBox(20,player1Summary,hBox,hBox1);
 		player1Details.setLayoutX(50);
@@ -244,8 +251,14 @@ public class Battle extends Application {
 		player2ScoreHeading.setFill(Color.RED);
 		player2ScoreHeading.setFont(Font.font("Verdana", FontWeight.BOLD, FontPosture.REGULAR, 20));
 		
+		
+		player2ScoreDisplay = new Text(); 
+		player2ScoreDisplay.setText("0");
+		player2ScoreDisplay.setFill(Color.WHITE);
+		player2ScoreDisplay.setFont(Font.font("Verdana", FontWeight.BOLD, FontPosture.REGULAR, 20));
+		
 		hBox = new HBox(10,player2TimerHeading,timer2);
-		hBox1 =new HBox(10,player2ScoreHeading);
+		hBox1 =new HBox(10,player2ScoreHeading,player2ScoreDisplay);
 		VBox player2Details= new VBox(20,player2Summary,hBox,hBox1);
 		player2Details.setLayoutX(1100);
 		player2Details.setLayoutY(100);
@@ -266,26 +279,33 @@ public class Battle extends Application {
 					return;
 
 				opponentTurn = !cell.shoot();
-
-				if (opponentBoard.amountOfships == 0) {
-
-					String s ="You Won This Game";
-
-					finalResultDisplay(s);
-
-
-				}
+				
 
 				if (opponentTurn) {
 					timelinePlayer1.pause();
 					timelinePlayer2.play();
 					opponentMove(personStage);
+				}else {
+				player1Score += 5;
+				displayScore("player1");
 				}
+				
+				if (opponentBoard.amountOfships == 0) {
+
+					String s ="You Won This Game";
+					finalResultDisplay(s);
+
+
+				}
+
+				
 			}
 
 		};
 
 
+		
+		
 		EventHandler<MouseEvent> playerEvent = new EventHandler<MouseEvent>() {
 
 			@Override
@@ -352,12 +372,24 @@ public class Battle extends Application {
 		exit.setMinWidth(150);
 		
 	}
+	
+	
+	
+	private void displayScore(String player) {
+		if(player.equalsIgnoreCase("player1"))
+			player1ScoreDisplay.setText(player1Score+"");
+		else
+			player2ScoreDisplay.setText(player2Score+"");
+	}
+	
 
 	/**
 	 * This method is AI which will detect the move on Player 1 Board.
 	 * @param personStage 
 	 */
 	private void opponentMove(Stage personStage) {
+		
+		
 		while (opponentTurn) {
 			int x = random.nextInt(10);
 			int y = random.nextInt(10);
@@ -372,6 +404,9 @@ public class Battle extends Application {
 			{
 				timelinePlayer2.pause();
 				timelinePlayer1.play();
+			}else {
+				player2Score += 5;
+				displayScore("player2");
 			}
 
 			if (firstPlayerBoard.amountOfships == 0) {
@@ -379,9 +414,8 @@ public class Battle extends Application {
 				String s ="You Lost This Game to the Computer";
 				finalResultDisplay(s);
 
-
-
 			}
+			
 		}
 	}
 	
