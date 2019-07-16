@@ -94,6 +94,7 @@ public class Board extends Parent {
 						cell.setFill(Color.GREEN);
 						cell.setStroke(Color.BLACK);
 					}
+
 				}
 			}
 			else {
@@ -109,6 +110,7 @@ public class Board extends Parent {
 						cell.setStroke(Color.BLACK);
 
 					}
+
 				}
 			}
 
@@ -290,7 +292,7 @@ public class Board extends Parent {
 				 @throws io exception
 				 */
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 			}
 
