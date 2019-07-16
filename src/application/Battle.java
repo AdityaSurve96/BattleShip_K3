@@ -3,6 +3,8 @@ package application;
 
 import java.io.File;
 import java.io.IOException;
+import java.math.BigInteger;
+import java.util.Optional;
 import java.util.Random;
 import application.Board.Cell;
 import javafx.animation.KeyFrame;
@@ -17,6 +19,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
@@ -275,15 +278,21 @@ public class Battle extends Application {
 					return;
 
 				Cell cell = (Cell) e.getSource();
+				
 				if (cell.targetHit)
 					return;
-
-				opponentTurn = !cell.shoot();
 				
+				
+				System.out.println("Player Shooting");
+				opponentTurn = !cell.shoot();
+				System.out.println("Player Shot done");
+			
 
 				if (opponentTurn) {
 					timelinePlayer1.pause();
+//					System.out.println("Player 1 Timer paused");
 					timelinePlayer2.play();
+//					System.out.println("Player 2 Timer resumed");
 					opponentMove(personStage);
 				}else {
 				player1Score += 5;
@@ -293,7 +302,7 @@ public class Battle extends Application {
 				if (opponentBoard.amountOfships == 0) {
 
 					String s ="You Won This Game";
-					finalResultDisplay(s);
+					finalResultDisplay(s,personStage);
 
 
 				}
@@ -339,6 +348,15 @@ public class Battle extends Application {
 
 		return root;
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 	/**
 	 * <p>setting styling effects for different buttons like pause,start,rest,load on output screen.
@@ -391,19 +409,23 @@ public class Battle extends Application {
 		
 		
 		while (opponentTurn) {
+			
 			int x = random.nextInt(10);
 			int y = random.nextInt(10);
-
+			
 			Cell cell = firstPlayerBoard.getCell(x, y);
 			if (cell.targetHit)
 				continue;
-
-			opponentTurn = cell.shoot();
 			
+			System.out.println("Opponent Shooting");
+			opponentTurn = cell.shoot();
+			System.out.println("Opponent shot done");
 			if(!opponentTurn)
 			{
-				//timelinePlayer2.pause();
-				timelinePlayer1.play();
+				timelinePlayer2.pause();
+//				System.out.println("Player 2 Timer paused");
+				timelinePlayer1.playFrom(Duration.minutes(1));
+//				System.out.println("Player 1 Timer resumed");
 			}else {
 				player2Score += 5;
 				displayScore("player2");
@@ -412,7 +434,7 @@ public class Battle extends Application {
 			if (firstPlayerBoard.amountOfships == 0) {
 
 				String s ="You Lost This Game to the Computer";
-				finalResultDisplay(s);
+				finalResultDisplay(s,personStage);
 
 			}
 			
@@ -423,14 +445,25 @@ public class Battle extends Application {
 	 * This method will Display the final result on the pop showing who the winner.
 	 * @param s String that specifies a text notifying when one player wins.
 	 */
-	private void finalResultDisplay(String s) {
+	private void finalResultDisplay(String s,Stage personStage) {
 		// TODO Auto-generated method stub
-		Alert opponentWin = new Alert(AlertType.INFORMATION);
-		opponentWin.setTitle("ALERT");
-		opponentWin.setHeaderText("WINNER ANNOUCEMENT");
+		ButtonType buttonTypeOne = new ButtonType("YES");
+		ButtonType buttonTypeTwo = new ButtonType("NO");
 		
-		opponentWin.setContentText(s);
-		opponentWin.show();
+		
+		Alert winOrLose = new Alert(AlertType.CONFIRMATION);
+		winOrLose.setTitle("WINNER ANNOUCEMENT");
+		winOrLose.setHeaderText(s);
+		
+		winOrLose.setContentText("Click YES to Restart the Game\nClick NO to Exit the Game");
+		winOrLose.getButtonTypes().setAll(buttonTypeOne , buttonTypeTwo);
+		Optional<ButtonType> result = winOrLose.showAndWait();
+		if (result.get() == buttonTypeOne){
+			restart(personStage);
+		} else if (result.get() == buttonTypeTwo) {
+		    System.exit(0);
+		}
+//		winOrLose.showAndWait();
 	}
 
 
@@ -450,9 +483,11 @@ public class Battle extends Application {
 				type--;
 			}
 		}
-
+		
 		executing = true;
 		timelinePlayer1.play();
+	
+		System.out.println("Player 1 Timer Started");
 	}
 
 	/**
