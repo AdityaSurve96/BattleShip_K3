@@ -265,6 +265,7 @@ public class Board extends Parent {
 		 * @return boolean
 		 */
 		public boolean shoot() {
+			
 			File hitRate = new File(".");
 
 			/**
@@ -296,9 +297,9 @@ public class Board extends Parent {
 
 			targetHit = true;
 			setFill(Color.BLACK);
+		
 
 			if (ship != null) {
-
 
 				ship.shipPartHit();
 				ship.shotCellsOfShips.add(this);
@@ -310,7 +311,15 @@ public class Board extends Parent {
 
 						c.setFill(Color.RED);
 					}
-					shipDestructionMessage();
+					
+
+					if(board.opponent) {
+						shipDestructionMessage("OPPONENT",1000,600);
+					}
+					else {
+						shipDestructionMessage("PLAYER",500,600);
+					}
+					
 					if(board.opponent)
 						Battle.player1Score +=20;
 					else
@@ -321,18 +330,21 @@ public class Board extends Parent {
 				}
 				return true;
 			}
-
+			
 			return false;
 		}
 		
 		
 	}
-	private void shipDestructionMessage() {
-	
-		Alert opponentWin = new Alert(AlertType.INFORMATION);
-		opponentWin.setTitle("ALERT");
-		opponentWin.setHeaderText("A ship has been Destroyed");
-		opponentWin.show();
+	private void shipDestructionMessage(String s,double x, double y) {
+		
+		Alert shipSinkAlert = new Alert(AlertType.WARNING);
+		shipSinkAlert.setTitle("SHIP SUNK");
+		shipSinkAlert.setHeaderText(null);
+		shipSinkAlert.setContentText(s+" ship has been destroyed");
+		shipSinkAlert.setX(x);
+		shipSinkAlert.setY(y);
+		shipSinkAlert.showAndWait();
 	}
 
 }
