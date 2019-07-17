@@ -1,9 +1,7 @@
 package application;
 
-
 import java.io.File;
 import java.io.IOException;
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.Random;
@@ -43,13 +41,16 @@ import javafx.util.Duration;
 
 /**
  * 
- * This is the Main Class which will help us to play the game . Method which will startGame , Create Boards.
+ * This is the Main Class which will help us to play the game . Method which
+ * will startGame , Create Boards.
  * <p>
- * Other tasks are like:</p>
+ * Other tasks are like:
+ * </p>
  * <ol>
- * <li>Handles the  Mouse events with  player and opponent moves.</li>
+ * <li>Handles the Mouse events with player and opponent moves.</li>
  * <li>Initialize Variables.</li>
  * </ol>
+ * 
  * @author K3
  *
  */
@@ -57,24 +58,33 @@ import javafx.util.Duration;
 public class Battle extends Application {
 
 	private boolean executing = false;
-	
+
 	private boolean isCheating = true;
 
 	private Board opponentBoard, firstPlayerBoard;
 
 	private int numberOfShips = 5;
-	
-	private ArrayList<Integer> shipLengths = new ArrayList<Integer>() { 
-			
-		{ add(5); 
-		  add(4); 
-		  add(3); 
-		  add(3); 
-		  add(2);   
+
+	private boolean normalGame = false;
+
+	private boolean salvation = true;
+
+	private int hits = 1;
+
+	private ArrayList<Cell> numberOfShots = new ArrayList<>();
+
+	private ArrayList<Integer> shipLengths = new ArrayList<Integer>() {
+
+		{
+			add(5);
+			add(4);
+			add(3);
+			add(3);
+			add(2);
 		}
 	};
-	
-	private int currentShip =0;
+
+	private int currentShip = 0;
 	private boolean opponentTurn = false;
 
 	private Random random = new Random();
@@ -88,69 +98,70 @@ public class Battle extends Application {
 	private Button load = new Button("LOAD");
 
 	private Button exit = new Button("EXIT");
-	
+
 	private Button doNotCheat = new Button("DO NOT CHEAT");
 
-	HBox hBox,hBox1;
-	
-	static int player1Score,player2Score;
-		
-	Text timer1, timer2,player2ScoreDisplay,player1ScoreDisplay;
+	HBox hBox, hBox1;
+
+	static int player1Score, player2Score;
+
+	Text timer1, timer2, player2ScoreDisplay, player1ScoreDisplay;
 	Timeline timelinePlayer1, timelinePlayer2;
-	
+
 	int mins = 0, secs = 0, millis = 0;
 	int mins1 = 0, secs1 = 0, millis1 = 0;
-	
+
 	boolean player1Timer = true;
 	boolean player2Timer = true;
-	
+
 	void change(Text text) {
-		if(millis == 1000) {
+		if (millis == 1000) {
 			secs++;
 			millis = 0;
 		}
-		if(secs == 60) {
+		if (secs == 60) {
 			mins++;
 			secs = 0;
 		}
-		text.setText((((mins/10) == 0) ? "0" : "") + mins + ":"
-		 + (((secs/10) == 0) ? "0" : "") + secs + ":" 
-			+ (((millis/10) == 0) ? "00" : (((millis/100) == 0) ? "0" : "")) + millis++);
-    }
-	
-	
+		text.setText((((mins / 10) == 0) ? "0" : "") + mins + ":" + (((secs / 10) == 0) ? "0" : "") + secs + ":"
+				+ (((millis / 10) == 0) ? "00" : (((millis / 100) == 0) ? "0" : "")) + millis++);
+	}
+
 	void change1(Text text) {
-		if(millis1 == 1000) {
+		if (millis1 == 1000) {
 			secs1++;
 			millis1 = 0;
 		}
-		if(secs1 == 60) {
+		if (secs1 == 60) {
 			mins1++;
 			secs1 = 0;
 		}
-		text.setText((((mins1/10) == 0) ? "0" : "") + mins1 + ":"
-		 + (((secs1/10) == 0) ? "0" : "") + secs1 + ":" 
-			+ (((millis1/10) == 0) ? "00" : (((millis1/100) == 0) ? "0" : "")) + millis1++);
-		//text.setText("OPPO");
-    }
-
+		text.setText((((mins1 / 10) == 0) ? "0" : "") + mins1 + ":" + (((secs1 / 10) == 0) ? "0" : "") + secs1 + ":"
+				+ (((millis1 / 10) == 0) ? "00" : (((millis1 / 100) == 0) ? "0" : "")) + millis1++);
+		// text.setText("OPPO");
+	}
 
 	/**
-	 * In general adding styles and layout to the output screen i.e titles ,grid layout,mouse effects and movement etc.
+	 * In general adding styles and layout to the output screen i.e titles ,grid
+	 * layout,mouse effects and movement etc.
 	 * <p>
-	 * In Detail tasks carried out for board design.</p>
+	 * In Detail tasks carried out for board design.
+	 * </p>
 	 * <ol type="1">
 	 * <li>Setting the title for the game.</li>
-	 * <li>Giving heading to grid1 and grid2 i.e player 1 grid and opponent grid</li>
-	 * <li>Create HBox i.e icons to specify different functionalities in game like start,reset,pause and load</li>
+	 * <li>Giving heading to grid1 and grid2 i.e player 1 grid and opponent
+	 * grid</li>
+	 * <li>Create HBox i.e icons to specify different functionalities in game like
+	 * start,reset,pause and load</li>
 	 * <li>Mouse handler events for opponent and player 1</li>
-		</ol>
-	 * @param personStage Stage that holds the board, grids and ships on it.
-	 * @param background 
-	 * @return	
+	 * </ol>
+	 * 
+	 * @param personStage
+	 *            Stage that holds the board, grids and ships on it.
+	 * @param background
+	 * @return
 	 */
 	private Parent designBoard(Stage personStage, Background background) {
-
 
 		BorderPane root = new BorderPane();
 		root.setPrefSize(1300, 800);
@@ -178,159 +189,130 @@ public class Battle extends Application {
 		Opponent.setY(100);
 		Opponent.setFont(Font.font("Verdana", FontWeight.BOLD, FontPosture.REGULAR, 20));
 
-		HBox actions = new HBox(30, st, reset,pause,load,exit,doNotCheat);
+		HBox actions = new HBox(30, st, reset, pause, load, exit, doNotCheat);
 		actions.setAlignment(Pos.CENTER);
 		buttonGeometry();
 
 		actions.setTranslateX(630);
 		actions.setTranslateY(750);
 
-		
-		
 		root.getChildren().add(battle);
 		root.getChildren().add(player1);
 		root.getChildren().add(Opponent);
 		root.getChildren().add(actions);
-		
-		
-		//Player 1 
-		
-		Text player1Summary = new Text(); 
+
+		// Player 1
+
+		Text player1Summary = new Text();
 		player1Summary.setText("Player 1");
 		player1Summary.setFill(Color.GOLD);
 		player1Summary.setFont(Font.font("Verdana", FontWeight.BOLD, FontPosture.REGULAR, 24));
-				
-		Text player1TimerHeading = new Text(); 
+
+		Text player1TimerHeading = new Text();
 		player1TimerHeading.setText("Timer:");
 		player1TimerHeading.setFill(Color.RED);
 		player1TimerHeading.setFont(Font.font("Verdana", FontWeight.BOLD, FontPosture.REGULAR, 20));
-		
+
 		timer1 = new Text("00:00:000");
 		timer1.setFill(Color.WHITE);
 		timer1.setFont(Font.font("Verdana", FontWeight.BOLD, FontPosture.REGULAR, 20));
-		
+
 		timelinePlayer1 = new Timeline(new KeyFrame(Duration.millis(1), new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-            	change(timer1);
+				change(timer1);
 			}
 		}));
-		
+
 		timelinePlayer1.setCycleCount(Timeline.INDEFINITE);
 		timelinePlayer1.setAutoReverse(false);
-		
-		Text player1ScoreHeading = new Text(); 
+
+		Text player1ScoreHeading = new Text();
 		player1ScoreHeading.setText("Score:");
 		player1ScoreHeading.setFill(Color.RED);
 		player1ScoreHeading.setFont(Font.font("Verdana", FontWeight.BOLD, FontPosture.REGULAR, 20));
-		
-		player1ScoreDisplay = new Text(); 
+
+		player1ScoreDisplay = new Text();
 		player1ScoreDisplay.setText("0");
 		player1ScoreDisplay.setFill(Color.WHITE);
 		player1ScoreDisplay.setFont(Font.font("Verdana", FontWeight.BOLD, FontPosture.REGULAR, 20));
-		
-		hBox = new HBox(10,player1TimerHeading,timer1);
-		hBox1 =new HBox(10,player1ScoreHeading,player1ScoreDisplay);
-		
-		VBox player1Details= new VBox(20,player1Summary,hBox,hBox1);
+
+		hBox = new HBox(10, player1TimerHeading, timer1);
+		hBox1 = new HBox(10, player1ScoreHeading, player1ScoreDisplay);
+
+		VBox player1Details = new VBox(20, player1Summary, hBox, hBox1);
 		player1Details.setLayoutX(50);
 		player1Details.setLayoutY(100);
 
 		root.getChildren().add(player1Details);
-				
-		//Player 2
-		
-		Text player2Summary = new Text(); 
+
+		// Player 2
+
+		Text player2Summary = new Text();
 		player2Summary.setText("Player 2");
 		player2Summary.setFill(Color.GOLD);
 		player2Summary.setFont(Font.font("Verdana", FontWeight.BOLD, FontPosture.REGULAR, 24));
-		
-		Text player2TimerHeading = new Text(); 
+
+		Text player2TimerHeading = new Text();
 		player2TimerHeading.setText("Timer:");
 		player2TimerHeading.setFill(Color.RED);
 		player2TimerHeading.setFont(Font.font("Verdana", FontWeight.BOLD, FontPosture.REGULAR, 20));
-		
-		
+
 		timer2 = new Text("00:00:000");
 		timer2.setFill(Color.WHITE);
 		timer2.setFont(Font.font("Verdana", FontWeight.BOLD, FontPosture.REGULAR, 20));
-		
+
 		timelinePlayer2 = new Timeline(new KeyFrame(Duration.millis(1), new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-            	change1(timer2);
+				change1(timer2);
 			}
 		}));
 		timelinePlayer2.setCycleCount(Timeline.INDEFINITE);
 		timelinePlayer2.setAutoReverse(false);
-		
-		
-		Text player2ScoreHeading = new Text(); 
+
+		Text player2ScoreHeading = new Text();
 		player2ScoreHeading.setText("Score:");
 		player2ScoreHeading.setFill(Color.RED);
 		player2ScoreHeading.setFont(Font.font("Verdana", FontWeight.BOLD, FontPosture.REGULAR, 20));
-		
-		
-		player2ScoreDisplay = new Text(); 
+
+		player2ScoreDisplay = new Text();
 		player2ScoreDisplay.setText("0");
 		player2ScoreDisplay.setFill(Color.WHITE);
 		player2ScoreDisplay.setFont(Font.font("Verdana", FontWeight.BOLD, FontPosture.REGULAR, 20));
-		
-		hBox = new HBox(10,player2TimerHeading,timer2);
-		hBox1 =new HBox(10,player2ScoreHeading,player2ScoreDisplay);
-		VBox player2Details= new VBox(20,player2Summary,hBox,hBox1);
+
+		hBox = new HBox(10, player2TimerHeading, timer2);
+		hBox1 = new HBox(10, player2ScoreHeading, player2ScoreDisplay);
+		VBox player2Details = new VBox(20, player2Summary, hBox, hBox1);
 		player2Details.setLayoutX(1100);
 		player2Details.setLayoutY(100);
-		
+
 		root.getChildren().add(player2Details);
-		
-		//End Graphics
-		
+
+		// End Graphics
+
 		EventHandler<MouseEvent> event = new EventHandler<MouseEvent>() {
 
 			@Override
 			public void handle(MouseEvent e) {
 				if (!executing)
 					return;
-
 				Cell cell = (Cell) e.getSource();
-				
-				if (cell.targetHit)
-					return;
-				
-				
-				System.out.println("Player Shooting");
-				opponentTurn = !cell.shoot();
-				System.out.println("Player Shot done");
-			
-
-				if (opponentTurn) {
-					timelinePlayer1.pause();
-//					System.out.println("Player 1 Timer paused");
-					timelinePlayer2.play();
-//					System.out.println("Player 2 Timer resumed");
-					opponentMove(personStage);
-				}else {
-				player1Score += 5;
-				displayScore("player1");
-				}
-				
-				if (opponentBoard.amountOfships == 0) {
-
-					String s ="You Won This Game";
-					finalResultDisplay(s,personStage);
-
-
+				numberOfShots.add(cell);
+				if (normalGame) {
+					shootNormalShip(numberOfShots, personStage);
+					numberOfShots.clear();
+				} else if (salvation) {
+					if (hits == firstPlayerBoard.amountOfships) {
+						shootSalvationShip(numberOfShots, personStage);					
+					} else
+						hits++;
 				}
 
-				
 			}
 
 		};
 
-
-		
-		
 		EventHandler<MouseEvent> playerEvent = new EventHandler<MouseEvent>() {
 
 			@Override
@@ -338,17 +320,15 @@ public class Battle extends Application {
 				if (executing)
 					return;
 
-				
-				
+				Cell cell = (Cell) e.getSource();
+				if (firstPlayerBoard.positionShip(
+						new Ship(shipLengths.get(currentShip), e.getButton() == MouseButton.PRIMARY), cell.row,
+						cell.col)) {
+					--numberOfShips;
+					currentShip++;
 
-					Cell cell = (Cell) e.getSource();
-					if (firstPlayerBoard.positionShip(new Ship(shipLengths.get(currentShip), e.getButton() == MouseButton.PRIMARY),
-							cell.row, cell.col)) {
-						--numberOfShips;
-						currentShip++;
+				}
 
-					}
-				
 			}
 
 		};
@@ -357,7 +337,6 @@ public class Battle extends Application {
 
 		firstPlayerBoard = new Board(false, playerEvent);
 
-	
 		firstPlayerBoard.setLayoutX(250);
 		firstPlayerBoard.setLayoutY(120);
 		opponentBoard.setLayoutX(750);
@@ -369,19 +348,13 @@ public class Battle extends Application {
 
 		return root;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
 
 	/**
-	 * <p>setting styling effects for different buttons like pause,start,rest,load on output screen.
-	 * Showing code for start button.Done similarly for other buttons defined in program.</p>
+	 * <p>
+	 * setting styling effects for different buttons like pause,start,rest,load on
+	 * output screen. Showing code for start button.Done similarly for other buttons
+	 * defined in program.
+	 * </p>
 	 * <code>
 	 * st.setStyle("-fx-background-color: #000000;-fx-font-size: 2em;-fx-text-fill:#ffffff;");
 	 * st.setMinHeight(80);
@@ -399,154 +372,184 @@ public class Battle extends Application {
 
 		st.setMinHeight(80);
 		st.setMinWidth(150);
-		
+
 		reset.setMinHeight(80);
 		reset.setMinWidth(150);
 
-		
 		pause.setMinHeight(80);
 		pause.setMinWidth(150);
-		
+
 		load.setMinHeight(80);
 		load.setMinWidth(150);
-		
+
 		exit.setMinHeight(80);
 		exit.setMinWidth(150);
-		
+
 		doNotCheat.setMinHeight(80);
 		doNotCheat.setMinWidth(250);
-		
+
 	}
-	
-	
-	
+
 	private void displayScore(String player) {
-		if(player.equalsIgnoreCase("player1"))
-			player1ScoreDisplay.setText(player1Score+"");
+		if (player.equalsIgnoreCase("player1"))
+			player1ScoreDisplay.setText(player1Score + "");
 		else
-			player2ScoreDisplay.setText(player2Score+"");
+			player2ScoreDisplay.setText(player2Score + "");
 	}
-	
 
 	/**
 	 * This method is AI which will detect the move on Player 1 Board.
-	 * @param personStage 
+	 * 
+	 * @param personStage
 	 */
-	private void opponentMove(Stage personStage) {
-		
-		
+	private void opponentNormalMove(Stage personStage) {
+
 		while (opponentTurn) {
-			
+
 			int x = random.nextInt(10);
 			int y = random.nextInt(10);
-			
+
 			Cell cell = firstPlayerBoard.getCell(x, y);
 			if (cell.targetHit)
 				continue;
-			
+
 			System.out.println("Opponent Shooting");
 			opponentTurn = cell.shoot();
 			System.out.println("Opponent shot done");
-			if(!opponentTurn)
-			{
+			if (!opponentTurn) {
 				timelinePlayer2.pause();
 
-				timelinePlayer1.playFrom(Duration.minutes(1));
+				timelinePlayer1.play();
 
-			}else {
+			} else {
 				player2Score += 5;
 				displayScore("player2");
 			}
 
 			if (firstPlayerBoard.amountOfships == 0) {
 
-				String s ="You Lost This Game to the Computer";
-				finalResultDisplay(s,personStage);
+				String s = "You Lost This Game to the Computer";
+				finalResultDisplay(s, personStage);
 
 			}
-			
+
 		}
 	}
-	
+
+	private void opponentSalvationMove(Stage personStage) {
+
+		for (int i = 0; i < opponentBoard.amountOfships; i++) {
+			int x = random.nextInt(10);
+			int y = random.nextInt(10);
+
+			Cell cell = firstPlayerBoard.getCell(x, y);
+			numberOfShots.add(cell);
+		}
+
+			for (Cell cell : numberOfShots) {
+				if (cell.targetHit)
+					continue;
+
+				System.out.println("Opponent Shooting");
+				opponentTurn = cell.shoot();
+				System.out.println("Opponent shot done");
+				if(opponentTurn) {
+				player2Score += 5;
+				displayScore("player2");
+				}
+				if (firstPlayerBoard.amountOfships == 0) {
+
+					String s = "You Lost This Game to the Computer";
+					finalResultDisplay(s, personStage);
+
+				}
+
+			}
+			timelinePlayer2.pause();
+
+			timelinePlayer1.play();
+			numberOfShots.clear();
+			hits = 1;
+	}
+
 	/**
 	 * This method will Display the final result on the pop showing who the winner.
-	 * @param s String that specifies a text notifying when one player wins.
+	 * 
+	 * @param s
+	 *            String that specifies a text notifying when one player wins.
 	 */
-	private void finalResultDisplay(String s,Stage personStage) {
+	private void finalResultDisplay(String s, Stage personStage) {
 		// TODO Auto-generated method stub
 		ButtonType buttonTypeOne = new ButtonType("YES");
 		ButtonType buttonTypeTwo = new ButtonType("NO");
-		
-		
+
 		Alert winOrLose = new Alert(AlertType.CONFIRMATION);
 		winOrLose.setTitle("WINNER ANNOUCEMENT");
 		winOrLose.setHeaderText(s);
-		
+
 		winOrLose.setContentText("Click YES to Restart the Game\nClick NO to Exit the Game");
-		winOrLose.getButtonTypes().setAll(buttonTypeOne , buttonTypeTwo);
+		winOrLose.getButtonTypes().setAll(buttonTypeOne, buttonTypeTwo);
 		Optional<ButtonType> result = winOrLose.showAndWait();
-		if (result.get() == buttonTypeOne){
+		if (result.get() == buttonTypeOne) {
 			restart(personStage);
 		} else if (result.get() == buttonTypeTwo) {
-		    System.exit(0);
+			System.exit(0);
 		}
 
 	}
 
-
 	/**
-	 * This method will Start the Game once the Player Click the start button and Player 1 has set up 
-	 * all his ships.
+	 * This method will Start the Game once the Player Click the start button and
+	 * Player 1 has set up all his ships.
 	 */
 	private void startGame() {
 		// place enemy ships
 
-		numberOfShips =5;
-		for(int i =0; i< shipLengths.size(); i ++) {
-			
+		numberOfShips = 5;
+		for (int i = 0; i < shipLengths.size(); i++) {
+
 			int x = random.nextInt(10);
 			int y = random.nextInt(10);
-			
+
 			if (opponentBoard.positionShip(new Ship(shipLengths.get(i), Math.random() < 0.5), x, y)) {
-				
+
 				numberOfShips--;
-			}
-			else {
-				i-=1;
+			} else {
+				i -= 1;
 			}
 		}
 
-		
 		executing = true;
 		timelinePlayer1.play();
-	
+
 		System.out.println("Player 1 Timer Started");
 	}
-	
+
 	private void seeOpponentShips(Board opponentBoard) {
 		for (int y = 0; y < 10; y++) {
 
 			for (int x = 0; x < 10; x++) {
 
-				Cell cell =opponentBoard.getCell(y,x);
-					if(cell.ship!=null) {
-						if(!cell.targetHit) {
-							if(isCheating)
-								cell.setFill(Color.GOLD);
-							else
-								cell.setFill(Color.WHITE);
-							
-						}
+				Cell cell = opponentBoard.getCell(y, x);
+				if (cell.ship != null) {
+					if (!cell.targetHit) {
+						if (isCheating)
+							cell.setFill(Color.GOLD);
+						else
+							cell.setFill(Color.WHITE);
+
 					}
-				
+				}
+
 			}
 
-			
 		}
 	}
-	
+
 	/**
-	 * This Method will initialize the Primary stage with the necessary elements in it
+	 * This Method will initialize the Primary stage with the necessary elements in
+	 * it
+	 * 
 	 * @param primaryStage
 	 */
 	private void intialise(Stage primaryStage) {
@@ -570,11 +573,10 @@ public class Battle extends Application {
 		primaryStage.setScene(scene);
 		primaryStage.setResizable(false);
 
-		
 		exit.setOnAction(e -> {
 			System.exit(0);
 		});
-		
+
 		st.setOnAction(e -> {
 			if (numberOfShips == 0)
 				startGame();
@@ -585,30 +587,29 @@ public class Battle extends Application {
 		});
 
 		doNotCheat.setOnAction(e -> {
-			
-			seeOpponentShips(opponentBoard);
-			
-			isCheating =!isCheating;
-			
-		});
-		
 
+			seeOpponentShips(opponentBoard);
+
+			isCheating = !isCheating;
+
+		});
 
 		primaryStage.show();
 	}
 
 	/**
 	 * Method will reset the Game by initialising all the related Nodes.
+	 * 
 	 * @param primaryStage
 	 */
 	private void restart(Stage primaryStage) {
-		
+
 		primaryStage.close();
 		Platform.runLater(() -> {
 			try {
 				new Battle().start(new Stage());
 			} catch (Exception e) {
-				
+
 				e.printStackTrace();
 			}
 		});
@@ -628,9 +629,75 @@ public class Battle extends Application {
 
 	/**
 	 * Launches the application
-	 * @param args-takes the default Arguments
+	 * 
+	 * @param args-takes
+	 *            the default Arguments
 	 */
 	public static void main(String[] args) {
 		launch(args);
 	}
+
+	/**
+	 * 
+	 */
+	public void shootNormalShip(ArrayList<Cell> cellHits, Stage personStage) {
+
+		for (Cell cell : cellHits) {
+			if (cell.targetHit)
+				return;
+
+			System.out.println("Player Shooting");
+			opponentTurn = !cell.shoot();
+			System.out.println("Player Shot done");
+
+			if (opponentTurn) {
+				timelinePlayer1.pause();
+				// System.out.println("Player 1 Timer paused");
+				timelinePlayer2.play();
+				// System.out.println("Player 2 Timer resumed");
+				opponentNormalMove(personStage);
+			} else {
+				player1Score += 5;
+				displayScore("player1");
+			}
+
+			if (opponentBoard.amountOfships == 0) {
+
+				String s = "You Won This Game";
+				finalResultDisplay(s, personStage);
+
+			}
+		}
+
+	}
+
+	public void shootSalvationShip(ArrayList<Cell> cellHits, Stage personStage) {
+		for (Cell cell : cellHits) {
+			if (cell.targetHit)
+				return;
+
+			System.out.println("Player Shooting");
+			opponentTurn = !cell.shoot();
+			System.out.println("Player Shot done");
+			if(!opponentTurn) {
+			player1Score += 5;
+			displayScore("player1");
+			}
+			if (opponentBoard.amountOfships == 0) {
+
+				String s = "You Won This Game";
+				finalResultDisplay(s, personStage);
+
+			}
+		}
+		timelinePlayer1.pause();
+		// System.out.println("Player 1 Timer paused");
+		timelinePlayer2.play();
+		// System.out.println("Player 2 Timer resumed");
+		hits = 1;
+		numberOfShots.clear();
+		opponentSalvationMove(personStage);
+		
+	}
+
 }
