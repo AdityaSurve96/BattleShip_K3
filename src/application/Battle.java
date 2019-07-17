@@ -298,6 +298,8 @@ public class Battle extends Application {
 				if (!executing)
 					return;
 				Cell cell = (Cell) e.getSource();
+				if (cell.targetHit)
+					return;
 				numberOfShots.add(cell);
 				if (normalGame) {
 					shootNormalShip(numberOfShots, personStage);
@@ -443,12 +445,16 @@ public class Battle extends Application {
 			int y = random.nextInt(10);
 
 			Cell cell = firstPlayerBoard.getCell(x, y);
-			numberOfShots.add(cell);
+			if (cell.targetHit)
+				{
+					i--;
+					continue;
+				}else {
+					numberOfShots.add(cell);
+				}
 		}
 
 			for (Cell cell : numberOfShots) {
-				if (cell.targetHit)
-					continue;
 
 				System.out.println("Opponent Shooting");
 				opponentTurn = cell.shoot();
@@ -673,8 +679,7 @@ public class Battle extends Application {
 
 	public void shootSalvationShip(ArrayList<Cell> cellHits, Stage personStage) {
 		for (Cell cell : cellHits) {
-			if (cell.targetHit)
-				return;
+			
 
 			System.out.println("Player Shooting");
 			opponentTurn = !cell.shoot();
