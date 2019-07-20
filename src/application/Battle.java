@@ -32,6 +32,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
@@ -60,16 +61,18 @@ public class Battle extends Application {
 	private boolean executing = false;
 
 	private boolean isCheating = true;
-
+	
 	private Board opponentBoard, firstPlayerBoard;
 
 	private int numberOfShips = 5;
 
-	private boolean normalGame = false;
+	private boolean normalGame;
 
-	private boolean salvation = true;
+	private boolean salvation;
 
 	private int hits = 1;
+	
+	private ArrayList<String> cellsSelected = new ArrayList<>();
 
 	private ArrayList<Cell> numberOfShots = new ArrayList<>();
 
@@ -100,6 +103,20 @@ public class Battle extends Application {
 	private Button exit = new Button("EXIT");
 
 	private Button doNotCheat = new Button("DO NOT CHEAT");
+	
+	
+	private Rectangle ship1 = new Rectangle(50, 450, 150, 30);
+	private Rectangle ship2 = new Rectangle(50, 490, 120, 30);
+	private Rectangle ship3 = new Rectangle(50, 530, 90, 30);
+	private Rectangle ship4 = new Rectangle(50, 570, 90, 30);
+	private Rectangle ship5 = new Rectangle(50, 610, 60, 30);
+	
+	
+	
+	
+	
+	
+	
 
 	HBox hBox, hBox1;
 
@@ -286,18 +303,33 @@ public class Battle extends Application {
 		VBox player2Details = new VBox(20, player2Summary, hBox, hBox1);
 		player2Details.setLayoutX(1100);
 		player2Details.setLayoutY(100);
-
+		
 		root.getChildren().add(player2Details);
 
+		root.getChildren().add(ship1);
+		root.getChildren().add(ship2);
+		root.getChildren().add(ship3);
+		root.getChildren().add(ship4);
+		root.getChildren().add(ship5);
 		// End Graphics
+		
+		
+		
+		
 
 		EventHandler<MouseEvent> event = new EventHandler<MouseEvent>() {
-
+			
 			@Override
 			public void handle(MouseEvent e) {
 				if (!executing)
 					return;
 				Cell cell = (Cell) e.getSource();
+				if(cellsSelected.contains(cell.row+""+cell.col)) {
+					return;
+				}
+				cellsSelected.add(cell.row+""+cell.col);
+				
+			
 				if (cell.targetHit)
 					return;
 				numberOfShots.add(cell);
@@ -324,10 +356,9 @@ public class Battle extends Application {
 
 				Cell cell = (Cell) e.getSource();
 				if (firstPlayerBoard.positionShip(
-						new Ship(shipLengths.get(currentShip), e.getButton() == MouseButton.PRIMARY), cell.row,
-						cell.col)) {
-					--numberOfShips;
-					currentShip++;
+						new Ship(shipLengths.get(currentShip), e.getButton() == MouseButton.PRIMARY), cell.row, cell.col)) {
+							--numberOfShips;
+							  currentShip++;
 
 				}
 
@@ -439,12 +470,20 @@ public class Battle extends Application {
 	}
 
 	private void opponentSalvationMove(Stage personStage) {
-
+		ArrayList<String> takenCellStrings = new ArrayList<String>(); 
 		for (int i = 0; i < opponentBoard.amountOfships; i++) {
 			int x = random.nextInt(10);
 			int y = random.nextInt(10);
-
+			if(takenCellStrings.contains(x+""+y)) {
+				i--;
+				continue;
+				
+			}
+			takenCellStrings.add(x+""+y);
+			
 			Cell cell = firstPlayerBoard.getCell(x, y);
+			
+				
 			if (cell.targetHit)
 				{
 					i--;
@@ -495,7 +534,9 @@ public class Battle extends Application {
 
 		winOrLose.setContentText("Click YES to Restart the Game\nClick NO to Exit the Game");
 		winOrLose.getButtonTypes().setAll(buttonTypeOne, buttonTypeTwo);
+		
 		Optional<ButtonType> result = winOrLose.showAndWait();
+		
 		if (result.get() == buttonTypeOne) {
 			restart(personStage);
 		} else if (result.get() == buttonTypeTwo) {
@@ -510,7 +551,7 @@ public class Battle extends Application {
 	 */
 	private void startGame() {
 		// place enemy ships
-
+		
 		numberOfShips = 5;
 		for (int i = 0; i < shipLengths.size(); i++) {
 
@@ -524,13 +565,33 @@ public class Battle extends Application {
 				i -= 1;
 			}
 		}
-
+		
+		Alert gameModeAlert = new Alert(AlertType.INFORMATION);
+		
+		ButtonType buttonSalva = new ButtonType("SALVA");
+		ButtonType buttonNormal = new ButtonType("NORMAL");
+		
+		gameModeAlert.setTitle("SELECT GAME MODE");
+		
+		gameModeAlert.setContentText("Click on the desired button to choose game mode");
+		gameModeAlert.getButtonTypes().setAll(buttonSalva, buttonNormal);
+		
+		Optional<ButtonType> result = gameModeAlert.showAndWait();
+		
+		if (result.get() == buttonSalva) {
+			
+			salvation=true;
+			normalGame=false;
+		} else if (result.get() == buttonNormal) {
+			normalGame=true;
+			salvation=false;
+		}
 		executing = true;
 		timelinePlayer1.play();
 
 		System.out.println("Player 1 Timer Started");
 	}
-
+	
 	private void seeOpponentShips(Board opponentBoard) {
 		for (int y = 0; y < 10; y++) {
 
