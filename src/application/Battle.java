@@ -972,14 +972,22 @@ public class Battle extends Application {
 	}
 
 	public void shootSalvationShip(ArrayList<Cell> cellHits, Stage personStage) {
+		currenttime= Integer.parseInt(timer1.getText().split(":")[1]);
 		for (Cell cell : cellHits) {
 
 			System.out.println("Player Shooting");
 			opponentTurn = !cell.shoot();
 			System.out.println("Player Shot done");
 			if (!opponentTurn) {
-				player1Score += 5;
-				displayScore("player1");
+				if(currenttime-previoustime<2)
+					player1Score += 5;
+				else if(currenttime-previoustime<5 && currenttime-previoustime>2)
+					player1Score += 3;
+				else if(currenttime-previoustime>5 && currenttime-previoustime<10)
+					player1Score += 2;
+				else if(currenttime-previoustime>10)
+					player1Score += 1;
+				
 			}
 			if (opponentBoard.amountOfships == 0) {
 
@@ -988,6 +996,10 @@ public class Battle extends Application {
 
 			}
 		}
+		
+		displayScore("player1");
+		
+		previoustime=currenttime;
 		timelinePlayer1.pause();
 		// System.out.println("Player 1 Timer paused");
 		timelinePlayer2.play();
