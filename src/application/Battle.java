@@ -660,8 +660,6 @@ public class Battle extends Application {
 			Cell cell = firstPlayerBoard.getCell(x, y);
 			if (cell.targetHit) {
 				 ai.generate();
-                 x = ai.nextX();
-                 y = ai.nextY();
 				continue;
 			}
 			oldValue=firstPlayerBoard.amountOfships;
