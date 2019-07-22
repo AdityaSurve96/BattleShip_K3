@@ -18,7 +18,7 @@ public class Ship extends Parent {
 
 	public int type;
 	public boolean direction = true;
-
+	double mouseX,mouseY;
 	private int percentageDestroyed;
 
 	/**
