@@ -22,11 +22,8 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.image.Image;
-import javafx.scene.input.ClipboardContent;
-import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.input.TransferMode;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
@@ -34,10 +31,8 @@ import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
@@ -604,8 +599,8 @@ public class Battle extends Application {
 				rootPane.setOnMouseReleased(new EventHandler<MouseEvent>() {
 					public void handle(MouseEvent event2) {
 						// Adjust pointer to make up for Grid's offset
-						double localX = event2.getX() ;
-						double localY = event2.getY() ;
+						double localX = event2.getX()-250 ;
+						double localY = event2.getY()-120;
 						int size = (int) ((int) selectedShip.getWidth() / cellSize);
 						if (playerBoard.contains(localX, localY)) {
 							int x = (int) (localX / cellSize);
@@ -613,15 +608,15 @@ public class Battle extends Application {
 							Rectangle r = (Rectangle) playerBoard.getCell(x, y);
 							int endX, endY;
 							if (isRotated) {
-								selectedShip.setLayoutX(r.getX() + r.getParent().getTranslateX()
+								selectedShip.setLayoutX(r.getLayoutX() + r.getParent().getTranslateX()
 										- selectedShip.getWidth() / 2 + cellSize / 2);
-								selectedShip.setLayoutY(r.getY() + r.getParent().getTranslateY() + size * cellSize
+								selectedShip.setLayoutY(r.getLayoutY() + r.getParent().getTranslateY() + size * cellSize
 										- selectedShip.getWidth() / 2 - cellSize / 2 + 5);
 								endX = x;
 								endY = y + size - 1;
 							} else {
-								selectedShip.setLayoutX(r.getX() + r.getParent().getTranslateX());
-								selectedShip.setLayoutY(r.getY() + r.getParent().getTranslateY() + 5);
+								selectedShip.setLayoutX(r.getLayoutX() + r.getParent().getTranslateX());
+								selectedShip.setLayoutY(r.getLayoutY() + r.getParent().getTranslateY() + 5);
 								endX = x + size - 1;
 								endY = y;
 							}
