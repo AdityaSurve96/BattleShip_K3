@@ -106,8 +106,8 @@ public class Battle extends Application {
 	private Button doNotCheat = new Button("DO NOT CHEAT");
 
 	private double cellSize = 30.0;
-	
-	private AI ai =new AI();
+
+	private AI ai = new AI();
 
 	private Rectangle ship1 = new Rectangle(50, 450, 150, 30);
 	private Rectangle ship2 = new Rectangle(50, 490, 120, 30);
@@ -320,8 +320,6 @@ public class Battle extends Application {
 		root.getChildren().add(ship5);
 		// End Graphics
 
-		
-
 		EventHandler<MouseEvent> event = new EventHandler<MouseEvent>() {
 
 			@Override
@@ -360,13 +358,13 @@ public class Battle extends Application {
 				// System.out.println("Draged");
 
 				Cell cell = (Cell) e.getSource();
-				if(currentShip<5) {
+				if (currentShip < 5) {
 					if (firstPlayerBoard.positionShip(
 							new Ship(shipLengths.get(currentShip), e.getButton() == MouseButton.PRIMARY), cell.row,
 							cell.col)) {
 						--numberOfShips;
 						currentShip++;
-	
+
 					}
 				}
 
@@ -405,8 +403,8 @@ public class Battle extends Application {
 		opponentBoard = new Board(true, event);
 
 		firstPlayerBoard = new Board(false, null);
-		
-		//installPlayerBoardListeners(root,firstPlayerBoard);
+
+		// installPlayerBoardListeners(root,firstPlayerBoard);
 
 		firstPlayerBoard.setLayoutX(250);
 		firstPlayerBoard.setLayoutY(120);
@@ -440,12 +438,12 @@ public class Battle extends Application {
 				}
 				double localX = rect.getX();
 				double localY = rect.getY();
-				System.out.println("Mouse Pressed"+ localX + " " +localY);
+				System.out.println("Mouse Pressed" + localX + " " + localY);
 				if (isRotated) {
 					localX = localX + selectedShip.getWidth() / 2;
 					localY = localY - selectedShip.getWidth() / 2 + cellSize;
 				}
-				
+
 				boat.setCursor(Cursor.MOVE);
 			}
 		});
@@ -456,12 +454,34 @@ public class Battle extends Application {
 				boat.setCursor(Cursor.HAND);
 				draggingBoat = false;
 				boat.toFront();
-				double localX = mouseEvent.getX()-250;
-				double localY = mouseEvent.getY()-120;
+				double localX = 0;
+				double localY = 0;
+				if (isRotated) {
+					if (selectedShip.getWidth() > 120) {
+						localX = mouseEvent.getX() - 200;
+						localY = mouseEvent.getY() - 195;
+					} else if (selectedShip.getWidth() <= 120 && selectedShip.getWidth() > 90) {
+						localX = mouseEvent.getX() - 210;
+						localY = mouseEvent.getY() - 175;
+					} else if (selectedShip.getWidth() <= 90 && selectedShip.getWidth() > 60) {
+						localX = mouseEvent.getX() - 220;
+						localY = mouseEvent.getY() - 164;
+					} else if (selectedShip.getWidth() <= 60 && selectedShip.getWidth() > 30) {
+						localX = mouseEvent.getX() - 230;
+						localY = mouseEvent.getY() - 145;
+					}
+
+				} else {
+					localX = mouseEvent.getX() - 250;
+					localY = mouseEvent.getY() - 120;
+				}
+				System.out.println(mouseEvent.getX() + " " + mouseEvent.getY());
+				System.out.println("Chill ----------- " + localX + " " + localY);
 				int size = (int) ((int) selectedShip.getWidth() / cellSize);
 				if (firstPlayerBoard.contains(localX, localY)) {
 					int x = (int) (localX / cellSize);
 					int y = (int) (localY / cellSize);
+					System.out.println("Hello " + x + " " + y);
 					Cell r = (Cell) firstPlayerBoard.getCell(x, y);
 					int endX, endY;
 					if (isRotated) {
@@ -472,31 +492,31 @@ public class Battle extends Application {
 						endX = x;
 						endY = y + size - 1;
 					} else {
-						//System.out.println("Mouse check Released "+  (r.getLayoutX() + r.getParent().getTranslateX()-5));
-						//System.out.println("Mouse check Released "+  (r.getLayoutY() + r.getParent().getTranslateY()));
-						
+						// System.out.println("Mouse check Released "+ (r.getLayoutX() +
+						// r.getParent().getTranslateX()-5));
+						// System.out.println("Mouse check Released "+ (r.getLayoutY() +
+						// r.getParent().getTranslateY()));
+
 						selectedShip.setLayoutX(0);
 						selectedShip.setLayoutY(0);
 						endX = x + size - 1;
 						endY = y;
 					}
 					int shipLength = 0;
-					if(selectedShip.getWidth()>120) 
-						shipLength=5;
-					else if(selectedShip.getWidth()<=120 && selectedShip.getWidth()>90)
-						shipLength=4;
-					else if(selectedShip.getWidth()<=90 && selectedShip.getWidth()>60)
-						shipLength=3;
-					else if(selectedShip.getWidth()<=60 && selectedShip.getWidth()>30)
-						shipLength=2;
-					
-					if (firstPlayerBoard.positionShip(
-							new Ship(shipLength, isRotated == true), x,
-							y)) {
+					if (selectedShip.getWidth() > 120)
+						shipLength = 5;
+					else if (selectedShip.getWidth() <= 120 && selectedShip.getWidth() > 90)
+						shipLength = 4;
+					else if (selectedShip.getWidth() <= 90 && selectedShip.getWidth() > 60)
+						shipLength = 3;
+					else if (selectedShip.getWidth() <= 60 && selectedShip.getWidth() > 30)
+						shipLength = 2;
+
+					if (firstPlayerBoard.positionShip(new Ship(shipLength, isRotated == true), x, y)) {
 						--numberOfShips;
 						currentShip++;
-	
-					}else {
+						selectedShip.setOpacity(0);
+					} else {
 						backtoHome(shipLength);
 					}
 				}
@@ -505,7 +525,7 @@ public class Battle extends Application {
 		boat.setOnMouseDragged(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent mouseEvent) {
-				//System.out.println("Dragged");
+				// System.out.println("Dragged");
 				needToRotate = false;
 				if (boat.rotateProperty().getValue() == 0) {
 					isRotated = false;
@@ -515,18 +535,19 @@ public class Battle extends Application {
 				boat.toFront();
 				draggingBoat = true;
 				Rectangle temp = (Rectangle) boat;
-				System.out.println("MouseEvent " +mouseEvent.getSceneX() + " " + mouseEvent.getSceneY());
-				//System.out.println("Boat width "+temp.getBoundsInLocal().getWidth());
+				System.out.println("MouseEvent " + mouseEvent.getSceneX() + " " + mouseEvent.getSceneY());
+				// System.out.println("Boat width "+temp.getBoundsInLocal().getWidth());
 				if (isRotated) {
 					// boat.setLayoutX(mouseEvent.getSceneX() - (boat.getBoundsInLocal().getWidth()
 					// / 2));
 					temp.setX(mouseEvent.getSceneX() - (temp.getBoundsInLocal().getWidth() / 2));
-					temp.setY(mouseEvent.getSceneY() - (temp.getBoundsInLocal().getWidth() / 3));
+					temp.setY(mouseEvent.getSceneY() + (temp.getBoundsInLocal().getWidth() / 3));
 					// boat.setLayoutY(mouseEvent.getSceneY() + (boat.getBoundsInLocal().getWidth()
 					// / 3));
 				} else {
 					System.out.println("Boat Layout " + temp.getX() + " " + temp.getY());
-					//System.out.println("Boat Translate Layout " +boat.getTranslateX() + " " + boat.getTranslateY());
+					// System.out.println("Boat Translate Layout " +boat.getTranslateX() + " " +
+					// boat.getTranslateY());
 					temp.setX(mouseEvent.getSceneX());
 					temp.setY(mouseEvent.getSceneY());
 				}
@@ -554,18 +575,18 @@ public class Battle extends Application {
 
 		});
 	}
-	
+
 	private void backtoHome(int len) {
-		if(len==5) {
-		selectedShip.setX(50);
-		selectedShip.setY(450);
-		}else if(len==4) {
+		if (len == 5) {
+			selectedShip.setX(50);
+			selectedShip.setY(450);
+		} else if (len == 4) {
 			selectedShip.setX(50);
 			selectedShip.setY(490);
-		}else if(len==3) {
+		} else if (len == 3) {
 			selectedShip.setX(50);
 			selectedShip.setY(530);
-		}else if(len==2) {
+		} else if (len == 2) {
 			selectedShip.setX(50);
 			selectedShip.setY(610);
 		}
@@ -630,75 +651,57 @@ public class Battle extends Application {
 			player2ScoreDisplay.setText(player2Score + "");
 	}
 
-	/*private void installPlayerBoardListeners(BorderPane rootPane,Board playerBoard) {
-		rootPane.setOnMouseDragged(new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent event) {
-				if (!clicked)
-					return;
-
-				rootPane.setOnMouseReleased(new EventHandler<MouseEvent>() {
-					public void handle(MouseEvent event2) {
-						// Adjust pointer to make up for Grid's offset
-						double localX = event2.getX()-250;
-						double localY = event2.getY()-120;
-						int size = (int) ((int) selectedShip.getWidth() / cellSize);
-						if (playerBoard.contains(localX, localY)) {
-							int x = (int) (localX / cellSize);
-							int y = (int) (localY / cellSize);
-							Rectangle r = (Rectangle) playerBoard.getCell(x, y);
-							int endX, endY;
-							if (isRotated) {
-								selectedShip.setLayoutX(r.getLayoutX() + r.getParent().getTranslateX()
-										- selectedShip.getWidth() / 2 + cellSize / 2);
-								selectedShip.setLayoutY(r.getLayoutY() + r.getParent().getTranslateY() + size * cellSize
-										- selectedShip.getWidth() / 2 - cellSize / 2 + 5);
-								//endX = x;
-								//endY = y + size - 1;
-							} else {
-								selectedShip.setLayoutX(r.getLayoutX() + r.getParent().getTranslateX());
-								selectedShip.setLayoutY(r.getLayoutY() + r.getParent().getTranslateY() + 5);
-							//	endX = x + size - 1;
-							//	endY = y;
-							}
-
-							if (firstPlayerBoard.positionShip(
-									new Ship(shipLengths.get(currentShip), isRotated == true), x,
-									y)) {
-								--numberOfShips;
-								currentShip++;
-
-							}
-						}
-						
-						//playerBoard.setOnMouseReleased(null);
-
-					}
-				});
-			}
-
-		});
-	}
-*/
+	/*
+	 * private void installPlayerBoardListeners(BorderPane rootPane,Board
+	 * playerBoard) { rootPane.setOnMouseDragged(new EventHandler<MouseEvent>() {
+	 * 
+	 * @Override public void handle(MouseEvent event) { if (!clicked) return;
+	 * 
+	 * rootPane.setOnMouseReleased(new EventHandler<MouseEvent>() { public void
+	 * handle(MouseEvent event2) { // Adjust pointer to make up for Grid's offset
+	 * double localX = event2.getX()-250; double localY = event2.getY()-120; int
+	 * size = (int) ((int) selectedShip.getWidth() / cellSize); if
+	 * (playerBoard.contains(localX, localY)) { int x = (int) (localX / cellSize);
+	 * int y = (int) (localY / cellSize); Rectangle r = (Rectangle)
+	 * playerBoard.getCell(x, y); int endX, endY; if (isRotated) {
+	 * selectedShip.setLayoutX(r.getLayoutX() + r.getParent().getTranslateX() -
+	 * selectedShip.getWidth() / 2 + cellSize / 2);
+	 * selectedShip.setLayoutY(r.getLayoutY() + r.getParent().getTranslateY() + size
+	 * * cellSize - selectedShip.getWidth() / 2 - cellSize / 2 + 5); //endX = x;
+	 * //endY = y + size - 1; } else { selectedShip.setLayoutX(r.getLayoutX() +
+	 * r.getParent().getTranslateX()); selectedShip.setLayoutY(r.getLayoutY() +
+	 * r.getParent().getTranslateY() + 5); // endX = x + size - 1; // endY = y; }
+	 * 
+	 * if (firstPlayerBoard.positionShip( new Ship(shipLengths.get(currentShip),
+	 * isRotated == true), x, y)) { --numberOfShips; currentShip++;
+	 * 
+	 * } }
+	 * 
+	 * //playerBoard.setOnMouseReleased(null);
+	 * 
+	 * } }); }
+	 * 
+	 * }); }
+	 */
 	/**
 	 * This method is AI which will detect the move on Player 1 Board.
 	 * 
 	 * @param personStage
 	 */
 	private void opponentNormalMove(Stage personStage) {
-		int x,y;
-		int oldValue,newValue;
+		int x, y;
+		int oldValue, newValue;
 		while (opponentTurn) {
 
-			 x = ai.nextX();
-			 y = ai.nextY();
+			x = ai.nextX();
+			y = ai.nextY();
 
 			Cell cell = firstPlayerBoard.getCell(x, y);
 			if (cell.targetHit) {
-				 ai.generate();
+				ai.generate();
 				continue;
 			}
-			oldValue=firstPlayerBoard.amountOfships;
+			oldValue = firstPlayerBoard.amountOfships;
 			System.out.println("Opponent Shooting");
 			opponentTurn = cell.shoot();
 			System.out.println("Opponent shot done");
@@ -709,11 +712,11 @@ public class Battle extends Application {
 				timelinePlayer1.play();
 
 			} else {
-				newValue=firstPlayerBoard.amountOfships;
-				if (oldValue != newValue) {   //if PC is guessing AND ship is destroyed
-                    ai.feedback(true, true);
-                }else {
-                	ai.feedback(true, false);
+				newValue = firstPlayerBoard.amountOfships;
+				if (oldValue != newValue) { // if PC is guessing AND ship is destroyed
+					ai.feedback(true, true);
+				} else {
+					ai.feedback(true, false);
 				}
 				player2Score += 5;
 				displayScore("player2");
@@ -840,15 +843,15 @@ public class Battle extends Application {
 
 			salvation = true;
 			normalGame = false;
-			
+
 		} else if (result.get() == buttonNormal) {
-			
+
 			normalGame = true;
 			salvation = false;
 		}
 		executing = true;
 		timelinePlayer1.play();
-		previoustime=Integer.parseInt(timer1.getText().split(":")[1]);
+		previoustime = Integer.parseInt(timer1.getText().split(":")[1]);
 	}
 
 	private void seeOpponentShips(Board opponentBoard) {
@@ -983,19 +986,19 @@ public class Battle extends Application {
 				// System.out.println("Player 2 Timer resumed");
 				opponentNormalMove(personStage);
 			} else {
-				currenttime= Integer.parseInt(timer1.getText().split(":")[1]);
+				currenttime = Integer.parseInt(timer1.getText().split(":")[1]);
 				System.out.println("Previous Time" + previoustime);
-				System.out.println("Cuurent Time "+ currenttime);
-				if(currenttime-previoustime<2)
+				System.out.println("Cuurent Time " + currenttime);
+				if (currenttime - previoustime < 2)
 					player1Score += 5;
-				else if(currenttime-previoustime<5 && currenttime-previoustime>2)
+				else if (currenttime - previoustime < 5 && currenttime - previoustime > 2)
 					player1Score += 3;
-				else if(currenttime-previoustime>5 && currenttime-previoustime<10)
+				else if (currenttime - previoustime > 5 && currenttime - previoustime < 10)
 					player1Score += 2;
-				else if(currenttime-previoustime>10)
+				else if (currenttime - previoustime > 10)
 					player1Score += 1;
-				
-				previoustime=currenttime;
+
+				previoustime = currenttime;
 				displayScore("player1");
 			}
 
@@ -1010,22 +1013,22 @@ public class Battle extends Application {
 	}
 
 	public void shootSalvationShip(ArrayList<Cell> cellHits, Stage personStage) {
-		currenttime= Integer.parseInt(timer1.getText().split(":")[1]);
+		currenttime = Integer.parseInt(timer1.getText().split(":")[1]);
 		for (Cell cell : cellHits) {
 
 			System.out.println("Player Shooting");
 			opponentTurn = !cell.shoot();
 			System.out.println("Player Shot done");
 			if (!opponentTurn) {
-				if(currenttime-previoustime<2)
+				if (currenttime - previoustime < 2)
 					player1Score += 5;
-				else if(currenttime-previoustime<5 && currenttime-previoustime>2)
+				else if (currenttime - previoustime < 5 && currenttime - previoustime > 2)
 					player1Score += 3;
-				else if(currenttime-previoustime>5 && currenttime-previoustime<10)
+				else if (currenttime - previoustime > 5 && currenttime - previoustime < 10)
 					player1Score += 2;
-				else if(currenttime-previoustime>10)
+				else if (currenttime - previoustime > 10)
 					player1Score += 1;
-				
+
 			}
 			if (opponentBoard.amountOfships == 0) {
 
@@ -1034,10 +1037,10 @@ public class Battle extends Application {
 
 			}
 		}
-		
+
 		displayScore("player1");
-		
-		previoustime=currenttime;
+
+		previoustime = currenttime;
 		timelinePlayer1.pause();
 		// System.out.println("Player 1 Timer paused");
 		timelinePlayer2.play();
