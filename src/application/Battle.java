@@ -456,6 +456,7 @@ public class Battle extends Application {
 				boat.toFront();
 				double localX = 0;
 				double localY = 0;
+
 				if (isRotated) {
 					if (selectedShip.getWidth() > 120) {
 						localX = mouseEvent.getX() - 200;
@@ -481,27 +482,6 @@ public class Battle extends Application {
 				if (firstPlayerBoard.contains(localX, localY)) {
 					int x = (int) (localX / cellSize);
 					int y = (int) (localY / cellSize);
-					System.out.println("Hello " + x + " " + y);
-					Cell r = (Cell) firstPlayerBoard.getCell(x, y);
-					int endX, endY;
-					if (isRotated) {
-						selectedShip.setLayoutX(r.getLayoutX() + r.getParent().getTranslateX()
-								- selectedShip.getWidth() / 2 + cellSize / 2);
-						selectedShip.setLayoutY(r.getLayoutY() + r.getParent().getTranslateY() + size * cellSize
-								- selectedShip.getWidth() / 2 - cellSize / 2 + 5);
-						endX = x;
-						endY = y + size - 1;
-					} else {
-						// System.out.println("Mouse check Released "+ (r.getLayoutX() +
-						// r.getParent().getTranslateX()-5));
-						// System.out.println("Mouse check Released "+ (r.getLayoutY() +
-						// r.getParent().getTranslateY()));
-
-						selectedShip.setLayoutX(0);
-						selectedShip.setLayoutY(0);
-						endX = x + size - 1;
-						endY = y;
-					}
 					int shipLength = 0;
 					if (selectedShip.getWidth() > 120)
 						shipLength = 5;
@@ -516,9 +496,32 @@ public class Battle extends Application {
 						--numberOfShips;
 						currentShip++;
 						selectedShip.setOpacity(0);
+						System.out.println("Hello " + x + " " + y);
+						Cell r = (Cell) firstPlayerBoard.getCell(x, y);
+						int endX, endY;
+						if (isRotated) {
+							selectedShip.setLayoutX(r.getLayoutX() + r.getParent().getTranslateX()
+									- selectedShip.getWidth() / 2 + cellSize / 2);
+							selectedShip.setLayoutY(r.getLayoutY() + r.getParent().getTranslateY() + size * cellSize
+									- selectedShip.getWidth() / 2 - cellSize / 2 + 5);
+							endX = x;
+							endY = y + size - 1;
+						} else {
+							// System.out.println("Mouse check Released "+ (r.getLayoutX() +
+							// r.getParent().getTranslateX()-5));
+							// System.out.println("Mouse check Released "+ (r.getLayoutY() +
+							// r.getParent().getTranslateY()));
+
+							selectedShip.setLayoutX(0);
+							selectedShip.setLayoutY(0);
+							endX = x + size - 1;
+							endY = y;
+						}
+
 					} else {
 						backtoHome(shipLength);
 					}
+
 				}
 			}
 		});
