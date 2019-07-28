@@ -321,7 +321,7 @@ public class Battle extends Application {
 		// End Graphics
 
 		EventHandler<MouseEvent> event = new EventHandler<MouseEvent>() {
-
+			
 			@Override
 			public void handle(MouseEvent e) {
 				if (!executing)
@@ -364,6 +364,7 @@ public class Battle extends Application {
 							cell.col)) {
 						--numberOfShips;
 						currentShip++;
+						
 
 					}
 				}
@@ -476,14 +477,17 @@ public class Battle extends Application {
 					localX = mouseEvent.getX() - 250;
 					localY = mouseEvent.getY() - 120;
 				}
+				
 				System.out.println(mouseEvent.getX() + " " + mouseEvent.getY());
 				System.out.println("Chill ----------- " + localX + " " + localY);
 				int size = (int) ((int) selectedShip.getWidth() / cellSize);
+				
+				int shipLength = 0;
 				if (firstPlayerBoard.contains(localX, localY)) {
 					int x = (int) (localX / cellSize);
 					int y = (int) (localY / cellSize);
-					int shipLength = 0;
-					if (selectedShip.getWidth() > 120)
+					
+					if (selectedShip.getWidth() > 120) 
 						shipLength = 5;
 					else if (selectedShip.getWidth() <= 120 && selectedShip.getWidth() > 90)
 						shipLength = 4;
@@ -517,11 +521,16 @@ public class Battle extends Application {
 							endX = x + size - 1;
 							endY = y;
 						}
+						
+			
 
 					} else {
 						backtoHome(shipLength);
 					}
 
+				}
+				else {
+					backtoHome(shipLength);
 				}
 			}
 		});
@@ -579,17 +588,28 @@ public class Battle extends Application {
 		});
 	}
 
+	
+	
 	private void backtoHome(int len) {
-		if (len == 5) {
+		
+		if (len == 5 || selectedShip.getWidth()>120) {
 			selectedShip.setX(50);
 			selectedShip.setY(450);
-		} else if (len == 4) {
+		} else if (len == 4 ||  (selectedShip.getWidth()<=120 && selectedShip.getWidth() > 90)) {
 			selectedShip.setX(50);
 			selectedShip.setY(490);
-		} else if (len == 3) {
-			selectedShip.setX(50);
-			selectedShip.setY(530);
-		} else if (len == 2) {
+		} else if (len == 3 || (selectedShip.getWidth()<=90 && selectedShip.getWidth() > 60)) {
+			if(selectedShip==ship3) {
+				selectedShip.setX(50);
+				selectedShip.setY(530);
+			}
+			else if(selectedShip == ship4) {
+				selectedShip.setX(50);
+				selectedShip.setY(570);
+			}
+			
+			
+		} else if (len == 2|| (selectedShip.getWidth()<=60 && selectedShip.getWidth() > 30)) {
 			selectedShip.setX(50);
 			selectedShip.setY(610);
 		}
@@ -726,7 +746,10 @@ public class Battle extends Application {
 			}
 
 			if (firstPlayerBoard.amountOfships == 0) {
-
+				
+				
+				timelinePlayer1.pause();
+				timelinePlayer2.pause();
 				String s = "You Lost This Game to the Computer";
 				finalResultDisplay(s, personStage);
 
@@ -989,6 +1012,7 @@ public class Battle extends Application {
 				// System.out.println("Player 2 Timer resumed");
 				opponentNormalMove(personStage);
 			} else {
+				
 				currenttime = Integer.parseInt(timer1.getText().split(":")[1]);
 				System.out.println("Previous Time" + previoustime);
 				System.out.println("Cuurent Time " + currenttime);
@@ -1000,16 +1024,18 @@ public class Battle extends Application {
 					player1Score += 2;
 				else if (currenttime - previoustime > 10)
 					player1Score += 1;
-
+				
 				previoustime = currenttime;
 				displayScore("player1");
 			}
 
 			if (opponentBoard.amountOfships == 0) {
-
+				
+				timelinePlayer1.pause();
+				timelinePlayer2.pause();
 				String s = "You Won This Game";
 				finalResultDisplay(s, personStage);
-
+				
 			}
 		}
 
