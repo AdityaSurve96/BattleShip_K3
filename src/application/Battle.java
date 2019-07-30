@@ -336,7 +336,7 @@ public class Battle extends Application {
 					return;
 				}
 				cellsSelected.add(cell.row + "" + cell.col);
-
+				cell.setFill(Color.GREY);
 				if (cell.targetHit)
 					return;
 				numberOfShots.add(cell);
