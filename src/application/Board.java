@@ -77,21 +77,63 @@ public class Board extends Parent {
 	 * @param y - Coordinate Y of ship
 	 * @return if the ship is placed correctly or not
 	 */
-	public boolean positionShip(Ship ship, int x, int y) {
+	public boolean positionShip(Ship ship, int x, int y, boolean moveableShip) {
 
-
-		if (validPlacementShip(ship, x, y)) {
+		
+		
+		
+		if(!moveableShip) {
+			if (validPlacementShip(ship, x, y)) {
+				int length = ship.type;
+	
+				if (ship.direction) {
+					
+					for (int i = y; i < y + length; i++) {
+	
+						Cell cell = getCell(x, i);
+						cell.ship = ship;
+						
+						if (!opponent) {
+							cell.setFill(Color.GREEN);
+							cell.setStroke(Color.BLACK);
+						}
+	
+					}
+				}
+				else {
+	
+					for (int i = x; i < x + length; i++) {
+	
+						Cell cell = getCell(i, y);
+						cell.ship = ship;
+	
+						if (!opponent) {
+	
+							cell.setFill(Color.GREEN);
+							cell.setStroke(Color.BLACK);
+	
+						}
+	
+					}
+				}
+	
+				return true;
+			}
+			return false;
+		}else {
+			
+			
 			int length = ship.type;
-
+			
 			if (ship.direction) {
 				
 				for (int i = y; i < y + length; i++) {
 
 					Cell cell = getCell(x, i);
-					cell.ship = ship;
+					cell.ship = null;
 					
 					if (!opponent) {
-						cell.setFill(Color.GREEN);
+						cell.setFill(Color.WHITE);
 						cell.setStroke(Color.BLACK);
 					}
 
@@ -102,22 +144,20 @@ public class Board extends Parent {
 				for (int i = x; i < x + length; i++) {
 
 					Cell cell = getCell(i, y);
-					cell.ship = ship;
+					cell.ship = null;
 
 					if (!opponent) {
 
-						cell.setFill(Color.GREEN);
+						cell.setFill(Color.WHITE);
 						cell.setStroke(Color.BLACK);
 
 					}
 
 				}
 			}
-
 			return true;
 		}
-
-		return false;
+		
 	}
 
 	/**
