@@ -833,13 +833,13 @@ public class Battle extends Application {
 		ButtonType Ship3 = new ButtonType("Ship3");
 		ButtonType Ship4 = new ButtonType("Ship4");
 		ButtonType Ship5 = new ButtonType("Ship5");
+		ButtonType cancelButtonType = new ButtonType("Close");
 		
 
-		gameModeAlert.setTitle("SELECT GAME MODE");
-
-		gameModeAlert.setContentText("Click on the desired button to choose game mode");
-		gameModeAlert.getButtonTypes().setAll(Ship1, Ship2,Ship3,Ship4,Ship5);
-
+		gameModeAlert.setTitle("Ship Adjustment");
+		gameModeAlert.setHeaderText("Select the ship you want to remove");
+		gameModeAlert.setContentText("Ship 1 = Length 5 and so on");
+		gameModeAlert.getButtonTypes().setAll(Ship1, Ship2,Ship3,Ship4,Ship5,cancelButtonType);
 		Optional<ButtonType> result = gameModeAlert.showAndWait();
 
 		String retShip ="";
