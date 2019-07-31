@@ -19,7 +19,7 @@ public class AI {
     private int x = 0;
     private int y = 0;
     private boolean lastGuessHit = false;
-    private Stack stack = new Stack();
+    public Stack stack = new Stack();
     private Random gen = new Random();
     private int lastDir = 0;
 
@@ -30,7 +30,7 @@ public class AI {
         this.generate();
     }
 
-    void reset() {
+    public void reset() {
         startSearchX = 0;
         startSearchY = 0;
         lastX = 0;
@@ -73,7 +73,7 @@ public class AI {
      *  If hit, search nearby spots for remainder of ship until a ship is destroyed or out of places to search
      *  Repeat
      */
-    void generate() {
+    public void generate() {
         //If no boat found yet, pick random coordinate
         if (!lastGuessHit && stack.isEmpty()) {
             x = gen.nextInt(10);
@@ -197,7 +197,7 @@ public class AI {
      * @param getHit whether or not last guess hit
      * @param getDestroy whether or not last guess destroyed a ship
      */
-    void feedback(boolean getHit, boolean getDestroy) {
+    public void feedback(boolean getHit, boolean getDestroy) {
         if (getDestroy) {
             stack.clear();
             lastX = 0;
