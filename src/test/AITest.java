@@ -23,7 +23,22 @@ public class AITest {
 		int x=ai.nextX();
 		int y=ai.nextY();
 		assertEquals(true, (x>=0 && x<=10) && (y>=0 && y<=10)?true:false);
-		assertEquals(false,(x>=0 && x<10) && (y>=0 && y<=10)?false:false);
+		
+	}
+	@Test
+	public void testGenerate1() {
+		int x=ai.nextX();
+		int y=ai.nextY();
+	
+	assertEquals(false,(x>=0 && x<10) && (y>=0 && y<=10)?false:false);
+	}
+	
+	@Test
+	public void testGenerate2() {
+		int x=ai.nextX();
+		int y=ai.nextY();
+	
+	assertEquals(false,(x>=0 && x<10) && (y>=0 && y<=10)?false:true);
 	}
 	
 	
