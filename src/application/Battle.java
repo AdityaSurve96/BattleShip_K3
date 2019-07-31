@@ -856,8 +856,11 @@ public class Battle extends Application {
 		else if (result.get() == Ship5) 
 			retShip ="ship5";
 		
+			
+		
 		String cordinates [];
 		if(dragAndDropShips.containsKey(strToShip.get(retShip))) {
+			numberOfShips++;
 			cordinates = dragAndDropShips.get(strToShip.get(retShip)).split("-");
 			firstPlayerBoard.positionShip(new Ship(Integer.parseInt(cordinates[3]),cordinates[2].equalsIgnoreCase("true")?true:false),
 					Integer.parseInt(cordinates[0]), Integer.parseInt(cordinates[1]),true);
