@@ -48,6 +48,15 @@ public class AITest {
 		ai.generate();
 		assertNotNull(ai.stack.isEmpty());
 		
+		
+		
+	}
+	
+	@Test
+	public void testGuessingDirection2(){
+		ai.feedback(false,true);
+		ai.generate();
+		assertNotNull(ai.stack.isEmpty());
 	}
 	
 	@Test
