@@ -207,7 +207,7 @@ public class Board extends Parent {
 	 * @param y Y coordinate for placement of ship
 	 * @return
 	 */
-	private boolean validPlacementShip(Ship ship, int x, int y) {
+	public boolean validPlacementShip(Ship ship, int x, int y) {
 
 		int length = ship.type;
 
@@ -258,9 +258,12 @@ public class Board extends Parent {
 	 * @param point takes x and y coordinate of the ship together as a 2D point and checks their placement validity i.e if they are properly placed within the grid,two ships coordinates do not interfere etc.
 	 * @return
 	 */
-	private boolean isValidPoint(Point2D point) {
+	public boolean isValidPoint(Point2D point) {
 		return isValidPoint(point.getX(), point.getY());
 	}
+	
+	//for Unit test purpose
+	
 
 	/**
 	 * Method that will help to validate the Point if it is in the Board
@@ -273,7 +276,7 @@ public class Board extends Parent {
 	}
 
 
-	public class Cell extends Rectangle {
+	public static class Cell extends Rectangle {
 
 		public int row, col;
 
@@ -281,7 +284,7 @@ public class Board extends Parent {
 
 		public boolean targetHit = false;
 
-		private Board board;
+		public Board board;
 
 		/**
 		 * 
@@ -378,7 +381,7 @@ public class Board extends Parent {
 		
 		
 	}
-	private void shipDestructionMessage(String s,double x, double y) {
+	private static void shipDestructionMessage(String s,double x, double y) {
 		
 		Alert shipSinkAlert = new Alert(AlertType.WARNING);
 		shipSinkAlert.setTitle("SHIP SUNK");

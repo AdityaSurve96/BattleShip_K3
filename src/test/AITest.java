@@ -14,8 +14,9 @@ public class AITest {
 	
 	
 	@Before
-	public void initailse() {
+	public void initialse() {
 		ai = new AI();
+		
 	}
 	
 	@Test

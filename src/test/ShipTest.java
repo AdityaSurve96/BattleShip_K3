@@ -19,12 +19,14 @@ public class ShipTest {
 	@BeforeClass
 	public static void check() {
 		ship =new Ship(1,true);
+		
 	}
 	
 	@Test
 	public void testShipIsAliveSuccess() {
 		boolean checkAlive =ship.shipIsAlive();
 		assertTrue(checkAlive);
+		
 	}
 	
 	@Test
@@ -37,6 +39,7 @@ public class ShipTest {
 	@Test
 	public void testShipIsAliveFailure() {
 		ship.percentageDestroyed -= 1;
+	
 		boolean checkAlive =ship.shipIsAlive();
 		assertFalse(checkAlive);
 	}
