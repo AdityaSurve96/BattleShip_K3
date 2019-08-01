@@ -12,10 +12,36 @@ import application.Ship;
 import application.Board.Cell;
 import javafx.geometry.Point2D;
 
+/**
+ * @author k3
+ *
+ */
+
 public class BoardTest {
 
 	static Board board;
 	static Cell cell;
+	
+	/**
+	 * @throws java.lang.Exception
+	 */
+	@BeforeClass
+	public static void setUpBeforeClass() throws Exception {
+	}
+
+	/**
+	 * @throws java.lang.Exception
+	 */
+	@Before
+	public void setUp() throws Exception {
+	}
+
+	/**
+	 * @throws java.lang.Exception
+	 */
+	@After
+	public void tearDown() throws Exception {
+	}
 	
 	
 	@Before
@@ -34,7 +60,9 @@ public class BoardTest {
 	}
 	
 	
-	
+	/**
+	*test method for valid point test
+	*/
 	
 	@Test
 	public void IsValidPointTest()
