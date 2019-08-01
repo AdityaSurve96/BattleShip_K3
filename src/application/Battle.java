@@ -612,6 +612,13 @@ public class Battle extends Application {
 		}
 	}
 	
+	/**
+	 * <p>This method selects/highlights the current rectangle on which the mouse has been pressed</p>
+	 * 
+	 * 
+	 * @param boat - the ship(rectangle) to be selected/highlighted
+	 * @return - the currently selected ship/rectangle
+	 */
 	private Rectangle select(Rectangle boat) {
 		selectedShip.setStroke(Color.WHITE);
 		selectedShip.setStrokeWidth(1.0);
