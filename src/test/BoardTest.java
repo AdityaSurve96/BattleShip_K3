@@ -35,7 +35,6 @@ public class BoardTest {
 	public void IsValidPointTest()
 	{
 		
-		
 		Point2D p = new Point2D(3, 4);
 		assertEquals(true, board.isValidPoint(p));
 	
