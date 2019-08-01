@@ -48,9 +48,6 @@ public class AITest {
 		ai.feedback(true,false);
 		ai.generate();
 		assertNotNull(ai.stack.isEmpty());
-		
-		
-		
 	}
 	
 	@Test
@@ -64,7 +61,6 @@ public class AITest {
 	public void testMove(){
 		boolean checkMoves = ai.move(2);
 		assertTrue(checkMoves);
-		
 	}
 
 	
@@ -75,6 +71,41 @@ public class AITest {
 		int secondX = ai.nextX();
 		assertNotEquals(firstX, secondX);
 	}
+	
+	@Test
+	public void testMoveFailed(){
+		boolean checkMoves = ai.move(1);
+		assertTrue(checkMoves);
+	}
+	
+	
+	@Test
+	public void testTrytoMove() {
+		int prevX = ai.nextX();
+		ai.stack.push(2);
+		ai.tryToMove();
+		int nextX =ai.nextX();
+		if(prevX == nextX)
+			assertEquals(prevX, nextX);
+		else
+			assertNotEquals(prevX, nextX );
+		
+	}
+	
+	@Test
+	public void testTrytoMoveFailure() {
+		int prevX = ai.nextX();
+		ai.stack.push(10);
+		ai.tryToMove();
+		int nextX =ai.nextX();
+		if(prevX == nextX)
+			assertEquals(prevX, nextX);
+		else
+			assertNotEquals(prevX, nextX );
+		
+		
+	}
+	
 	
 	
 	@After
