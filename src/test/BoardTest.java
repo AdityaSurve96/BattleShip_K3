@@ -158,8 +158,7 @@ public class BoardTest {
 		
 		assertNull(cell.ship);
 	}
-	
-	
+
 	
 
 }

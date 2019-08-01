@@ -401,7 +401,7 @@ public class Battle extends Application {
 	 * @param boat - It denotes the ship rectangle 
 	 */
 	private void installBoatListeners(Node boat) {
-		final Delta dragDelta = new Delta();
+//		final Delta dragDelta = new Delta();
 
 		// Handle dragging, using help from
 		// http://stackoverflow.com/questions/22139615/dragging-buttons-in-javafx
@@ -499,21 +499,21 @@ public class Battle extends Application {
 						selectedShip.setOpacity(0);
 						System.out.println("Hello " + x + " " + y);
 						Cell r = (Cell) firstPlayerBoard.getCell(x, y);
-						int endX, endY;
+//						int endX, endY;
 						if (isRotated) {
 							selectedShip.setX(r.getLayoutX() + r.getParent().getTranslateX()
 									- selectedShip.getWidth() / 2 + cellSize / 2);
 							selectedShip.setY(r.getLayoutY() + r.getParent().getTranslateY() + size * cellSize
 									- selectedShip.getWidth() / 2 - cellSize / 2 + 5);
-							endX = x;
-							endY = y + size - 1;
+//							endX = x;
+//							endY = y + size - 1;
 						} else {
 							
 
 							selectedShip.setLayoutX(0);
 							selectedShip.setLayoutY(0);
-							endX = x + size - 1;
-							endY = y;
+//							endX = x + size - 1;
+//							endY = y;
 						}
 
 					} else {
@@ -577,6 +577,13 @@ public class Battle extends Application {
 		});
 	}
 
+	/**
+	 * <p>This method places the ships back to their original location if the user
+	 * does not provide a valid placement position for them</p>
+	 * 
+	 * @param len - Length of the ship { 5,4,3,2 }
+	 * @param shipSelect - the currently selected ship
+	 */
 	private void backtoHome(int len,Rectangle shipSelect) {
 		shipSelect.setDisable(false);
 		if (len == 5 || shipSelect.getWidth() > 120) {
@@ -604,7 +611,7 @@ public class Battle extends Application {
 			shipSelect.setOpacity(100);
 		}
 	}
-
+	
 	private Rectangle select(Rectangle boat) {
 		selectedShip.setStroke(Color.WHITE);
 		selectedShip.setStrokeWidth(1.0);
