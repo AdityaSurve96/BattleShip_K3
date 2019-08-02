@@ -1248,6 +1248,8 @@ public class Battle extends Application {
 	public void callSuggestionMethod() {
 		int count = 1;
 		for (Rectangle rect : dragAndDropShipsOpponent.keySet()) {
+			
+			// Number of ship cells to display as hint
 			if (count > 2)
 				break;
 			String takeCordinates[] = dragAndDropShipsOpponent.get(rect).split("-");
@@ -1290,6 +1292,8 @@ public class Battle extends Application {
 				curTime = Integer.parseInt(timer1.getText().split(":")[0]) * 60
 						  + Integer.parseInt(timer1.getText().split(":")[1]);
 				
+				
+				// Time gap after which the hint should be given
 				if (curTime - prevTime > 5) {
 					
 					exit = true;
