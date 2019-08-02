@@ -72,7 +72,7 @@ public class Battle extends Application {
 	private boolean normalGame;
 
 	private boolean salvation;
-	
+
 	private boolean suggSalvation;
 
 	private int hits = 1;
@@ -119,7 +119,6 @@ public class Battle extends Application {
 	private Rectangle ship4 = new Rectangle(50, 570, 90, 30);
 	private Rectangle ship5 = new Rectangle(50, 610, 60, 30);
 
-
 	private boolean needToRotate = true;
 	private boolean isRotated = false;
 	private Rectangle selectedShip;
@@ -138,28 +137,27 @@ public class Battle extends Application {
 
 	boolean player1Timer = true;
 	boolean player2Timer = true;
-	
+
 	checkTimer checkTime = new checkTimer();
 
 	Thread t1 = new Thread(checkTime, "T1");
 
 	static boolean checkTimeForSug = true;
 
-	
 	// Map to keep a match of the ship names to selected ships
-	
-	Map<String,Rectangle> strToShip = new HashMap<String,Rectangle>();
-	
+
+	Map<String, Rectangle> strToShip = new HashMap<String, Rectangle>();
+
 	// Map to match the selected ship to its properties
-	Map<Rectangle,String> dragAndDropShips = new HashMap<Rectangle,String>();
-	
+	Map<Rectangle, String> dragAndDropShips = new HashMap<Rectangle, String>();
+
 	Map<Rectangle, String> dragAndDropShipsOpponent = new HashMap<Rectangle, String>();
-	
+
 	boolean checkForSugg = false;
-	
-	
+
 	/**
 	 * It updates the timer text of Player1
+	 * 
 	 * @param text
 	 */
 	void changeTimer1(Text text) {
@@ -174,10 +172,10 @@ public class Battle extends Application {
 		text.setText((((mins / 10) == 0) ? "0" : "") + mins + ":" + (((secs / 10) == 0) ? "0" : "") + secs + ":"
 				+ (((millis / 10) == 0) ? "00" : (((millis / 100) == 0) ? "0" : "")) + millis++);
 	}
-	
-	
+
 	/**
 	 * It updates the timer text of opponent/Player2
+	 * 
 	 * @param text
 	 */
 	void changeTimer2(Text text) {
@@ -191,7 +189,7 @@ public class Battle extends Application {
 		}
 		text.setText((((mins1 / 10) == 0) ? "0" : "") + mins1 + ":" + (((secs1 / 10) == 0) ? "0" : "") + secs1 + ":"
 				+ (((millis1 / 10) == 0) ? "00" : (((millis1 / 100) == 0) ? "0" : "")) + millis1++);
-		
+
 	}
 
 	/**
@@ -209,8 +207,7 @@ public class Battle extends Application {
 	 * <li>Mouse handler events for opponent and player 1</li>
 	 * </ol>
 	 * 
-	 * @param personStage
-	 *            Stage that holds the board, grids and ships on it.
+	 * @param personStage Stage that holds the board, grids and ships on it.
 	 * @param background
 	 * @return
 	 */
@@ -391,8 +388,7 @@ public class Battle extends Application {
 		opponentBoard = new Board(true, event);
 
 		firstPlayerBoard = new Board(false, null);
-		
-		
+
 		firstPlayerBoard.setLayoutX(250);
 		firstPlayerBoard.setLayoutY(120);
 		opponentBoard.setLayoutX(750);
@@ -405,19 +401,24 @@ public class Battle extends Application {
 		return root;
 	}
 
-	
 	/**
-	 * <p>This method registers every single ship with following listeners:</p>
+	 * <p>
+	 * This method registers every single ship with following listeners:
+	 * </p>
 	 * <ol>
-	 * <li>MousePressed Listener to change cursor appearance and get current position coordinates when 
-	 * mouse is Pressed on the ship but not released  </li>
-	 * <li>MouseEntered Listener for changing the cursor appearance when cursor is hovered on the ship</li>
-	 * <li>MouseClicked Listener for changing the orientation of the ship when mouse click happens on any ship</li>
-	 * <li>MouseDragged Listener which handles the ship dragging when the ship rectangle is  dragged</li>
-	 * <li>MouseRelease Listener which handles the ship placement when the dragging operation ends</li>
+	 * <li>MousePressed Listener to change cursor appearance and get current
+	 * position coordinates when mouse is Pressed on the ship but not released</li>
+	 * <li>MouseEntered Listener for changing the cursor appearance when cursor is
+	 * hovered on the ship</li>
+	 * <li>MouseClicked Listener for changing the orientation of the ship when mouse
+	 * click happens on any ship</li>
+	 * <li>MouseDragged Listener which handles the ship dragging when the ship
+	 * rectangle is dragged</li>
+	 * <li>MouseRelease Listener which handles the ship placement when the dragging
+	 * operation ends</li>
 	 * </ol>
 	 * 
-	 * @param boat - It denotes the ship rectangle 
+	 * @param boat - It denotes the ship rectangle
 	 */
 	private void installBoatListeners(Node boat) {
 
@@ -426,8 +427,7 @@ public class Battle extends Application {
 		boat.setOnMousePressed(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent mouseEvent) {
-			
-				
+
 				needToRotate = true;
 				Rectangle rect = (Rectangle) boat;
 				select(rect);
@@ -438,7 +438,7 @@ public class Battle extends Application {
 				}
 				double localX = rect.getX();
 				double localY = rect.getY();
-			
+
 				if (isRotated) {
 					localX = localX + selectedShip.getWidth() / 2;
 					localY = localY - selectedShip.getWidth() / 2 + cellSize;
@@ -450,9 +450,9 @@ public class Battle extends Application {
 		boat.setOnMouseReleased(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent mouseEvent) {
-			
+
 				boat.setCursor(Cursor.HAND);
-	
+
 				boat.toFront();
 				double localX = 0;
 				double localY = 0;
@@ -477,7 +477,6 @@ public class Battle extends Application {
 					localY = mouseEvent.getY() - 120;
 				}
 
-				
 				int size = (int) ((int) selectedShip.getWidth() / cellSize);
 
 				int shipLength = 0;
@@ -489,33 +488,28 @@ public class Battle extends Application {
 					if (selectedShip.getWidth() > 120) {
 						shipLength = 5;
 						shipName = "ship1";
-					}
-					else if (selectedShip.getWidth() <= 120 && selectedShip.getWidth() > 90) {
+					} else if (selectedShip.getWidth() <= 120 && selectedShip.getWidth() > 90) {
 						shipLength = 4;
 						shipName = "ship2";
-					}
-					else if (selectedShip.getWidth() <= 90 && selectedShip.getWidth() > 60) {
+					} else if (selectedShip.getWidth() <= 90 && selectedShip.getWidth() > 60) {
 						shipLength = 3;
-						if(selectedShip == ship3)
+						if (selectedShip == ship3)
 							shipName = "ship3";
 						else
 							shipName = "ship4";
-					}
-					else if (selectedShip.getWidth() <= 60 && selectedShip.getWidth() > 30) {
+					} else if (selectedShip.getWidth() <= 60 && selectedShip.getWidth() > 30) {
 						shipLength = 2;
 						shipName = "ship5";
 					}
-					
-					
-					
-					if (firstPlayerBoard.positionShip(new Ship(shipLength, isRotated == true), x, y,false)) {
+
+					if (firstPlayerBoard.positionShip(new Ship(shipLength, isRotated == true), x, y, false)) {
 						--numberOfShips;
 						currentShip++;
 						strToShip.put(shipName, selectedShip);
-						dragAndDropShips.put(selectedShip, x+"-"+y+"-"+isRotated+"-"+shipLength);
+						dragAndDropShips.put(selectedShip, x + "-" + y + "-" + isRotated + "-" + shipLength);
 						selectedShip.setDisable(true);
 						selectedShip.setOpacity(0);
-						
+
 						Cell r = (Cell) firstPlayerBoard.getCell(x, y);
 
 						if (isRotated) {
@@ -525,7 +519,6 @@ public class Battle extends Application {
 									- selectedShip.getWidth() / 2 - cellSize / 2 + 5);
 
 						} else {
-							
 
 							selectedShip.setLayoutX(0);
 							selectedShip.setLayoutY(0);
@@ -533,20 +526,20 @@ public class Battle extends Application {
 						}
 
 					} else {
-						
-							backtoHome(shipLength,selectedShip);
-						
+
+						backtoHome(shipLength, selectedShip);
+
 					}
 
 				} else {
-					backtoHome(shipLength,selectedShip);
+					backtoHome(shipLength, selectedShip);
 				}
 			}
 		});
 		boat.setOnMouseDragged(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent mouseEvent) {
-				
+
 				needToRotate = false;
 				if (boat.rotateProperty().getValue() == 0) {
 					isRotated = false;
@@ -554,18 +547,16 @@ public class Battle extends Application {
 					isRotated = true;
 				}
 				boat.toFront();
-		
+
 				Rectangle temp = (Rectangle) boat;
-				
-				
+
 				if (isRotated) {
-					
+
 					temp.setX(mouseEvent.getSceneX() - (temp.getBoundsInLocal().getWidth() / 2));
 					temp.setY(mouseEvent.getSceneY() + (temp.getBoundsInLocal().getWidth() / 3));
-					
+
 				} else {
-					
-					
+
 					temp.setX(mouseEvent.getSceneX());
 					temp.setY(mouseEvent.getSceneY());
 				}
@@ -582,7 +573,7 @@ public class Battle extends Application {
 			@Override
 			public void handle(MouseEvent mouseEvent) {
 				if (needToRotate) {
-					
+
 					if (boat.rotateProperty().getValue() == 0) {
 						boat.setRotate(90.0);
 					} else
@@ -594,13 +585,15 @@ public class Battle extends Application {
 	}
 
 	/**
-	 * <p>This method places the ships back to their original location if the user
-	 * does not provide a valid placement position for them</p>
+	 * <p>
+	 * This method places the ships back to their original location if the user does
+	 * not provide a valid placement position for them
+	 * </p>
 	 * 
-	 * @param len - Length of the ship { 5,4,3,2 }
+	 * @param len        - Length of the ship { 5,4,3,2 }
 	 * @param shipSelect - the currently selected ship
 	 */
-	private void backtoHome(int len,Rectangle shipSelect) {
+	private void backtoHome(int len, Rectangle shipSelect) {
 		shipSelect.setDisable(false);
 		if (len == 5 || shipSelect.getWidth() > 120) {
 			shipSelect.setX(50);
@@ -627,9 +620,12 @@ public class Battle extends Application {
 			shipSelect.setOpacity(100);
 		}
 	}
-	
+
 	/**
-	 * <p>This method selects/highlights the current rectangle on which the mouse has been pressed</p>
+	 * <p>
+	 * This method selects/highlights the current rectangle on which the mouse has
+	 * been pressed
+	 * </p>
 	 * 
 	 * 
 	 * @param boat - the ship(rectangle) to be selected/highlighted
@@ -663,7 +659,7 @@ public class Battle extends Application {
 		st.setStyle("-fx-background-color: #000000;-fx-font-size: 2em;-fx-text-fill:#ffffff;");
 		reset.setStyle("-fx-background-color: #000000;-fx-font-size: 2em;-fx-text-fill:#ffffff;");
 		adjust.setStyle("-fx-background-color: #000000;-fx-font-size: 2em;-fx-text-fill:#ffffff;");
-	
+
 		exit.setStyle("-fx-background-color: #000000;-fx-font-size: 2em;-fx-text-fill:#ffffff;");
 		doNotCheat.setStyle("-fx-background-color: #000000;-fx-font-size: 2em;-fx-text-fill:#ffffff;");
 
@@ -676,8 +672,6 @@ public class Battle extends Application {
 		adjust.setMinHeight(80);
 		adjust.setMinWidth(150);
 
-	
-
 		exit.setMinHeight(80);
 		exit.setMinWidth(150);
 
@@ -687,9 +681,12 @@ public class Battle extends Application {
 	}
 
 	/**
-	 * <p>This method updates the text field of scores when any player earns points</p>
+	 * <p>
+	 * This method updates the text field of scores when any player earns points
+	 * </p>
 	 * 
-	 * @param player - the player can be either user(firstPlayer) or opponent/Player 2
+	 * @param player - the player can be either user(firstPlayer) or opponent/Player
+	 *               2
 	 */
 	private void displayScore(String player) {
 		if (player.equalsIgnoreCase("player1"))
@@ -698,11 +695,10 @@ public class Battle extends Application {
 			player2ScoreDisplay.setText(player2Score + "");
 	}
 
-	
 	/**
 	 * This method is AI which will detect the move on Player 1 Board.
 	 * 
-	 * @param personStage - root(JavaFX Game Stage) 
+	 * @param personStage - root(JavaFX Game Stage)
 	 */
 	private void opponentNormalMove(Stage personStage) {
 		int x, y;
@@ -718,9 +714,9 @@ public class Battle extends Application {
 				continue;
 			}
 			oldValue = firstPlayerBoard.amountOfships;
-			System.out.println("Opponent Shooting");
+			// System.out.println("Opponent Shooting");
 			opponentTurn = cell.shoot();
-			System.out.println("Opponent shot done");
+			// System.out.println("Opponent shot done");
 			if (!opponentTurn) {
 				ai.feedback(false, false);
 				timelinePlayer2.pause();
@@ -757,6 +753,7 @@ public class Battle extends Application {
 
 	/**
 	 * This method handles the moves played by the AI / opponent in Salva Mode
+	 * 
 	 * @param personStage - the game Stage (root)
 	 */
 	private void opponentSalvationMove(Stage personStage) {
@@ -805,11 +802,12 @@ public class Battle extends Application {
 		hits = 1;
 	}
 
-
 	/**
-	 * This method will Display the final result on the pop-up showing who the winner is.
+	 * This method will Display the final result on the pop-up showing who the
+	 * winner is.
 	 * 
-	 * @param s -String that specifies a text notifying when one player wins.
+	 * @param s           -String that specifies a text notifying when one player
+	 *                    wins.
 	 *
 	 * @param personStage - root ( JavaFX game Stage)
 	 */
@@ -834,14 +832,18 @@ public class Battle extends Application {
 		}
 
 	}
-	
+
 	/**
-	 * <p>This method generates alert for re-adjusting the ship only during placement 
-	 * before the start of the game</p>
-	 * <p>It also contains the logic for ship re-adjustment</p>
+	 * <p>
+	 * This method generates alert for re-adjusting the ship only during placement
+	 * before the start of the game
+	 * </p>
+	 * <p>
+	 * It also contains the logic for ship re-adjustment
+	 * </p>
 	 * 
 	 */
-	
+
 	private void adjustShips() {
 		Alert gameModeAlert = new Alert(AlertType.INFORMATION);
 
@@ -851,48 +853,45 @@ public class Battle extends Application {
 		ButtonType Ship4 = new ButtonType("Ship4");
 		ButtonType Ship5 = new ButtonType("Ship5");
 		ButtonType cancelButtonType = new ButtonType("Close");
-		
 
 		gameModeAlert.setTitle("Ship Adjustment");
 		gameModeAlert.setHeaderText("Select the ship you want to remove");
 		gameModeAlert.setContentText("Ship 1 = Length 5 and so on");
-		gameModeAlert.getButtonTypes().setAll(Ship1, Ship2,Ship3,Ship4,Ship5,cancelButtonType);
+		gameModeAlert.getButtonTypes().setAll(Ship1, Ship2, Ship3, Ship4, Ship5, cancelButtonType);
 		Optional<ButtonType> result = gameModeAlert.showAndWait();
 
-		String retShip ="";
+		String retShip = "";
 
-		if (result.get() == Ship1) 
-			retShip ="ship1";
-		 else if (result.get() == Ship2) 
-			retShip ="ship2";
-		else if (result.get() == Ship3) 
-			retShip ="ship3";
-		else if (result.get() == Ship4) 
-			retShip ="ship4";
-		else if (result.get() == Ship5) 
-			retShip ="ship5";
-		
-			
-		
-		String cordinates [];
-		if(dragAndDropShips.containsKey(strToShip.get(retShip))) {
+		if (result.get() == Ship1)
+			retShip = "ship1";
+		else if (result.get() == Ship2)
+			retShip = "ship2";
+		else if (result.get() == Ship3)
+			retShip = "ship3";
+		else if (result.get() == Ship4)
+			retShip = "ship4";
+		else if (result.get() == Ship5)
+			retShip = "ship5";
+
+		String cordinates[];
+		if (dragAndDropShips.containsKey(strToShip.get(retShip))) {
 			numberOfShips++;
 			cordinates = dragAndDropShips.get(strToShip.get(retShip)).split("-");
-			firstPlayerBoard.positionShip(new Ship(Integer.parseInt(cordinates[3]),cordinates[2].equalsIgnoreCase("true")?true:false),
-					Integer.parseInt(cordinates[0]), Integer.parseInt(cordinates[1]),true);
+			firstPlayerBoard.positionShip(
+					new Ship(Integer.parseInt(cordinates[3]), cordinates[2].equalsIgnoreCase("true") ? true : false),
+					Integer.parseInt(cordinates[0]), Integer.parseInt(cordinates[1]), true);
 			dragAndDropShips.remove(strToShip.get(retShip));
-			backtoHome(Integer.parseInt(cordinates[3]),strToShip.get(retShip));
-			
+			backtoHome(Integer.parseInt(cordinates[3]), strToShip.get(retShip));
+
 		}
 
 	}
-	
-	
-	
 
 	/**
-	 * <p>This method will Start the Game once the Player Click the start button and
-	 * Player 1 has set up all his ships.</p>
+	 * <p>
+	 * This method will Start the Game once the Player Click the start button and
+	 * Player 1 has set up all his ships.
+	 * </p>
 	 */
 	private void startGame() {
 		// place enemy ships
@@ -903,8 +902,8 @@ public class Battle extends Application {
 			int x = random.nextInt(10);
 			int y = random.nextInt(10);
 			boolean direct = Math.random() < 0.5;
-			if (opponentBoard.positionShip(new Ship(shipLengths.get(i), direct), x, y,false)) {
-				
+			if (opponentBoard.positionShip(new Ship(shipLengths.get(i), direct), x, y, false)) {
+
 				if (direct) {
 					for (int k = y; k < y + shipLengths.get(i); k++) {
 						dragAndDropShipsOpponent.put(opponentBoard.getCell(x, k), x + "-" + k);
@@ -930,7 +929,7 @@ public class Battle extends Application {
 		gameModeAlert.setTitle("SELECT GAME MODE");
 
 		gameModeAlert.setContentText("Click on the desired button to choose game mode");
-		gameModeAlert.getButtonTypes().setAll(buttonSalva,buttonSuggSalva, buttonNormal);
+		gameModeAlert.getButtonTypes().setAll(buttonSalva, buttonSuggSalva, buttonNormal);
 
 		Optional<ButtonType> result = gameModeAlert.showAndWait();
 
@@ -952,11 +951,15 @@ public class Battle extends Application {
 		}
 		executing = true;
 		timelinePlayer1.play();
-		previoustime = Integer.parseInt(timer1.getText().split(":")[0])*60+Integer.parseInt(timer1.getText().split(":")[1]);;
+		previoustime = Integer.parseInt(timer1.getText().split(":")[0]) * 60
+				+ Integer.parseInt(timer1.getText().split(":")[1]);
+		;
 	}
 
 	/**
-	 * <p>This method displays all the ships on the opponent board in Golden Color</p>
+	 * <p>
+	 * This method displays all the ships on the opponent board in Golden Color
+	 * </p>
 	 * 
 	 * @param opponentBoard - opponent players grid
 	 */
@@ -982,8 +985,10 @@ public class Battle extends Application {
 	}
 
 	/**
-	 * <p>This Method will initialize the Primary stage with the necessary elements in
-	 * it</p>
+	 * <p>
+	 * This Method will initialize the Primary stage with the necessary elements in
+	 * it
+	 * </p>
 	 * 
 	 * @param primaryStage - root (JAVAFX Game Stage)
 	 */
@@ -1029,8 +1034,8 @@ public class Battle extends Application {
 			isCheating = !isCheating;
 
 		});
-		
-		adjust.setOnAction(e->{
+
+		adjust.setOnAction(e -> {
 			adjustShips();
 		});
 
@@ -1038,7 +1043,9 @@ public class Battle extends Application {
 	}
 
 	/**
-	 * <p>Method will reset the Game by initializing all the related Nodes.</p>
+	 * <p>
+	 * Method will reset the Game by initializing all the related Nodes.
+	 * </p>
 	 * 
 	 * @param primaryStage
 	 */
@@ -1071,38 +1078,40 @@ public class Battle extends Application {
 	 * Launches the application
 	 * 
 	 * @param args-takes the default Arguments
-	 *            
+	 * 
 	 */
 	public static void main(String[] args) {
 		launch(args);
 	}
 
 	/**
-	 *<p> This function helps the FirstPlayer to shoot ships during Normal Mode</p>
-	 * @param cellHits - the arrayList holding the selected cell ready for hitting
-	 * @param personStage - root ( JavaFX game Stage) 
+	 * <p>
+	 * This function helps the FirstPlayer to shoot ships during Normal Mode
+	 * </p>
+	 * 
+	 * @param cellHits    - the arrayList holding the selected cell ready for
+	 *                    hitting
+	 * @param personStage - root ( JavaFX game Stage)
 	 */
 	public void shootNormalShip(ArrayList<Cell> cellHits, Stage personStage) {
 
 		for (Cell cell : cellHits) {
-			if (cell.targetHit) 
+			if (cell.targetHit)
 				return;
-			
-			
-			
-			System.out.println("Player Shooting");
+
+			//System.out.println("Player Shooting");
 			opponentTurn = !cell.shoot();
-			System.out.println("Player Shot done");
+			//System.out.println("Player Shot done");
 
 			if (opponentTurn) {
 				timelinePlayer1.pause();
-			
+
 				timelinePlayer2.play();
-				
+
 				if (suggSalvation) {
 					checkTimeForSug = false;
 				}
-				
+
 				opponentNormalMove(personStage);
 			} else {
 				Rectangle deleteCell = null;
@@ -1124,9 +1133,10 @@ public class Battle extends Application {
 					}
 				}
 
-				currenttime = Integer.parseInt(timer1.getText().split(":")[0])*60+Integer.parseInt(timer1.getText().split(":")[1]);
-				System.out.println("Previous Time" + previoustime);
-				System.out.println("Cuurent Time " + currenttime);
+				currenttime = Integer.parseInt(timer1.getText().split(":")[0]) * 60
+						+ Integer.parseInt(timer1.getText().split(":")[1]);
+				//System.out.println("Previous Time" + previoustime);
+				//System.out.println("Cuurent Time " + currenttime);
 				if (currenttime - previoustime < 2)
 					player1Score += 5;
 				else if (currenttime - previoustime < 5 && currenttime - previoustime > 2)
@@ -1152,12 +1162,13 @@ public class Battle extends Application {
 
 	}
 
-	
 	/**
-	 * <p>This function is used by the AI/ opponent to shoot the cells on FirstPlayer
-	 * board during Salva Mode</p>
+	 * <p>
+	 * This function is used by the AI/ opponent to shoot the cells on FirstPlayer
+	 * board during Salva Mode
+	 * </p>
 	 * 
-	 * @param cellHits - 
+	 * @param cellHits    -
 	 * @param personStage
 	 */
 	public void shootSalvationShip(ArrayList<Cell> cellHits, Stage personStage) {
@@ -1190,31 +1201,47 @@ public class Battle extends Application {
 
 		previoustime = currenttime;
 		timelinePlayer1.pause();
-		
+
 		timelinePlayer2.play();
-		
+
 		hits = 1;
 		numberOfShots.clear();
 		opponentSalvationMove(personStage);
 
 	}
-	
-	
+/**
+ * Providing suggestions to the user after some time if the user does not perform any event
+ * temporaryCell gets the cell according to the coordinate and filled with blue color
+ * 
+ */
 	public void callSuggestionMethod() {
 		int count = 1;
 		for (Rectangle rect : dragAndDropShipsOpponent.keySet()) {
 			if (count > 5)
 				break;
 			String takeCordinates[] = dragAndDropShipsOpponent.get(rect).split("-");
-			Cell temp = opponentBoard.getCell(Integer.parseInt(takeCordinates[0]), Integer.parseInt(takeCordinates[1]));
-			temp.setFill(Color.BLUE);
+			Cell temporaryCell = opponentBoard.getCell(Integer.parseInt(takeCordinates[0]), Integer.parseInt(takeCordinates[1]));
+			temporaryCell.setFill(Color.BLUE);
 			count++;
 
 		}
 		checkForSugg = true;
 
 	}
-	
+/**
+ * 
+ * This is the timer Class which will help us to determine the difference between the player events and calling necessary events 
+ * <p>
+ * Other tasks are like:
+ * </p>
+ * <ol>
+ * <li>Handles the thread and calls suggestion method.</li>
+ * <li>Determines the time</li>
+ * </ol>
+ * 
+ * @author K3
+ *
+ */
 	class checkTimer implements Runnable {
 		private volatile boolean exit = false;
 		private int prevTime = 0;
@@ -1223,11 +1250,13 @@ public class Battle extends Application {
 		public void run() {
 			exit = false;
 			System.out.println(exit);
-			prevTime =Integer.parseInt(timer1.getText().split(":")[0])*60+Integer.parseInt(timer1.getText().split(":")[1]);
+			prevTime = Integer.parseInt(timer1.getText().split(":")[0]) * 60
+					+ Integer.parseInt(timer1.getText().split(":")[1]);
 			while (!exit) {
 
-				curTime = Integer.parseInt(timer1.getText().split(":")[0])*60+Integer.parseInt(timer1.getText().split(":")[1]);
-				System.out.println(curTime - prevTime);
+				curTime = Integer.parseInt(timer1.getText().split(":")[0]) * 60
+						+ Integer.parseInt(timer1.getText().split(":")[1]);
+				// System.out.println(curTime - prevTime);
 				if (curTime - prevTime > 5) {
 					System.out.println("After 10 and check");
 					exit = true;
@@ -1246,6 +1275,5 @@ public class Battle extends Application {
 			exit = true;
 		}
 	}
-
 
 }
