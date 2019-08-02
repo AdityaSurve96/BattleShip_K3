@@ -363,7 +363,6 @@ public class Battle extends Application {
 		};
 
 		selectedShip = ship1;
-		// ship1.setOnMousePressed(salvaEvent);
 		installBoatListeners(ship1);
 		installBoatListeners(ship2);
 		installBoatListeners(ship3);
@@ -374,7 +373,6 @@ public class Battle extends Application {
 
 		firstPlayerBoard = new Board(false, null);
 
-		// installPlayerBoardListeners(root,firstPlayerBoard);
 
 		
 		
