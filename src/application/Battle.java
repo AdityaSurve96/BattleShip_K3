@@ -735,6 +735,7 @@ public class Battle extends Application {
 					Thread t2 = new Thread(checkTime, "T2");
 					t2.start();
 				}
+				
 				timelinePlayer1.play();
 
 			} else {
@@ -821,7 +822,7 @@ public class Battle extends Application {
 	 * @param personStage - root ( JavaFX game Stage)
 	 */
 	private void finalResultDisplay(String s, Stage personStage) {
-		// TODO Auto-generated method stub
+		
 		ButtonType buttonTypeOne = new ButtonType("YES");
 		ButtonType buttonTypeTwo = new ButtonType("NO");
 
@@ -1117,6 +1118,8 @@ public class Battle extends Application {
 				timelinePlayer2.play();
 
 				if (suggSalvation) {
+					
+					// To hide back all the cells shown as hint
 					for (Rectangle rect : dragAndDropShipsOpponent.keySet()) {
 						String takeCordinates[] = dragAndDropShipsOpponent.get(rect).split("-");
 							Cell temp = opponentBoard.getCell(Integer.parseInt(takeCordinates[0]),
@@ -1130,7 +1133,8 @@ public class Battle extends Application {
 
 				opponentNormalMove(personStage);
 			} else {
-				Rectangle deleteCell = null;
+				
+				Rectangle deleteCell = null; // To remove the hinted cell which was hit
 				if (suggSalvation) {
 					if (checkForSugg) {
 						for (Rectangle rect : dragAndDropShipsOpponent.keySet()) {
@@ -1139,6 +1143,8 @@ public class Battle extends Application {
 									&& Integer.parseInt(takeCordinates[1]) == cell.col) {
 								deleteCell = rect;
 							} else {
+								
+								// Hide back the remaining hinted cells
 								Cell temp = opponentBoard.getCell(Integer.parseInt(takeCordinates[0]),
 										Integer.parseInt(takeCordinates[1]));
 								temp.setFill(Color.WHITE);
@@ -1175,6 +1181,13 @@ public class Battle extends Application {
 				finalResultDisplay(s, personStage);
 
 			}
+		}
+		
+		//TO show the hint even after player hits a part of the ship
+		checkTimeForSug = true;
+		if (suggSalvation) {
+			Thread t2 = new Thread(checkTime, "T2");
+			t2.start();
 		}
 
 	}
@@ -1236,7 +1249,7 @@ public class Battle extends Application {
 	public void callSuggestionMethod() {
 		int count = 1;
 		for (Rectangle rect : dragAndDropShipsOpponent.keySet()) {
-			if (count > 5)
+			if (count > 2)
 				break;
 			String takeCordinates[] = dragAndDropShipsOpponent.get(rect).split("-");
 			Cell temporaryCell = opponentBoard.getCell(Integer.parseInt(takeCordinates[0]), Integer.parseInt(takeCordinates[1]));
@@ -1262,6 +1275,8 @@ public class Battle extends Application {
  *
  */
 	class checkTimer implements Runnable {
+		// Declaring volatile to make exit variables updated value 
+		//always visible to main thread.
 		private volatile boolean exit = false;
 		private int prevTime = 0;
 		private int curTime = 0;
