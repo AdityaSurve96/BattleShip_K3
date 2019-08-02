@@ -35,6 +35,10 @@ public class ShipTest {
 		assertTrue(checkAlive);
 		
 	}
+	/**
+	 * Test method for shiphitsucess.
+	 */
+	
 	
 	@Test
 	public void testshipPartHitSuccess() {
