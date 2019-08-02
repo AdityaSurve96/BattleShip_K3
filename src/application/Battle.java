@@ -102,7 +102,7 @@ public class Battle extends Application {
 
 	private Button adjust = new Button("ADJUST");
 
-	private Button load = new Button("LOAD");
+//	private Button load = new Button("LOAD");
 
 	private Button exit = new Button("EXIT");
 
@@ -219,7 +219,7 @@ public class Battle extends Application {
 		Opponent.setY(100);
 		Opponent.setFont(Font.font("Verdana", FontWeight.BOLD, FontPosture.REGULAR, 20));
 
-		HBox actions = new HBox(30, st, reset, adjust, load, exit, doNotCheat);
+		HBox actions = new HBox(30, st, reset, adjust, exit, doNotCheat);
 		actions.setAlignment(Pos.CENTER);
 		buttonGeometry();
 
@@ -667,7 +667,7 @@ public class Battle extends Application {
 		st.setStyle("-fx-background-color: #000000;-fx-font-size: 2em;-fx-text-fill:#ffffff;");
 		reset.setStyle("-fx-background-color: #000000;-fx-font-size: 2em;-fx-text-fill:#ffffff;");
 		adjust.setStyle("-fx-background-color: #000000;-fx-font-size: 2em;-fx-text-fill:#ffffff;");
-		load.setStyle("-fx-background-color: #000000;-fx-font-size: 2em;-fx-text-fill:#ffffff;");
+	//	load.setStyle("-fx-background-color: #000000;-fx-font-size: 2em;-fx-text-fill:#ffffff;");
 		exit.setStyle("-fx-background-color: #000000;-fx-font-size: 2em;-fx-text-fill:#ffffff;");
 		doNotCheat.setStyle("-fx-background-color: #000000;-fx-font-size: 2em;-fx-text-fill:#ffffff;");
 
@@ -680,8 +680,8 @@ public class Battle extends Application {
 		adjust.setMinHeight(80);
 		adjust.setMinWidth(150);
 
-		load.setMinHeight(80);
-		load.setMinWidth(150);
+	//	load.setMinHeight(80);
+	//	load.setMinWidth(150);
 
 		exit.setMinHeight(80);
 		exit.setMinWidth(150);
