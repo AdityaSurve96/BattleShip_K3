@@ -25,7 +25,6 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.image.Image;
-import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
@@ -73,6 +72,8 @@ public class Battle extends Application {
 	private boolean normalGame;
 
 	private boolean salvation;
+	
+	private boolean suggSalvation;
 
 	private int hits = 1;
 
@@ -137,6 +138,12 @@ public class Battle extends Application {
 
 	boolean player1Timer = true;
 	boolean player2Timer = true;
+	
+	checkTimer checkTime = new checkTimer();
+
+	Thread t1 = new Thread(checkTime, "T1");
+
+	static boolean checkTimeForSug = true;
 
 	
 	// Map to keep a match of the ship names to selected ships
@@ -145,6 +152,10 @@ public class Battle extends Application {
 	
 	// Map to match the selected ship to its properties
 	Map<Rectangle,String> dragAndDropShips = new HashMap<Rectangle,String>();
+	
+	Map<Rectangle, String> dragAndDropShipsOpponent = new HashMap<Rectangle, String>();
+	
+	boolean checkForSugg = false;
 	
 	
 	/**
@@ -361,6 +372,9 @@ public class Battle extends Application {
 						shootSalvationShip(numberOfShots, personStage);
 					} else
 						hits++;
+				} else if (suggSalvation) {
+					shootNormalShip(numberOfShots, personStage);
+					numberOfShots.clear();
 				}
 
 			}
@@ -711,6 +725,11 @@ public class Battle extends Application {
 				ai.feedback(false, false);
 				timelinePlayer2.pause();
 
+				checkTimeForSug = true;
+				if (suggSalvation) {
+					Thread t2 = new Thread(checkTime, "T2");
+					t2.start();
+				}
 				timelinePlayer1.play();
 
 			} else {
@@ -883,8 +902,18 @@ public class Battle extends Application {
 
 			int x = random.nextInt(10);
 			int y = random.nextInt(10);
-
-			if (opponentBoard.positionShip(new Ship(shipLengths.get(i), Math.random() < 0.5), x, y,false)) {
+			boolean direct = Math.random() < 0.5;
+			if (opponentBoard.positionShip(new Ship(shipLengths.get(i), direct), x, y,false)) {
+				
+				if (direct) {
+					for (int k = y; k < y + shipLengths.get(i); k++) {
+						dragAndDropShipsOpponent.put(opponentBoard.getCell(x, k), x + "-" + k);
+					}
+				} else {
+					for (int k = x; k < x + shipLengths.get(i); k++) {
+						dragAndDropShipsOpponent.put(opponentBoard.getCell(k, y), k + "-" + y);
+					}
+				}
 
 				numberOfShips--;
 			} else {
@@ -895,12 +924,13 @@ public class Battle extends Application {
 		Alert gameModeAlert = new Alert(AlertType.INFORMATION);
 
 		ButtonType buttonSalva = new ButtonType("SALVA");
+		ButtonType buttonSuggSalva = new ButtonType("SUGG SALVA");
 		ButtonType buttonNormal = new ButtonType("NORMAL");
 
 		gameModeAlert.setTitle("SELECT GAME MODE");
 
 		gameModeAlert.setContentText("Click on the desired button to choose game mode");
-		gameModeAlert.getButtonTypes().setAll(buttonSalva, buttonNormal);
+		gameModeAlert.getButtonTypes().setAll(buttonSalva,buttonSuggSalva, buttonNormal);
 
 		Optional<ButtonType> result = gameModeAlert.showAndWait();
 
@@ -913,10 +943,16 @@ public class Battle extends Application {
 
 			normalGame = true;
 			salvation = false;
+		} else if (result.get() == buttonSuggSalva) {
+
+			suggSalvation = true;
+			normalGame = false;
+			salvation = false;
+			t1.start();
 		}
 		executing = true;
 		timelinePlayer1.play();
-		previoustime = Integer.parseInt(timer1.getText().split(":")[1]);
+		previoustime = Integer.parseInt(timer1.getText().split(":")[0])*60+Integer.parseInt(timer1.getText().split(":")[1]);;
 	}
 
 	/**
@@ -1063,10 +1099,32 @@ public class Battle extends Application {
 			
 				timelinePlayer2.play();
 				
+				if (suggSalvation) {
+					checkTimeForSug = false;
+				}
+				
 				opponentNormalMove(personStage);
 			} else {
+				Rectangle deleteCell = null;
+				if (suggSalvation) {
+					if (checkForSugg) {
+						for (Rectangle rect : dragAndDropShipsOpponent.keySet()) {
+							String takeCordinates[] = dragAndDropShipsOpponent.get(rect).split("-");
+							if (Integer.parseInt(takeCordinates[0]) == cell.row
+									&& Integer.parseInt(takeCordinates[1]) == cell.col) {
+								deleteCell = rect;
+							} else {
+								Cell temp = opponentBoard.getCell(Integer.parseInt(takeCordinates[0]),
+										Integer.parseInt(takeCordinates[1]));
+								temp.setFill(Color.WHITE);
+								temp.setStroke(Color.BLACK);
+							}
+						}
+						dragAndDropShipsOpponent.remove(deleteCell);
+					}
+				}
 
-				currenttime = Integer.parseInt(timer1.getText().split(":")[1]);
+				currenttime = Integer.parseInt(timer1.getText().split(":")[0])*60+Integer.parseInt(timer1.getText().split(":")[1]);
 				System.out.println("Previous Time" + previoustime);
 				System.out.println("Cuurent Time " + currenttime);
 				if (currenttime - previoustime < 2)
@@ -1139,6 +1197,54 @@ public class Battle extends Application {
 		numberOfShots.clear();
 		opponentSalvationMove(personStage);
 
+	}
+	
+	
+	public void callSuggestionMethod() {
+		int count = 1;
+		for (Rectangle rect : dragAndDropShipsOpponent.keySet()) {
+			if (count > 5)
+				break;
+			String takeCordinates[] = dragAndDropShipsOpponent.get(rect).split("-");
+			Cell temp = opponentBoard.getCell(Integer.parseInt(takeCordinates[0]), Integer.parseInt(takeCordinates[1]));
+			temp.setFill(Color.BLUE);
+			count++;
+
+		}
+		checkForSugg = true;
+
+	}
+	
+	class checkTimer implements Runnable {
+		private volatile boolean exit = false;
+		private int prevTime = 0;
+		private int curTime = 0;
+
+		public void run() {
+			exit = false;
+			System.out.println(exit);
+			prevTime =Integer.parseInt(timer1.getText().split(":")[0])*60+Integer.parseInt(timer1.getText().split(":")[1]);
+			while (!exit) {
+
+				curTime = Integer.parseInt(timer1.getText().split(":")[0])*60+Integer.parseInt(timer1.getText().split(":")[1]);
+				System.out.println(curTime - prevTime);
+				if (curTime - prevTime > 5) {
+					System.out.println("After 10 and check");
+					exit = true;
+				}
+				if (!checkTimeForSug) {
+					System.out.println("On Click");
+					exit = true;
+				}
+			}
+			if (exit && checkTimeForSug) {
+				callSuggestionMethod();
+			}
+		}
+
+		public void stop() {
+			exit = true;
+		}
 	}
 
 
