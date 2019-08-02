@@ -372,9 +372,6 @@ public class Battle extends Application {
 		opponentBoard = new Board(true, event);
 
 		firstPlayerBoard = new Board(false, null);
-
-
-		
 		
 		
 		firstPlayerBoard.setLayoutX(250);
@@ -939,6 +936,7 @@ public class Battle extends Application {
 		st.setOnAction(e -> {
 			if (numberOfShips == 0)
 				startGame();
+			adjust.setDisable(true);
 		});
 
 		reset.setOnAction(e -> {
