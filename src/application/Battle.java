@@ -721,9 +721,9 @@ public class Battle extends Application {
 				continue;
 			}
 			oldValue = firstPlayerBoard.amountOfships;
-			// System.out.println("Opponent Shooting");
+		
 			opponentTurn = cell.shoot();
-			// System.out.println("Opponent shot done");
+			
 			if (!opponentTurn) {
 				ai.feedback(false, false);
 				timelinePlayer2.pause();
@@ -790,9 +790,9 @@ public class Battle extends Application {
 
 		for (Cell cell : numberOfShots) {
 
-			System.out.println("Opponent Shooting");
+			
 			opponentTurn = cell.shoot();
-			System.out.println("Opponent shot done");
+			
 			if (opponentTurn) {
 				player2Score += 5;
 				displayScore("player2");
@@ -1108,9 +1108,8 @@ public class Battle extends Application {
 			if (cell.targetHit)
 				return;
 
-			//System.out.println("Player Shooting");
 			opponentTurn = !cell.shoot();
-			//System.out.println("Player Shot done");
+		
 
 			if (opponentTurn) {
 				timelinePlayer1.pause();
@@ -1205,9 +1204,9 @@ public class Battle extends Application {
 		currenttime = Integer.parseInt(timer1.getText().split(":")[1]);
 		for (Cell cell : cellHits) {
 
-			System.out.println("Player Shooting");
+			
 			opponentTurn = !cell.shoot();
-			System.out.println("Player Shot done");
+			
 			if (!opponentTurn) {
 				
 				//Score determining logic
