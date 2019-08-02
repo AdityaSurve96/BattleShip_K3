@@ -19,7 +19,7 @@ public class AI {
     private int x = 0;
     private int y = 0;
     private boolean lastGuessHit = false;
-    public Stack stack = new Stack();
+    public Stack<Integer> stack = new Stack<Integer>();
     private Random gen = new Random();
     private int lastDir = 0;
 
