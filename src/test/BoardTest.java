@@ -92,7 +92,9 @@ public class BoardTest {
 		assertEquals(false, board.isValidPoint(p));
 	
 	}
-	
+	/**
+	 * Test method for positionship.
+	 */
 	
 	@Test
 	public void testPositionShip() {
