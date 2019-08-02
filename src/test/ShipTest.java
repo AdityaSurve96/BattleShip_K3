@@ -16,11 +16,30 @@ public class ShipTest {
 	static Ship ship;
 	int hit;
 
+	
+	/**
+	 * @throws java.lang.Exception
+	 */
+	@BeforeClass
+	public static void setUpBeforeClass() throws Exception {
+	}
+
+	/**
+	 * @throws java.lang.Exception
+	 */
+	@After
+	public void tearDown() throws Exception {
+	}
+
 	@BeforeClass
 	public static void check() {
 		ship =new Ship(1,true);
 		
 	}
+	
+	/**
+	 * Test method for {@link ship#alivesucess()}.
+	 */
 	
 	@Test
 	public void testShipIsAliveSuccess() {
