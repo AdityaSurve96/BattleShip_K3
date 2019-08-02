@@ -1116,6 +1116,7 @@ public class Battle extends Application {
 							temp.setFill(Color.WHITE);
 							temp.setStroke(Color.BLACK);
 						}
+					
 					checkTimeForSug = false;
 				}
 
