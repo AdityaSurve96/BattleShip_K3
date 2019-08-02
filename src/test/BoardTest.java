@@ -82,6 +82,9 @@ public class BoardTest {
 		assertEquals(false, board.isValidPoint(p));
 	
 	}
+	/**
+	 * Test method for invalidpoint.
+	 */
 	
 	
 	@Test
