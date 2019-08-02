@@ -386,6 +386,20 @@ public class Battle extends Application {
 		return root;
 	}
 
+	
+	/**
+	 * <p>This method registers every single ship with following listeners:</p>
+	 * <ol>
+	 * <li>MousePressed Listener to change cursor appearance and get current position coordinates when 
+	 * mouse is Pressed on the ship but not released  </li>
+	 * <li>MouseEntered Listener for changing the cursor appearance when cursor is hovered on the ship</li>
+	 * <li>MouseClicked Listener for changing the orientation of the ship when mouse click happens on any ship</li>
+	 * <li>MouseDragged Listener which handles the ship dragging when the ship rectangle is  dragged</li>
+	 * <li>MouseRelease Listener which handles the ship placement when the dragging operation ends</li>
+	 * </ol>
+	 * 
+	 * @param boat - It denotes the ship rectangle 
+	 */
 	private void installBoatListeners(Node boat) {
 		final Delta dragDelta = new Delta();
 
@@ -494,10 +508,7 @@ public class Battle extends Application {
 							endX = x;
 							endY = y + size - 1;
 						} else {
-							// System.out.println("Mouse check Released "+ (r.getLayoutX() +
-							// r.getParent().getTranslateX()-5));
-							// System.out.println("Mouse check Released "+ (r.getLayoutY() +
-							// r.getParent().getTranslateY()));
+							
 
 							selectedShip.setLayoutX(0);
 							selectedShip.setLayoutY(0);
@@ -519,7 +530,7 @@ public class Battle extends Application {
 		boat.setOnMouseDragged(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent mouseEvent) {
-				// System.out.println("Dragged");
+				
 				needToRotate = false;
 				if (boat.rotateProperty().getValue() == 0) {
 					isRotated = false;
@@ -530,18 +541,15 @@ public class Battle extends Application {
 				draggingBoat = true;
 				Rectangle temp = (Rectangle) boat;
 				System.out.println("MouseEvent " + mouseEvent.getSceneX() + " " + mouseEvent.getSceneY());
-				// System.out.println("Boat width "+temp.getBoundsInLocal().getWidth());
+				
 				if (isRotated) {
-					// boat.setLayoutX(mouseEvent.getSceneX() - (boat.getBoundsInLocal().getWidth()
-					// / 2));
+					
 					temp.setX(mouseEvent.getSceneX() - (temp.getBoundsInLocal().getWidth() / 2));
 					temp.setY(mouseEvent.getSceneY() + (temp.getBoundsInLocal().getWidth() / 3));
-					// boat.setLayoutY(mouseEvent.getSceneY() + (boat.getBoundsInLocal().getWidth()
-					// / 3));
+					
 				} else {
 					System.out.println("Boat Layout " + temp.getX() + " " + temp.getY());
-					// System.out.println("Boat Translate Layout " +boat.getTranslateX() + " " +
-					// boat.getTranslateY());
+					
 					temp.setX(mouseEvent.getSceneX());
 					temp.setY(mouseEvent.getSceneY());
 				}
@@ -558,8 +566,7 @@ public class Battle extends Application {
 			@Override
 			public void handle(MouseEvent mouseEvent) {
 				if (needToRotate) {
-					// boat.setLayoutX(mouseEvent.getSceneX());
-					// boat.setLayoutY(mouseEvent.getSceneY());
+					
 					if (boat.rotateProperty().getValue() == 0) {
 						boat.setRotate(90.0);
 					} else

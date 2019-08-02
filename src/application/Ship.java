@@ -40,6 +40,9 @@ public class Ship extends Parent {
 
 	}
 
+	/**
+	 * This method decrements the ship health by one each time a ship is hit
+	 */
 	public void shipPartHit() {
 
 		percentageDestroyed--;
