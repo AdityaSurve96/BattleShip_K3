@@ -10,22 +10,7 @@ import application.AI;
 
 public class AITest {
 
-	static AI ai;
-	/**
-	 * @throws java.lang.Exception
-	 */
-	@Before
-	public void setUp() throws Exception {
-	}
-
-	/**
-	 * @throws java.lang.Exception
-	 */
-	@After
-	public void tearDown() throws Exception {
-	}
-	
-	
+	static AI ai;	
 	
 	@Before
 	public void initialse() {
