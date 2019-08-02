@@ -223,7 +223,7 @@ public class Battle extends Application {
 		actions.setAlignment(Pos.CENTER);
 		buttonGeometry();
 
-		actions.setTranslateX(630);
+		actions.setTranslateX(670);
 		actions.setTranslateY(750);
 
 		root.getChildren().add(battle);
