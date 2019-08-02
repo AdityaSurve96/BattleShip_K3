@@ -362,49 +362,6 @@ public class Battle extends Application {
 
 		};
 
-//		EventHandler<MouseEvent> playerEvent = new EventHandler<MouseEvent>() {
-//
-//			@Override
-//			public void handle(MouseEvent e) {
-//				if (executing)
-//					return;
-//				// System.out.println("Draged");
-//
-//				Cell cell = (Cell) e.getSource();
-//				if (currentShip < 5) {
-//					if (firstPlayerBoard.positionShip(
-//							new Ship(shipLengths.get(currentShip), e.getButton() == MouseButton.PRIMARY), cell.row,
-//							cell.col,false)) {
-//						--numberOfShips;
-//						currentShip++;
-//
-//					}
-//				}
-//
-//			}
-//
-//		};
-
-//		EventHandler<MouseEvent> salvaEvent = new EventHandler<MouseEvent>() {
-//
-//			@Override
-//			public void handle(MouseEvent e) {
-//				if (executing)
-//					return;
-//				// System.out.println("Draged");
-//
-//				/*
-//				 * Cell cell = (Cell) e.getSource(); if (firstPlayerBoard.positionShip( new
-//				 * Ship(shipLengths.get(currentShip), e.getButton() == MouseButton.PRIMARY),
-//				 * cell.row, cell.col)) { --numberOfShips; currentShip++;
-//				 * 
-//				 * }
-//				 */
-//
-//			}
-//
-//		};
-
 		selectedShip = ship1;
 		// ship1.setOnMousePressed(salvaEvent);
 		installBoatListeners(ship1);
