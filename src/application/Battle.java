@@ -226,7 +226,7 @@ public class Battle extends Application {
 		Opponent.setY(100);
 		Opponent.setFont(Font.font("Verdana", FontWeight.BOLD, FontPosture.REGULAR, 20));
 
-		HBox actions = new HBox(30, st, reset, adjust, exit, doNotCheat);
+		HBox actions = new HBox(30, st, reset, adjust, doNotCheat, exit);
 		actions.setAlignment(Pos.CENTER);
 		buttonGeometry();
 
