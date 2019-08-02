@@ -144,7 +144,11 @@ public class Battle extends Application {
 	Map<String,Rectangle> strToShip = new HashMap<String,Rectangle>();
 	Map<Rectangle,String> dragAndDropShips = new HashMap<Rectangle,String>();
 	
-	void change(Text text) {
+	/**
+	 * It updates the timer text of Player1
+	 * @param text
+	 */
+	void changeTimer1(Text text) {
 		if (millis == 1000) {
 			secs++;
 			millis = 0;
@@ -156,8 +160,11 @@ public class Battle extends Application {
 		text.setText((((mins / 10) == 0) ? "0" : "") + mins + ":" + (((secs / 10) == 0) ? "0" : "") + secs + ":"
 				+ (((millis / 10) == 0) ? "00" : (((millis / 100) == 0) ? "0" : "")) + millis++);
 	}
-
-	void change1(Text text) {
+	/**
+	 * It updates the timer text of opponent/Player2
+	 * @param text
+	 */
+	void changeTimer2(Text text) {
 		if (millis1 == 1000) {
 			secs1++;
 			millis1 = 0;
@@ -250,7 +257,7 @@ public class Battle extends Application {
 		timelinePlayer1 = new Timeline(new KeyFrame(Duration.millis(1), new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				change(timer1);
+				changeTimer1(timer1);
 			}
 		}));
 
@@ -295,7 +302,7 @@ public class Battle extends Application {
 		timelinePlayer2 = new Timeline(new KeyFrame(Duration.millis(1), new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				change1(timer2);
+				changeTimer2(timer2);
 			}
 		}));
 		timelinePlayer2.setCycleCount(Timeline.INDEFINITE);
