@@ -1109,6 +1109,13 @@ public class Battle extends Application {
 				timelinePlayer2.play();
 
 				if (suggSalvation) {
+					for (Rectangle rect : dragAndDropShipsOpponent.keySet()) {
+						String takeCordinates[] = dragAndDropShipsOpponent.get(rect).split("-");
+							Cell temp = opponentBoard.getCell(Integer.parseInt(takeCordinates[0]),
+									Integer.parseInt(takeCordinates[1]));
+							temp.setFill(Color.WHITE);
+							temp.setStroke(Color.BLACK);
+						}
 					checkTimeForSug = false;
 				}
 

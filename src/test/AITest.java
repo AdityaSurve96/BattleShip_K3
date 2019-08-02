@@ -29,8 +29,10 @@ public class AITest {
 	public void testGenerate1() {
 		int x=ai.nextX();
 		int y=ai.nextY();
-	
-	assertEquals(false,(x>=0 && x<10) && (y>=0 && y<=10)?false:false);
+		ai.generate();
+		int xNext =ai.nextX();
+		int yNext =ai.nextY();
+		assertNotEquals(x+"-"+y,xNext+"-"+yNext);
 	}
 	
 	@Test
