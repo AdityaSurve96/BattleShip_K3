@@ -7,6 +7,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -17,22 +18,9 @@ public class ShipTest {
 	int hit;
 
 	
-	/**
-	 * @throws java.lang.Exception
-	 */
+	
 	@BeforeClass
-	public static void setUpBeforeClass() throws Exception {
-	}
-
-	/**
-	 * @throws java.lang.Exception
-	 */
-	@After
-	public void tearDown() throws Exception {
-	}
-
-	@BeforeClass
-	public static void check() {
+	public static  void check() {
 		ship =new Ship(1,true);
 		
 	}
@@ -64,7 +52,10 @@ public class ShipTest {
 	}
 	
 	
-	
+	@AfterClass
+	public static void removeReferences() {
+		ship=null;
+	}
 	
 
 	
