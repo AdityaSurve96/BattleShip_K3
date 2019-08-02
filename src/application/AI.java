@@ -8,9 +8,7 @@ package application;
 import java.util.Random;
 import java.util.Stack;
 
-/**
- * @author pg3f4
- */
+
 public class AI {
     private int startSearchX = 0;
     private int startSearchY = 0;
@@ -24,12 +22,15 @@ public class AI {
     private int lastDir = 0;
 
     /**
-     *
+     * 
      */
     public AI() {
         this.generate();
     }
 
+    /**
+     * 
+     */
     public void reset() {
         startSearchX = 0;
         startSearchY = 0;
@@ -90,18 +91,18 @@ public class AI {
             tryToMove();
             return;
         }
-
+        //If ship was found in lastHit then try to move in next queued direction
         if (lastGuessHit && !stack.isEmpty()) {
             tryToMove();
             return;
         }
 
         if (lastGuessHit && stack.isEmpty()) {
-            //Pick random dir
+            //Pick random direction 
             int dir = gen.nextInt(4);
             startSearchX = lastX;
             startSearchY = lastY;
-            //Add all dirs to stack in random order
+            //Add all directions to stack in random order
             int i = 4;
             while (i > 0) {
                 stack.push(dir);
