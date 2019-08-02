@@ -385,9 +385,9 @@ public class Board extends Parent {
 	 * <p>This method generated an alert when a ship is sunk 
 	 * on either player board or opponent board
 	 * </p>
-	 * @param s
-	 * @param x
-	 * @param y
+	 * @param s-this is to denote player/opponent
+	 * @param x-x coordinate of the alert position
+	 * @param y-y coordinate of the alert position
 	 */
 	private static void shipDestructionMessage(String s,double x, double y) {
 		

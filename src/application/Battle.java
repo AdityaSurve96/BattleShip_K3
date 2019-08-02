@@ -1096,7 +1096,7 @@ public class Battle extends Application {
 
 	
 	/**
-	 * <p>This funtion is used by the AI/ opponent to shoot the cells on FirstPlayer
+	 * <p>This function is used by the AI/ opponent to shoot the cells on FirstPlayer
 	 * board during Salva Mode</p>
 	 * 
 	 * @param cellHits - 
