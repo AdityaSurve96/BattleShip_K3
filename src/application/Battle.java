@@ -149,6 +149,8 @@ public class Battle extends Application {
 
 	// Map to match the selected ship to its properties
 	
+	//drag and drop functionalities for player and opponent player
+	
 	Map<Rectangle, String> dragAndDropShips = new HashMap<Rectangle, String>();
 
 	Map<Rectangle, String> dragAndDropShipsOpponent = new HashMap<Rectangle, String>();
@@ -693,7 +695,7 @@ public class Battle extends Application {
 	 * </p>
 	 * 
 	 * @param player - the player can be either user(firstPlayer) or opponent/Player2
-	 *              
+	 *displayes player scores              
 	 */
 	private void displayScore(String player) {
 		if (player.equalsIgnoreCase("player1"))
