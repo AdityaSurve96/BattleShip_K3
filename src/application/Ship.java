@@ -51,6 +51,7 @@ public class Ship extends Parent {
 
 
 	/**
+	 *check wheather ship is alive or destroyed
 	 * @return true if the ship is alive or false if the ship has been destroyed
 	 */
 	public boolean shipIsAlive() {
