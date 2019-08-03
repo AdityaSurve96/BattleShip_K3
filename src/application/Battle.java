@@ -116,6 +116,7 @@ public class Battle extends Application {
 	private Button adjust = new Button("ADJUST");
 
 
+
 	private Button load = new Button("LOAD");
 
 	private Button save = new Button("SAVE");
@@ -752,8 +753,13 @@ public class Battle extends Application {
 	 * </p>
 	 * 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 	 * @param player - the player can be either user(firstPlayer) or opponent/Player2
 	 *displayes player scores              
+=======
+	 * @param player
+	 *            - the player can be either user(firstPlayer) or opponent/Player 2
+>>>>>>> Stashed changes
 =======
 	 * @param player
 	 *            - the player can be either user(firstPlayer) or opponent/Player 2
@@ -1455,7 +1461,6 @@ public class Battle extends Application {
 			opponentTurn = !cell.shoot();
 			// System.out.println("Player Shot done");
 
-
 			if (opponentTurn) {
 				timelinePlayer1.pause();
 
@@ -1501,10 +1506,16 @@ public class Battle extends Application {
 
 				currenttime = Integer.parseInt(timer1.getText().split(":")[0]) * 60
 
+
 							 + Integer.parseInt(timer1.getText().split(":")[1]);
 			
 				
 				// Score determining  logic 
+
+						
+				// System.out.println("Previous Time" + previoustime);
+				// System.out.println("Cuurent Time " + currenttime);
+
 
 						
 				// System.out.println("Previous Time" + previoustime);
@@ -1593,11 +1604,13 @@ public class Battle extends Application {
 
 	}
 
+
 /**
  * Providing suggestions to the user.
  * After some time if the user does not perform any event ,then the 
  * temporaryCell gets the cell according to the coordinate and fills it with blue color
  */
+
 
 
 	/**
