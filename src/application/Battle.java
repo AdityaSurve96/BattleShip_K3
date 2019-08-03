@@ -1,12 +1,19 @@
 package application;
 
+import java.awt.Desktop;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import application.Board.Cell;
 import javafx.animation.KeyFrame;
@@ -35,11 +42,13 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -96,6 +105,8 @@ public class Battle extends Application {
 	
 	private boolean opponentTurn = false;
 
+	File shipFile = new File(".");
+
 	private Random random = new Random();
 
 	private Button st = new Button("START");
@@ -104,9 +115,16 @@ public class Battle extends Application {
 
 	private Button adjust = new Button("ADJUST");
 
+<<<<<<< Updated upstream
+=======
+	private Button load = new Button("LOAD");
+
+	private Button save = new Button("SAVE");
+
+>>>>>>> Stashed changes
 	private Button exit = new Button("EXIT");
 
-	private Button doNotCheat = new Button("DO NOT CHEAT");
+	private Button doNotCheat = new Button("CHEAT");
 
 	private double cellSize = 30.0;
 
@@ -153,9 +171,17 @@ public class Battle extends Application {
 	
 	Map<Rectangle, String> dragAndDropShips = new HashMap<Rectangle, String>();
 
+	Map<Integer, String> opponetShipDetails = new HashMap<Integer, String>();
+
 	Map<Rectangle, String> dragAndDropShipsOpponent = new HashMap<Rectangle, String>();
 
 	boolean checkForSugg = false;
+
+	final FileChooser fileChooser = new FileChooser();
+
+	private Desktop desktop = Desktop.getDesktop();
+	
+	boolean loadCheck = false;
 
 	/**
 	 *<p> It updates the timer text of Player1
@@ -209,7 +235,8 @@ public class Battle extends Application {
 	 * <li>Mouse handler events for opponent and player 1</li>
 	 * </ol>
 	 * 
-	 * @param personStage Stage that holds the board, grids and ships on it.
+	 * @param personStage
+	 *            Stage that holds the board, grids and ships on it.
 	 * @param background
 	 * @return - returns the root node ( Parent )
 	 */
@@ -241,7 +268,7 @@ public class Battle extends Application {
 		Opponent.setY(100);
 		Opponent.setFont(Font.font("Verdana", FontWeight.BOLD, FontPosture.REGULAR, 20));
 
-		HBox actions = new HBox(30, st, reset, adjust, doNotCheat, exit);
+		HBox actions = new HBox(30, st, reset, adjust, save, load, doNotCheat, exit);
 		actions.setAlignment(Pos.CENTER);
 		buttonGeometry();
 
@@ -389,6 +416,7 @@ public class Battle extends Application {
 		installBoatListeners(ship4);
 		installBoatListeners(ship5);
 
+		// setBackgroundShip();
 		opponentBoard = new Board(true, event);
 
 		firstPlayerBoard = new Board(false, null);
@@ -404,6 +432,24 @@ public class Battle extends Application {
 
 		return root;
 	}
+
+	/*
+	 * public void setBackgroundShip() { Image hitFile=null; try { //for(int
+	 * i=0;i<5;i++) { hitFile = new
+	 * Image("file:///"+shipFile.getCanonicalFile()+"/shipstag.png"); ImagePattern
+	 * img = new ImagePattern(hitFile); ship1.setFill(img); ship2.setFill(img);
+	 * ship3.setFill(img); ship4.setFill(img); ship5.setFill(img); //}
+	 * 
+	 *//**
+		 * @throws io
+		 *             exception
+		 *//*
+			 * } catch (IOException e) {
+			 * 
+			 * e.printStackTrace(); }
+			 * 
+			 * }
+			 */
 
 	/**
 	 * <p>
@@ -422,7 +468,8 @@ public class Battle extends Application {
 	 * operation ends</li>
 	 * </ol>
 	 * 
-	 * @param boat - It denotes the ship rectangle
+	 * @param boat
+	 *            - It denotes the ship rectangle
 	 */
 	private void installBoatListeners(Node boat) {
 
@@ -599,8 +646,10 @@ public class Battle extends Application {
 	 * not provide a valid placement position for them
 	 * </p>
 	 * 
-	 * @param len        - Length of the ship { 5,4,3,2 }
-	 * @param shipSelect - the currently selected ship
+	 * @param len
+	 *            - Length of the ship { 5,4,3,2 }
+	 * @param shipSelect
+	 *            - the currently selected ship
 	 */
 	private void backtoHome(int len, Rectangle shipSelect) {
 		shipSelect.setDisable(false);
@@ -637,7 +686,8 @@ public class Battle extends Application {
 	 * </p>
 	 * 
 	 * 
-	 * @param boat - the ship(rectangle) to be selected/highlighted
+	 * @param boat
+	 *            - the ship(rectangle) to be selected/highlighted
 	 * @return - the currently selected ship/rectangle
 	 */
 	private Rectangle select(Rectangle boat) {
@@ -668,6 +718,8 @@ public class Battle extends Application {
 		st.setStyle("-fx-background-color: #000000;-fx-font-size: 2em;-fx-text-fill:#ffffff;");
 		reset.setStyle("-fx-background-color: #000000;-fx-font-size: 2em;-fx-text-fill:#ffffff;");
 		adjust.setStyle("-fx-background-color: #000000;-fx-font-size: 2em;-fx-text-fill:#ffffff;");
+		load.setStyle("-fx-background-color: #000000;-fx-font-size: 2em;-fx-text-fill:#ffffff;");
+		save.setStyle("-fx-background-color: #000000;-fx-font-size: 2em;-fx-text-fill:#ffffff;");
 
 		exit.setStyle("-fx-background-color: #000000;-fx-font-size: 2em;-fx-text-fill:#ffffff;");
 		doNotCheat.setStyle("-fx-background-color: #000000;-fx-font-size: 2em;-fx-text-fill:#ffffff;");
@@ -681,11 +733,17 @@ public class Battle extends Application {
 		adjust.setMinHeight(80);
 		adjust.setMinWidth(150);
 
+		load.setMinHeight(80);
+		load.setMinWidth(150);
+
+		save.setMinHeight(80);
+		save.setMinWidth(150);
+
 		exit.setMinHeight(80);
 		exit.setMinWidth(150);
 
 		doNotCheat.setMinHeight(80);
-		doNotCheat.setMinWidth(250);
+		doNotCheat.setMinWidth(150);
 
 	}
 
@@ -694,8 +752,13 @@ public class Battle extends Application {
 	 * This method updates the text field of scores when any player earns points
 	 * </p>
 	 * 
+<<<<<<< Updated upstream
 	 * @param player - the player can be either user(firstPlayer) or opponent/Player2
 	 *displayes player scores              
+=======
+	 * @param player
+	 *            - the player can be either user(firstPlayer) or opponent/Player 2
+>>>>>>> Stashed changes
 	 */
 	private void displayScore(String player) {
 		if (player.equalsIgnoreCase("player1"))
@@ -707,7 +770,8 @@ public class Battle extends Application {
 	/**
 	 * This method is AI which will detect the move on Player 1 Board.
 	 * 
-	 * @param personStage - root(JavaFX Game Stage)
+	 * @param personStage
+	 *            - root(JavaFX Game Stage)
 	 */
 	private void opponentNormalMove(Stage personStage) {
 		int x, y;
@@ -766,7 +830,8 @@ public class Battle extends Application {
 	/**
 	 * This method handles the moves played by the AI / opponent in Salva Mode
 	 * 
-	 * @param personStage - the game Stage (root)
+	 * @param personStage
+	 *            - the game Stage (root)
 	 */
 	private void opponentSalvationMove(Stage personStage) {
 		ArrayList<String> takenCellStrings = new ArrayList<String>();
@@ -818,10 +883,11 @@ public class Battle extends Application {
 	 * This method will Display the final result on the pop-up showing who the
 	 * winner is.
 	 * 
-	 * @param s           -String that specifies a text notifying when one player
-	 *                    wins.
+	 * @param s
+	 *            -String that specifies a text notifying when one player wins.
 	 *
-	 * @param personStage - root ( JavaFX game Stage)
+	 * @param personStage
+	 *            - root ( JavaFX game Stage)
 	 */
 	private void finalResultDisplay(String s, Stage personStage) {
 		
@@ -907,31 +973,41 @@ public class Battle extends Application {
 	 */
 	private void startGame() {
 		// place enemy ships
+		if (!loadCheck) {
+			numberOfShips = 5;
+			for (int i = 0; i < shipLengths.size(); i++) {
 
-		numberOfShips = 5;
-		for (int i = 0; i < shipLengths.size(); i++) {
-
-			int x = random.nextInt(10);
-			int y = random.nextInt(10);
-			boolean direct = Math.random() < 0.5;
-			if (opponentBoard.positionShip(new Ship(shipLengths.get(i), direct), x, y, false)) {
-
-				if (direct) {
-					for (int k = y; k < y + shipLengths.get(i); k++) {
-						dragAndDropShipsOpponent.put(opponentBoard.getCell(x, k), x + "-" + k);
+				int x = random.nextInt(10);
+				int y = random.nextInt(10);
+				boolean direct = Math.random() < 0.5;
+				if (opponentBoard.positionShip(new Ship(shipLengths.get(i), direct), x, y, false)) {
+					if(!opponetShipDetails.containsKey(shipLengths.get(i))) {
+					opponetShipDetails.put(shipLengths.get(i), x + "-" + y + "-" + direct + "-" + shipLengths.get(i));
+					}else {
+					opponetShipDetails.put(shipLengths.get(i)-2, x + "-" + y + "-" + direct + "-" + shipLengths.get(i));
+							
 					}
+					if (direct) {
+						for (int k = y; k < y + shipLengths.get(i); k++) {
+							dragAndDropShipsOpponent.put(opponentBoard.getCell(x, k), x + "-" + k);
+						}
+					} else {
+						for (int k = x; k < x + shipLengths.get(i); k++) {
+							dragAndDropShipsOpponent.put(opponentBoard.getCell(k, y), k + "-" + y);
+						}
+					}
+
+					numberOfShips--;
 				} else {
-					for (int k = x; k < x + shipLengths.get(i); k++) {
-						dragAndDropShipsOpponent.put(opponentBoard.getCell(k, y), k + "-" + y);
-					}
+					i -= 1;
 				}
-
-				numberOfShips--;
-			} else {
-				i -= 1;
 			}
 		}
+		showGameMessage();
+	}
 
+	private void showGameMessage() {
+		// TODO Auto-generated method stub
 		Alert gameModeAlert = new Alert(AlertType.INFORMATION);
 
 		ButtonType buttonSalva = new ButtonType("SALVA");
@@ -972,7 +1048,8 @@ public class Battle extends Application {
 	 * This method displays all the ships on the opponent board in Golden Color
 	 * </p>
 	 * 
-	 * @param opponentBoard - opponent players grid
+	 * @param opponentBoard
+	 *            - opponent players grid
 	 */
 	private void seeOpponentShips(Board opponentBoard) {
 		for (int y = 0; y < 10; y++) {
@@ -1001,7 +1078,8 @@ public class Battle extends Application {
 	 * it
 	 * </p>
 	 * 
-	 * @param primaryStage - root (JAVAFX Game Stage)
+	 * @param primaryStage
+	 *            - root (JAVAFX Game Stage)
 	 */
 	private void intialise(Stage primaryStage) {
 		File n = new File(".");
@@ -1045,12 +1123,272 @@ public class Battle extends Application {
 			isCheating = !isCheating;
 
 		});
+		fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("TXT files (*.TXT)", "*.TXT"),
+				new FileChooser.ExtensionFilter("txt files (*.txt)", "*.txt"));
+
+		load.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(final ActionEvent e) {
+				File file = fileChooser.showOpenDialog(primaryStage);
+				if (file != null) {
+					openFile(file);
+				}
+			}
+		});
+
+		save.setOnAction(event -> {
+			FileChooser fileChooser = new FileChooser();
+			timelinePlayer1.pause();
+			timelinePlayer2.pause();
+			// Set extension filter for text files
+			FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
+			fileChooser.getExtensionFilters().add(extFilter);
+
+			// Show save file dialog
+			File file = fileChooser.showSaveDialog(primaryStage);
+
+			if (file != null) {
+				saveTextToFile(file);
+			}
+		});
 
 		adjust.setOnAction(e -> {
 			adjustShips();
 		});
 
 		primaryStage.show();
+	}
+
+	private void saveTextToFile(File file) {
+		String playerBoardInfo = getBoardInformation(firstPlayerBoard);
+		String opponentBoardInfo = getBoardInformation(opponentBoard);
+
+		String content = "Player_1 @ " + "Timer ->" + timer1.getText() + "; Score ->" + player1Score + ";"
+				 + getShiPosition("player") + ";" + "Board ->" + playerBoardInfo + ";" + "\n"
+				+ "Player_2 @ " + "Timer ->" + timer2.getText() + "; Score ->" + player2Score + ";"
+				+ getShiPosition("opponent") + ";" + "Board ->" + opponentBoardInfo + ";";
+		try {
+			PrintWriter writer;
+			writer = new PrintWriter(file);
+			writer.println(content);
+			writer.close();
+		} catch (IOException ex) {
+			Logger.getLogger(Battle.class.getName()).log(Level.SEVERE, null, ex);
+		}
+	}
+
+	private String getShiPosition(String playerCheck) {
+		String shipDetails = "";
+		if (playerCheck.equals("player")) {
+			shipDetails = "playerShips ->";
+			for (Rectangle details : dragAndDropShips.keySet()) {
+				shipDetails += "(" + dragAndDropShips.get(details) + "),";
+			}
+		} else {
+			shipDetails = "Opponent ->";
+			for (int details : opponetShipDetails.keySet()) {
+				shipDetails += "(" + opponetShipDetails.get(details) + "),";
+			}
+
+		}
+		// TODO Auto-generated method stub
+		return shipDetails;
+	}
+
+	private String getBoardInformation(Board boardDetails) {
+		// TODO Auto-generated method stub
+		String finalDetails = "";
+		for (int i = 0; i < 10; i++) {
+			for (int j = 0; j < 10; j++) {
+				Cell temp = boardDetails.getCell(i, j);
+				if (temp.targetHit)
+					finalDetails += "(" + i + "-" + j + "-" + "hit),";
+				else if (temp.ship != null)
+					finalDetails += "(" + i + "-" + j + "-" + "ship),";
+				else if (temp.getFill() == Color.BLACK)
+					finalDetails += "(" + i + "-" + j + "-" + "miss),";
+				else
+					finalDetails += "(" + i + "-" + j + "-" + "normal),";
+
+			}
+		}
+
+		return finalDetails;
+	}
+
+	private void openFile(File file) {
+		BufferedReader reader = null;
+		try {
+			reader = new BufferedReader(new FileReader(file));
+			String line;
+			loadCheck=true;
+			while ((line = reader.readLine()) != null) {
+				//System.out.println(line);
+				loading(line);
+				
+			}
+			ship1.setDisable(true);
+			ship2.setDisable(true);
+			ship3.setDisable(true);
+			ship4.setDisable(true);
+			ship5.setDisable(true);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+	
+	
+	private void loading(String line) {
+		// TODO Auto-generated method stub
+		String tme [] =line.split("@");
+		if(tme[0].trim().equals("Player_1")) {
+			tme=tme[1].split(";");
+			for (String playDetails : tme) {
+				String remainDetails[] =playDetails.split("->");
+				if(remainDetails[0].trim().equals("Timer")) { 
+					timer1.setText(remainDetails[1].trim());
+					String disintegrate[] = remainDetails[1].trim().split(":");
+					millis= Integer.parseInt(disintegrate[2].trim());
+					secs= Integer.parseInt(disintegrate[1].trim());
+					mins= Integer.parseInt(disintegrate[0].trim());
+				}
+				else if(remainDetails[0].trim().equals("Score")) {
+					player1Score=Integer.parseInt(remainDetails[1].trim());
+					displayScore("player1");
+				}
+				else if(remainDetails[0].trim().equals("playerShips")) {
+					String shipReceived []= remainDetails[1].trim().split(",");
+					for (String shipDetailsR : shipReceived) {
+						shipDetailsR = shipDetailsR.substring(1, shipDetailsR.length()-1);
+						String shipDetailsRec[] = shipDetailsR.trim().split("-");
+						callPostionShip("Player_1",Integer.parseInt(shipDetailsRec[0].trim())
+								,Integer.parseInt(shipDetailsRec[1].trim())
+								,Boolean.parseBoolean(shipDetailsRec[2].trim())
+								,Integer.parseInt(shipDetailsRec[3].trim()));
+					}
+				}else if(remainDetails[0].trim().equals("Board")) {
+					File hitRate = new File(".");
+					Image hitFile=null;
+					try {
+						hitFile = new Image("file:///"+hitRate.getCanonicalFile()+"/hitShip.png");
+
+						/** 
+						 @throws io exception
+						 */
+					} catch (IOException e) {
+						
+						e.printStackTrace();
+					}
+					String shipReceived []= remainDetails[1].trim().split(",");
+					for (String shipDetailsR : shipReceived) {
+						shipDetailsR = shipDetailsR.substring(1, shipDetailsR.length()-1);
+						String shipDetailsRec[] = shipDetailsR.trim().split("-");
+						if(shipDetailsRec[2].trim().equals("miss")) {
+						firstPlayerBoard.getCell(Integer.parseInt(shipDetailsRec[0].trim()), 
+								Integer.parseInt(shipDetailsRec[1].trim())).targetHit=false;
+						firstPlayerBoard.getCell(Integer.parseInt(shipDetailsRec[0].trim()), 
+								Integer.parseInt(shipDetailsRec[1].trim())).setFill(Color.BLACK);
+						}else if(shipDetailsRec[2].trim().equals("hit")) {
+							firstPlayerBoard.getCell(Integer.parseInt(shipDetailsRec[0].trim()), 
+									Integer.parseInt(shipDetailsRec[1].trim())).targetHit=true;
+							firstPlayerBoard.getCell(Integer.parseInt(shipDetailsRec[0].trim()), 
+									Integer.parseInt(shipDetailsRec[1].trim())).ship.shipPartHit();
+							firstPlayerBoard.getCell(Integer.parseInt(shipDetailsRec[0].trim()), 
+									Integer.parseInt(shipDetailsRec[1].trim())).ship.shotCellsOfShips.add(firstPlayerBoard.getCell(Integer.parseInt(shipDetailsRec[0].trim()), 
+											Integer.parseInt(shipDetailsRec[1].trim())));
+							firstPlayerBoard.getCell(Integer.parseInt(shipDetailsRec[0].trim()), 
+									Integer.parseInt(shipDetailsRec[1].trim())).setFill(new ImagePattern(hitFile));
+						}
+					}
+				}
+			}
+		}else {
+			
+			tme=tme[1].split(";");
+			for (String playDetails : tme) {
+				String remainDetails[] =playDetails.split("->");
+				if(remainDetails[0].trim().equals("Timer")) {
+					timer2.setText(remainDetails[1].trim());
+					String disintegrate[] = remainDetails[1].trim().split(":");
+					millis1 = Integer.parseInt(disintegrate[2].trim());
+					secs1 = Integer.parseInt(disintegrate[1].trim());
+					mins1 = Integer.parseInt(disintegrate[0].trim());
+				}
+				else if(remainDetails[0].trim().equals("Score")) {
+					player2Score=Integer.parseInt(remainDetails[1].trim());
+					displayScore("Opponent");
+				}
+				else if(remainDetails[0].trim().equals("Opponent")) {
+					String shipReceived []= remainDetails[1].trim().split(",");
+					for (String shipDetailsR : shipReceived) {
+						shipDetailsR = shipDetailsR.substring(1, shipDetailsR.length()-1);
+						String shipDetailsRec[] = shipDetailsR.trim().split("-");
+						callPostionShip("Opponent",Integer.parseInt(shipDetailsRec[0].trim())
+								,Integer.parseInt(shipDetailsRec[1].trim())
+								,Boolean.parseBoolean(shipDetailsRec[2].trim())
+								,Integer.parseInt(shipDetailsRec[3].trim()));
+					}
+				}else if(remainDetails[0].trim().equals("Board")) {
+					File hitRate = new File(".");
+					Image hitFile=null;
+					try {
+						hitFile = new Image("file:///"+hitRate.getCanonicalFile()+"/hitShip.png");
+
+						/** 
+						 @throws io exception
+						 */
+					} catch (IOException e) {
+						
+						e.printStackTrace();
+					}
+					String shipReceived []= remainDetails[1].trim().split(",");
+					for (String shipDetailsR : shipReceived) {
+						shipDetailsR = shipDetailsR.substring(1, shipDetailsR.length()-1);
+						String shipDetailsRec[] = shipDetailsR.trim().split("-");
+						if(shipDetailsRec[2].trim().equals("miss")) {
+						opponentBoard.getCell(Integer.parseInt(shipDetailsRec[0].trim()), 
+								Integer.parseInt(shipDetailsRec[1].trim())).targetHit=false;
+						opponentBoard.getCell(Integer.parseInt(shipDetailsRec[0].trim()), 
+								Integer.parseInt(shipDetailsRec[1].trim())).setFill(Color.BLACK);
+						}else if(shipDetailsRec[2].trim().equals("hit")) {
+							opponentBoard.getCell(Integer.parseInt(shipDetailsRec[0].trim()), 
+									Integer.parseInt(shipDetailsRec[1].trim())).targetHit=true;
+							opponentBoard.getCell(Integer.parseInt(shipDetailsRec[0].trim()), 
+									Integer.parseInt(shipDetailsRec[1].trim())).ship.shipPartHit();
+							opponentBoard.getCell(Integer.parseInt(shipDetailsRec[0].trim()), 
+									Integer.parseInt(shipDetailsRec[1].trim())).ship.shotCellsOfShips.add(opponentBoard.getCell(Integer.parseInt(shipDetailsRec[0].trim()), 
+											Integer.parseInt(shipDetailsRec[1].trim())));
+							opponentBoard.getCell(Integer.parseInt(shipDetailsRec[0].trim()), 
+									Integer.parseInt(shipDetailsRec[1].trim())).setFill(new ImagePattern(hitFile));
+						}
+					}
+				}
+			}
+			
+		}
+	}
+
+	/**
+	 * 
+	 * @param string
+	 * @param string2
+	 * @param string3
+	 * @param string4
+	 */
+	private void callPostionShip(String name,int xCor, int yCor, boolean orient, int len) {
+		if(name.trim().equals("Player_1")) {
+			firstPlayerBoard.positionShip(new Ship(len, orient), xCor, yCor, false);
+			numberOfShips--;
+		}else {
+			opponentBoard.positionShip(new Ship(len, orient), xCor, yCor, false);
+			
+		}
+		
 	}
 
 	/**
@@ -1088,7 +1426,8 @@ public class Battle extends Application {
 	/**
 	 * Launches the application
 	 * 
-	 * @param args-takes the default Arguments
+	 * @param args-takes
+	 *            the default Arguments
 	 * 
 	 */
 	public static void main(String[] args) {
@@ -1100,9 +1439,10 @@ public class Battle extends Application {
 	 * This function helps the FirstPlayer to shoot ships during Normal Mode
 	 * </p>
 	 * 
-	 * @param cellHits    - the arrayList holding the selected cell ready for
-	 *                    hitting
-	 * @param personStage - root ( JavaFX game Stage)
+	 * @param cellHits
+	 *            - the arrayList holding the selected cell ready for hitting
+	 * @param personStage
+	 *            - root ( JavaFX game Stage)
 	 */
 	public void shootNormalShip(ArrayList<Cell> cellHits, Stage personStage) {
 
@@ -1110,8 +1450,14 @@ public class Battle extends Application {
 			if (cell.targetHit)
 				return;
 
+<<<<<<< Updated upstream
 			opponentTurn = !cell.shoot();
 		
+=======
+			// System.out.println("Player Shooting");
+			opponentTurn = !cell.shoot();
+			// System.out.println("Player Shot done");
+>>>>>>> Stashed changes
 
 			if (opponentTurn) {
 				timelinePlayer1.pause();
@@ -1123,12 +1469,12 @@ public class Battle extends Application {
 					// To hide back all the cells shown as hint
 					for (Rectangle rect : dragAndDropShipsOpponent.keySet()) {
 						String takeCordinates[] = dragAndDropShipsOpponent.get(rect).split("-");
-							Cell temp = opponentBoard.getCell(Integer.parseInt(takeCordinates[0]),
-									Integer.parseInt(takeCordinates[1]));
-							temp.setFill(Color.WHITE);
-							temp.setStroke(Color.BLACK);
-						}
-					
+						Cell temp = opponentBoard.getCell(Integer.parseInt(takeCordinates[0]),
+								Integer.parseInt(takeCordinates[1]));
+						temp.setFill(Color.WHITE);
+						temp.setStroke(Color.BLACK);
+					}
+
 					checkTimeForSug = false;
 				}
 
@@ -1157,10 +1503,16 @@ public class Battle extends Application {
 				}
 
 				currenttime = Integer.parseInt(timer1.getText().split(":")[0]) * 60
+<<<<<<< Updated upstream
 							 + Integer.parseInt(timer1.getText().split(":")[1]);
 			
 				
 				// Score determining  logic 
+=======
+						+ Integer.parseInt(timer1.getText().split(":")[1]);
+				// System.out.println("Previous Time" + previoustime);
+				// System.out.println("Cuurent Time " + currenttime);
+>>>>>>> Stashed changes
 				if (currenttime - previoustime < 2)
 					player1Score += 5;
 				else if (currenttime - previoustime < 5 && currenttime - previoustime > 2)
@@ -1199,7 +1551,8 @@ public class Battle extends Application {
 	 * board during Salva Mode
 	 * </p>
 	 * 
-	 * @param cellHits    -
+	 * @param cellHits
+	 *            -
 	 * @param personStage
 	 */
 	public void shootSalvationShip(ArrayList<Cell> cellHits, Stage personStage) {
@@ -1242,11 +1595,21 @@ public class Battle extends Application {
 		opponentSalvationMove(personStage);
 
 	}
+<<<<<<< Updated upstream
 /**
  * Providing suggestions to the user.
  * After some time if the user does not perform any event ,then the 
  * temporaryCell gets the cell according to the coordinate and fills it with blue color
  */
+=======
+
+	/**
+	 * Providing suggestions to the user after some time if the user does not
+	 * perform any event temporaryCell gets the cell according to the coordinate and
+	 * filled with blue color
+	 * 
+	 */
+>>>>>>> Stashed changes
 	public void callSuggestionMethod() {
 		int count = 1;
 		for (Rectangle rect : dragAndDropShipsOpponent.keySet()) {
@@ -1255,7 +1618,8 @@ public class Battle extends Application {
 			if (count > 2)
 				break;
 			String takeCordinates[] = dragAndDropShipsOpponent.get(rect).split("-");
-			Cell temporaryCell = opponentBoard.getCell(Integer.parseInt(takeCordinates[0]), Integer.parseInt(takeCordinates[1]));
+			Cell temporaryCell = opponentBoard.getCell(Integer.parseInt(takeCordinates[0]),
+					Integer.parseInt(takeCordinates[1]));
 			temporaryCell.setFill(Color.BLUE);
 			count++;
 
@@ -1263,20 +1627,22 @@ public class Battle extends Application {
 		checkForSugg = true;
 
 	}
-/**
- * 
- * This is the timer Class which will help us to determine the difference between the player events and calling necessary events 
- * <p>
- * Other tasks are like:
- * </p>
- * <ol>
- * <li>Handles the thread and calls suggestion method.</li>
- * <li>Determines the time</li>
- * </ol>
- * 
- * @author K3
- *
- */
+
+	/**
+	 * 
+	 * This is the timer Class which will help us to determine the difference
+	 * between the player events and calling necessary events
+	 * <p>
+	 * Other tasks are like:
+	 * </p>
+	 * <ol>
+	 * <li>Handles the thread and calls suggestion method.</li>
+	 * <li>Determines the time</li>
+	 * </ol>
+	 * 
+	 * @author K3
+	 *
+	 */
 	class checkTimer implements Runnable {
 		// Declaring volatile to make exit variables updated value 
 		//always visible to main thread.

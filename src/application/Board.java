@@ -186,7 +186,11 @@ public class Board extends Parent {
 				new Point2D(x - 1, y),
 				new Point2D(x + 1, y),
 				new Point2D(x, y - 1),
-				new Point2D(x, y + 1)
+				new Point2D(x, y + 1),
+				new Point2D(x - 1, y - 1),
+				new Point2D(x + 1, y + 1),
+				new Point2D(x - 1, y + 1),
+				new Point2D(x + 1, y - 1)
 		};
 
 		List<Cell> neighbors = new ArrayList<Cell>();
@@ -340,12 +344,12 @@ public class Board extends Parent {
 			}
 
 
-			targetHit = true;
+			
 			setFill(Color.BLACK);
 		
 
 			if (ship != null) {
-
+				targetHit = true;
 				ship.shipPartHit();
 				ship.shotCellsOfShips.add(this);
 				setFill(new ImagePattern(hitFile));
