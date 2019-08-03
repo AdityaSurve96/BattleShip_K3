@@ -115,13 +115,12 @@ public class Battle extends Application {
 
 	private Button adjust = new Button("ADJUST");
 
-<<<<<<< Updated upstream
-=======
+
 	private Button load = new Button("LOAD");
 
 	private Button save = new Button("SAVE");
 
->>>>>>> Stashed changes
+
 	private Button exit = new Button("EXIT");
 
 	private Button doNotCheat = new Button("CHEAT");
@@ -1449,15 +1448,13 @@ public class Battle extends Application {
 		for (Cell cell : cellHits) {
 			if (cell.targetHit)
 				return;
-
-<<<<<<< Updated upstream
 			opponentTurn = !cell.shoot();
 		
-=======
+
 			// System.out.println("Player Shooting");
 			opponentTurn = !cell.shoot();
 			// System.out.println("Player Shot done");
->>>>>>> Stashed changes
+
 
 			if (opponentTurn) {
 				timelinePlayer1.pause();
@@ -1503,16 +1500,16 @@ public class Battle extends Application {
 				}
 
 				currenttime = Integer.parseInt(timer1.getText().split(":")[0]) * 60
-<<<<<<< Updated upstream
+
 							 + Integer.parseInt(timer1.getText().split(":")[1]);
 			
 				
 				// Score determining  logic 
-=======
-						+ Integer.parseInt(timer1.getText().split(":")[1]);
+
+						
 				// System.out.println("Previous Time" + previoustime);
 				// System.out.println("Cuurent Time " + currenttime);
->>>>>>> Stashed changes
+
 				if (currenttime - previoustime < 2)
 					player1Score += 5;
 				else if (currenttime - previoustime < 5 && currenttime - previoustime > 2)
@@ -1595,13 +1592,13 @@ public class Battle extends Application {
 		opponentSalvationMove(personStage);
 
 	}
-<<<<<<< Updated upstream
+
 /**
  * Providing suggestions to the user.
  * After some time if the user does not perform any event ,then the 
  * temporaryCell gets the cell according to the coordinate and fills it with blue color
  */
-=======
+
 
 	/**
 	 * Providing suggestions to the user after some time if the user does not
@@ -1609,7 +1606,7 @@ public class Battle extends Application {
 	 * filled with blue color
 	 * 
 	 */
->>>>>>> Stashed changes
+
 	public void callSuggestionMethod() {
 		int count = 1;
 		for (Rectangle rect : dragAndDropShipsOpponent.keySet()) {
