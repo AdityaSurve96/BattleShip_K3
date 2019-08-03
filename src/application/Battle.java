@@ -1206,11 +1206,13 @@ public class Battle extends Application {
 				loading(line);
 				
 			}
+			loadCheck=true;
 			ship1.setDisable(true);
 			ship2.setDisable(true);
 			ship3.setDisable(true);
 			ship4.setDisable(true);
 			ship5.setDisable(true);
+			st.setText("Resume");
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
