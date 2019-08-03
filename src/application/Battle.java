@@ -90,7 +90,6 @@ public class Battle extends Application {
 
 	private ArrayList<Cell> numberOfShots = new ArrayList<>();
 
-	@SuppressWarnings("serial")
 	private ArrayList<Integer> shipLengths = new ArrayList<Integer>() {
 
 		{
@@ -102,7 +101,7 @@ public class Battle extends Application {
 		}
 	};
 
-	
+	private int currentShip = 0;
 	private boolean opponentTurn = false;
 
 	File shipFile = new File(".");
@@ -115,12 +114,9 @@ public class Battle extends Application {
 
 	private Button adjust = new Button("ADJUST");
 
-
-
 	private Button load = new Button("LOAD");
 
 	private Button save = new Button("SAVE");
-
 
 	private Button exit = new Button("EXIT");
 
@@ -166,9 +162,6 @@ public class Battle extends Application {
 	Map<String, Rectangle> strToShip = new HashMap<String, Rectangle>();
 
 	// Map to match the selected ship to its properties
-	
-	//drag and drop functionalities for player and opponent player
-	
 	Map<Rectangle, String> dragAndDropShips = new HashMap<Rectangle, String>();
 
 	Map<Integer, String> opponetShipDetails = new HashMap<Integer, String>();
@@ -393,13 +386,11 @@ public class Battle extends Application {
 				if (normalGame) {
 					shootNormalShip(numberOfShots, personStage);
 					numberOfShots.clear();
-					
 				} else if (salvation) {
 					if (hits == firstPlayerBoard.amountOfships) {
 						shootSalvationShip(numberOfShots, personStage);
 					} else
 						hits++;
-					
 				} else if (suggSalvation) {
 					shootNormalShip(numberOfShots, personStage);
 					numberOfShots.clear();
@@ -555,6 +546,7 @@ public class Battle extends Application {
 
 					if (firstPlayerBoard.positionShip(new Ship(shipLength, isRotated == true), x, y, false)) {
 						--numberOfShips;
+						currentShip++;
 						strToShip.put(shipName, selectedShip);
 						dragAndDropShips.put(selectedShip, x + "-" + y + "-" + isRotated + "-" + shipLength);
 						selectedShip.setDisable(true);
@@ -586,8 +578,6 @@ public class Battle extends Application {
 				}
 			}
 		});
-		
-		
 		boat.setOnMouseDragged(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent mouseEvent) {
@@ -614,16 +604,12 @@ public class Battle extends Application {
 				}
 			}
 		});
-		
-		
 		boat.setOnMouseEntered(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent mouseEvent) {
 				boat.setCursor(Cursor.HAND);
 			}
 		});
-		
-		
 		boat.setOnMouseClicked(new EventHandler<MouseEvent>() {
 
 			@Override
@@ -752,18 +738,8 @@ public class Battle extends Application {
 	 * This method updates the text field of scores when any player earns points
 	 * </p>
 	 * 
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-	 * @param player - the player can be either user(firstPlayer) or opponent/Player2
-	 *displayes player scores              
-=======
 	 * @param player
 	 *            - the player can be either user(firstPlayer) or opponent/Player 2
->>>>>>> Stashed changes
-=======
-	 * @param player
-	 *            - the player can be either user(firstPlayer) or opponent/Player 2
->>>>>>> Stashed changes
 	 */
 	private void displayScore(String player) {
 		if (player.equalsIgnoreCase("player1"))
@@ -792,21 +768,18 @@ public class Battle extends Application {
 				continue;
 			}
 			oldValue = firstPlayerBoard.amountOfships;
-		
+			// System.out.println("Opponent Shooting");
 			opponentTurn = cell.shoot();
-			
+			// System.out.println("Opponent shot done");
 			if (!opponentTurn) {
 				ai.feedback(false, false);
 				timelinePlayer2.pause();
 
-				
-				// Code block for keeping a track of hint time
 				checkTimeForSug = true;
 				if (suggSalvation) {
 					Thread t2 = new Thread(checkTime, "T2");
 					t2.start();
 				}
-				
 				timelinePlayer1.play();
 
 			} else {
@@ -862,9 +835,9 @@ public class Battle extends Application {
 
 		for (Cell cell : numberOfShots) {
 
-			
+			System.out.println("Opponent Shooting");
 			opponentTurn = cell.shoot();
-			
+			System.out.println("Opponent shot done");
 			if (opponentTurn) {
 				player2Score += 5;
 				displayScore("player2");
@@ -1016,13 +989,13 @@ public class Battle extends Application {
 		Alert gameModeAlert = new Alert(AlertType.INFORMATION);
 
 		ButtonType buttonSalva = new ButtonType("SALVA");
-		ButtonType buttonSalvaHint = new ButtonType("SALVA (HINT)");
+		ButtonType buttonSuggSalva = new ButtonType("SUGG SALVA");
 		ButtonType buttonNormal = new ButtonType("NORMAL");
 
 		gameModeAlert.setTitle("SELECT GAME MODE");
 
 		gameModeAlert.setContentText("Click on the desired button to choose game mode");
-		gameModeAlert.getButtonTypes().setAll(buttonSalva, buttonSalvaHint, buttonNormal);
+		gameModeAlert.getButtonTypes().setAll(buttonSalva, buttonSuggSalva, buttonNormal);
 
 		Optional<ButtonType> result = gameModeAlert.showAndWait();
 
@@ -1035,17 +1008,18 @@ public class Battle extends Application {
 
 			normalGame = true;
 			salvation = false;
-		} else if (result.get() == buttonSalvaHint) {
+		} else if (result.get() == buttonSuggSalva) {
 
 			suggSalvation = true;
-			normalGame = false; 
+			normalGame = false;
 			salvation = false;
 			t1.start();
 		}
 		executing = true;
 		timelinePlayer1.play();
 		previoustime = Integer.parseInt(timer1.getText().split(":")[0]) * 60
-					   + Integer.parseInt(timer1.getText().split(":")[1]);
+				+ Integer.parseInt(timer1.getText().split(":")[1]);
+		;
 	}
 
 	/**
@@ -1454,8 +1428,6 @@ public class Battle extends Application {
 		for (Cell cell : cellHits) {
 			if (cell.targetHit)
 				return;
-			opponentTurn = !cell.shoot();
-		
 
 			// System.out.println("Player Shooting");
 			opponentTurn = !cell.shoot();
@@ -1467,8 +1439,6 @@ public class Battle extends Application {
 				timelinePlayer2.play();
 
 				if (suggSalvation) {
-					
-					// To hide back all the cells shown as hint
 					for (Rectangle rect : dragAndDropShipsOpponent.keySet()) {
 						String takeCordinates[] = dragAndDropShipsOpponent.get(rect).split("-");
 						Cell temp = opponentBoard.getCell(Integer.parseInt(takeCordinates[0]),
@@ -1482,8 +1452,7 @@ public class Battle extends Application {
 
 				opponentNormalMove(personStage);
 			} else {
-				
-				Rectangle deleteCell = null; // To remove the hinted cell which was hit
+				Rectangle deleteCell = null;
 				if (suggSalvation) {
 					if (checkForSugg) {
 						for (Rectangle rect : dragAndDropShipsOpponent.keySet()) {
@@ -1492,8 +1461,6 @@ public class Battle extends Application {
 									&& Integer.parseInt(takeCordinates[1]) == cell.col) {
 								deleteCell = rect;
 							} else {
-								
-								// Hide back the remaining hinted cells
 								Cell temp = opponentBoard.getCell(Integer.parseInt(takeCordinates[0]),
 										Integer.parseInt(takeCordinates[1]));
 								temp.setFill(Color.WHITE);
@@ -1505,22 +1472,9 @@ public class Battle extends Application {
 				}
 
 				currenttime = Integer.parseInt(timer1.getText().split(":")[0]) * 60
-
-
-							 + Integer.parseInt(timer1.getText().split(":")[1]);
-			
-				
-				// Score determining  logic 
-
-						
+						+ Integer.parseInt(timer1.getText().split(":")[1]);
 				// System.out.println("Previous Time" + previoustime);
 				// System.out.println("Cuurent Time " + currenttime);
-
-
-						
-				// System.out.println("Previous Time" + previoustime);
-				// System.out.println("Cuurent Time " + currenttime);
-
 				if (currenttime - previoustime < 2)
 					player1Score += 5;
 				else if (currenttime - previoustime < 5 && currenttime - previoustime > 2)
@@ -1543,13 +1497,6 @@ public class Battle extends Application {
 
 			}
 		}
-		
-		//TO show the hint even after player hits a part of the ship
-		checkTimeForSug = true;
-		if (suggSalvation) {
-			Thread t2 = new Thread(checkTime, "T2");
-			t2.start();
-		}
 
 	}
 
@@ -1567,12 +1514,10 @@ public class Battle extends Application {
 		currenttime = Integer.parseInt(timer1.getText().split(":")[1]);
 		for (Cell cell : cellHits) {
 
-			
+			System.out.println("Player Shooting");
 			opponentTurn = !cell.shoot();
-			
+			System.out.println("Player Shot done");
 			if (!opponentTurn) {
-				
-				//Score determining logic
 				if (currenttime - previoustime < 2)
 					player1Score += 5;
 				else if (currenttime - previoustime < 5 && currenttime - previoustime > 2)
@@ -1604,28 +1549,16 @@ public class Battle extends Application {
 
 	}
 
-
-/**
- * Providing suggestions to the user.
- * After some time if the user does not perform any event ,then the 
- * temporaryCell gets the cell according to the coordinate and fills it with blue color
- */
-
-
-
 	/**
 	 * Providing suggestions to the user after some time if the user does not
 	 * perform any event temporaryCell gets the cell according to the coordinate and
 	 * filled with blue color
 	 * 
 	 */
-
 	public void callSuggestionMethod() {
 		int count = 1;
 		for (Rectangle rect : dragAndDropShipsOpponent.keySet()) {
-			
-			// Number of ship cells to display as hint
-			if (count > 2)
+			if (count > 5)
 				break;
 			String takeCordinates[] = dragAndDropShipsOpponent.get(rect).split("-");
 			Cell temporaryCell = opponentBoard.getCell(Integer.parseInt(takeCordinates[0]),
@@ -1654,30 +1587,26 @@ public class Battle extends Application {
 	 *
 	 */
 	class checkTimer implements Runnable {
-		// Declaring volatile to make exit variables updated value 
-		//always visible to main thread.
 		private volatile boolean exit = false;
 		private int prevTime = 0;
 		private int curTime = 0;
 
 		public void run() {
 			exit = false;
-			
+			System.out.println(exit);
 			prevTime = Integer.parseInt(timer1.getText().split(":")[0]) * 60
-						+ Integer.parseInt(timer1.getText().split(":")[1]);
+					+ Integer.parseInt(timer1.getText().split(":")[1]);
 			while (!exit) {
 
 				curTime = Integer.parseInt(timer1.getText().split(":")[0]) * 60
-						  + Integer.parseInt(timer1.getText().split(":")[1]);
-				
-				
-				// Time gap after which the hint should be given
+						+ Integer.parseInt(timer1.getText().split(":")[1]);
+				// System.out.println(curTime - prevTime);
 				if (curTime - prevTime > 5) {
-					
+					System.out.println("After 10 and check");
 					exit = true;
 				}
 				if (!checkTimeForSug) {
-					
+					System.out.println("On Click");
 					exit = true;
 				}
 			}
