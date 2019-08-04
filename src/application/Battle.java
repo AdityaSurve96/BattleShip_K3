@@ -183,6 +183,8 @@ public class Battle extends Application {
 	private Desktop desktop = Desktop.getDesktop();
 	
 	boolean loadCheck = false;
+	
+	boolean twoPlayer = false;
 
 	/**
 	 *<p> It updates the timer text of Player1
@@ -272,7 +274,7 @@ public class Battle extends Application {
 		Opponent.setY(100);
 		Opponent.setFont(Font.font("Verdana", FontWeight.BOLD, FontPosture.REGULAR, 20));
 
-		HBox actions = new HBox(30, st, reset, adjust, save, load, p2p, exit);
+		HBox actions = new HBox(30, st, reset, adjust, save, load, p2p, doNotCheat, exit);
 		actions.setAlignment(Pos.CENTER);
 		buttonGeometry();
 
@@ -723,7 +725,7 @@ public class Battle extends Application {
 		doNotCheat.setStyle("-fx-background-color: #000000;-fx-font-size: 2em;-fx-text-fill:#ffffff;");
 
 		st.setMinHeight(80);
-		st.setMinWidth(150);
+		st.setMinWidth(100);
 
 		reset.setMinHeight(80);
 		reset.setMinWidth(150);
@@ -738,10 +740,10 @@ public class Battle extends Application {
 		save.setMinWidth(150);
 
 		exit.setMinHeight(80);
-		exit.setMinWidth(150);
+		exit.setMinWidth(100);
 		
 		p2p.setMinHeight(80);
-		p2p.setMinWidth(150);
+		p2p.setMinWidth(100);
 
 		doNotCheat.setMinHeight(80);
 		doNotCheat.setMinWidth(150);
@@ -966,7 +968,7 @@ public class Battle extends Application {
 	 */
 	private void startGame() {
 		// place enemy ships
-		if (!loadCheck) {
+		if (!loadCheck && !twoPlayer) {
 			numberOfShips = 5;
 			for (int i = 0; i < shipLengths.size(); i++) {
 
@@ -1157,6 +1159,7 @@ public class Battle extends Application {
 		p2p.setOnAction(e->{
 			if (numberOfShips == 0)
 			{
+				twoPlayer =true;
 				runInit();
 				startGame();
 				
@@ -1166,7 +1169,7 @@ public class Battle extends Application {
 		primaryStage.show();
 	}
 	
-	static Runnable udp_task = new Runnable() {
+	Runnable udp_task = new Runnable() {
 		public void run() {
 			System.out.println("System 1 Listening on 6000");
 			udpReceive();
@@ -1179,7 +1182,7 @@ public class Battle extends Application {
 	}
 
 
-	private static void udpReceive() {
+	private void udpReceive() {
 		// TODO Auto-generated method stub
 		byte[] buffer = new byte[1000];
 		DatagramSocket aSocket = null;
@@ -1195,8 +1198,21 @@ public class Battle extends Application {
 						buffer.length);
 				
 				aSocket.receive(reply);
-				String receivedData = data(buffer).toString();
-				System.out.println(receivedData);
+				System.out.println("Player2");
+				String receivedData[] = data(buffer).toString().split("->");
+				
+				String udpships[] = receivedData[1].split(",");
+				if(receivedData[0].trim().equals("playerShips")) {
+					for (int i = 0; i < udpships.length; i++) {
+						String udpTemp[] =udpships[i].substring(1, udpships[i].length()-1).split("-");
+						callPostionShip("opponent",Integer.parseInt(udpTemp[0].trim()),
+								Integer.parseInt(udpTemp[1].trim()),Boolean.parseBoolean(udpTemp[2].trim()),
+								Integer.parseInt(udpTemp[3].trim()));
+					}
+					
+				}else {
+					
+				}
 				
 			}
 		} catch (SocketException e1) {
