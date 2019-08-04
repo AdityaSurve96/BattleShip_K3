@@ -7,7 +7,13 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
+import java.net.SocketException;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -108,7 +114,7 @@ public class Battle extends Application {
 
 	private Random random = new Random();
 
-	private Button st = new Button("START");
+	private Button st = new Button("PLAY COMP");
 
 	private Button reset = new Button("RESET");
 
@@ -121,6 +127,8 @@ public class Battle extends Application {
 	private Button exit = new Button("EXIT");
 
 	private Button doNotCheat = new Button("CHEAT");
+	
+	private Button p2p = new Button("P2P");
 
 	private double cellSize = 30.0;
 
@@ -212,6 +220,9 @@ public class Battle extends Application {
 				+ (((millis1 / 10) == 0) ? "00" : (((millis1 / 100) == 0) ? "0" : "")) + millis1++);
 
 	}
+	
+	
+	
 
 	/**
 	 * In general adding styles and layout to the output screen i.e titles ,grid
@@ -261,7 +272,7 @@ public class Battle extends Application {
 		Opponent.setY(100);
 		Opponent.setFont(Font.font("Verdana", FontWeight.BOLD, FontPosture.REGULAR, 20));
 
-		HBox actions = new HBox(30, st, reset, adjust, save, load, doNotCheat, exit);
+		HBox actions = new HBox(30, st, reset, adjust, save, load, p2p, exit);
 		actions.setAlignment(Pos.CENTER);
 		buttonGeometry();
 
@@ -706,6 +717,7 @@ public class Battle extends Application {
 		adjust.setStyle("-fx-background-color: #000000;-fx-font-size: 2em;-fx-text-fill:#ffffff;");
 		load.setStyle("-fx-background-color: #000000;-fx-font-size: 2em;-fx-text-fill:#ffffff;");
 		save.setStyle("-fx-background-color: #000000;-fx-font-size: 2em;-fx-text-fill:#ffffff;");
+		p2p.setStyle("-fx-background-color: #000000;-fx-font-size: 2em;-fx-text-fill:#ffffff;");
 
 		exit.setStyle("-fx-background-color: #000000;-fx-font-size: 2em;-fx-text-fill:#ffffff;");
 		doNotCheat.setStyle("-fx-background-color: #000000;-fx-font-size: 2em;-fx-text-fill:#ffffff;");
@@ -727,6 +739,9 @@ public class Battle extends Application {
 
 		exit.setMinHeight(80);
 		exit.setMinWidth(150);
+		
+		p2p.setMinHeight(80);
+		p2p.setMinWidth(150);
 
 		doNotCheat.setMinHeight(80);
 		doNotCheat.setMinWidth(150);
@@ -982,6 +997,7 @@ public class Battle extends Application {
 			}
 		}
 		showGameMessage();
+		
 	}
 
 	private void showGameMessage() {
@@ -1015,6 +1031,8 @@ public class Battle extends Application {
 			salvation = false;
 			t1.start();
 		}
+		String playerBoardInfo = getShiPosition("player");
+		udpSend(playerBoardInfo);
 		executing = true;
 		timelinePlayer1.play();
 		previoustime = Integer.parseInt(timer1.getText().split(":")[0]) * 60
@@ -1134,8 +1152,93 @@ public class Battle extends Application {
 		adjust.setOnAction(e -> {
 			adjustShips();
 		});
+		
+		
+		p2p.setOnAction(e->{
+			if (numberOfShips == 0)
+			{
+				runInit();
+				startGame();
+				
+			}
+		});
 
 		primaryStage.show();
+	}
+	
+	static Runnable udp_task = new Runnable() {
+		public void run() {
+			System.out.println("System 1 Listening on 6000");
+			udpReceive();
+		}
+	};
+	
+	public void runInit() {
+		Thread thread = new Thread(udp_task);
+		thread.start();
+	}
+
+
+	private static void udpReceive() {
+		// TODO Auto-generated method stub
+		byte[] buffer = new byte[1000];
+		DatagramSocket aSocket = null;
+		
+		
+		try {
+			aSocket = new DatagramSocket(6000);
+		
+			while(true) {
+				Arrays.fill(buffer, (byte)0);
+
+				DatagramPacket reply = new DatagramPacket(buffer,
+						buffer.length);
+				
+				aSocket.receive(reply);
+				String receivedData = data(buffer).toString();
+				System.out.println(receivedData);
+				
+			}
+		} catch (SocketException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	private void udpSend(String textToSend) {
+		// TODO Auto-generated method stub
+		byte[] message = textToSend.getBytes();
+		DatagramSocket aSocket = null;
+		try {
+			aSocket = new DatagramSocket();
+		
+			InetAddress aHost = InetAddress.getByName("127.0.0.1");
+
+			// Sequencer port number
+			int serverPort = 6001;
+
+			DatagramPacket request = new DatagramPacket(message, message.length, aHost, serverPort);// request packet
+			aSocket.send(request);// request sent out		
+		}
+		 catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	public static StringBuilder data(byte[] a) {
+		if (a == null)
+			return null;
+		StringBuilder ret = new StringBuilder();
+		int i = 0;
+		while (a[i] != 0) {
+			ret.append((char) a[i]);
+			i++;
+		}
+		return ret;
 	}
 
 	private void saveTextToFile(File file) {
@@ -1399,7 +1502,7 @@ public class Battle extends Application {
 	 */
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-
+		
 		intialise(primaryStage);
 
 	}
