@@ -114,7 +114,7 @@ public class Battle extends Application {
 
 	private Random random = new Random();
 
-	private Button st = new Button("PLAY COMP");
+	private Button st = new Button("P2C");
 
 	private Button reset = new Button("RESET");
 
@@ -127,7 +127,7 @@ public class Battle extends Application {
 	private Button exit = new Button("EXIT");
 
 	private Button doNotCheat = new Button("CHEAT");
-	
+
 	private Button p2p = new Button("P2P");
 
 	private double cellSize = 30.0;
@@ -145,6 +145,9 @@ public class Battle extends Application {
 	private Rectangle selectedShip;
 	private double previoustime = 0;
 	private double currenttime = 0;
+	
+	private double previoustime2 = 0;
+	private double currenttime2 = 0;
 
 	HBox hBox, hBox1;
 
@@ -181,14 +184,18 @@ public class Battle extends Application {
 	final FileChooser fileChooser = new FileChooser();
 
 	private Desktop desktop = Desktop.getDesktop();
-	
+
 	boolean loadCheck = false;
-	
+
 	boolean twoPlayer = false;
 
+	Stage global_stage = null;
+
 	/**
-	 *<p> It updates the timer text of Player1
-	 *</p>
+	 * <p>
+	 * It updates the timer text of Player1
+	 * </p>
+	 * 
 	 * @param text
 	 */
 	void changeTimer1(Text text) {
@@ -205,8 +212,10 @@ public class Battle extends Application {
 	}
 
 	/**
-	 *<p> It updates the timer text of opponent/Player2
-	 *</p> 
+	 * <p>
+	 * It updates the timer text of opponent/Player2
+	 * </p>
+	 * 
 	 * @param text
 	 */
 	void changeTimer2(Text text) {
@@ -222,9 +231,6 @@ public class Battle extends Application {
 				+ (((millis1 / 10) == 0) ? "00" : (((millis1 / 100) == 0) ? "0" : "")) + millis1++);
 
 	}
-	
-	
-	
 
 	/**
 	 * In general adding styles and layout to the output screen i.e titles ,grid
@@ -252,7 +258,7 @@ public class Battle extends Application {
 		root.setPrefSize(1300, 800);
 
 		Text battle = new Text();
-		battle.setText("BATTLESHIP GAME");
+		battle.setText("BATTLESHIP GAME--PLAYER 2");
 		battle.setFill(Color.BLACK);
 		battle.setStrokeWidth(2);
 		battle.setStroke(Color.WHITE);
@@ -396,17 +402,35 @@ public class Battle extends Application {
 				if (cell.targetHit)
 					return;
 				numberOfShots.add(cell);
-				if (normalGame) {
-					shootNormalShip(numberOfShots, personStage);
-					numberOfShots.clear();
-				} else if (salvation) {
-					if (hits == firstPlayerBoard.amountOfships) {
-						shootSalvationShip(numberOfShots, personStage);
-					} else
-						hits++;
-				} else if (suggSalvation) {
-					shootNormalShip(numberOfShots, personStage);
-					numberOfShots.clear();
+				if (!twoPlayer) {
+					if (normalGame) {
+						shootNormalShip(numberOfShots, personStage);
+						numberOfShots.clear();
+					} else if (salvation) {
+						if (hits == firstPlayerBoard.amountOfships) {
+							shootSalvationShip(numberOfShots, personStage);
+						} else
+							hits++;
+					} else if (suggSalvation) {
+						shootNormalShip(numberOfShots, personStage);
+						numberOfShots.clear();
+					}
+				} else {
+					udpSend("shootShip->(" + cell.row + "-" + cell.col + ")");
+					previoustime2 =  Integer.parseInt(timer2.getText().split(":")[0]) * 60
+							+ Integer.parseInt(timer2.getText().split(":")[1]);
+					if (normalGame) {
+						shootNormalShip(numberOfShots, personStage);
+						numberOfShots.clear();
+					} else if (salvation) {
+						if (hits == firstPlayerBoard.amountOfships) {
+							shootSalvationShip(numberOfShots, personStage);
+						} else
+							hits++;
+					} else if (suggSalvation) {
+						shootNormalShip(numberOfShots, personStage);
+						numberOfShots.clear();
+					}
 				}
 
 			}
@@ -741,7 +765,7 @@ public class Battle extends Application {
 
 		exit.setMinHeight(80);
 		exit.setMinWidth(100);
-		
+
 		p2p.setMinHeight(80);
 		p2p.setMinWidth(100);
 
@@ -775,7 +799,7 @@ public class Battle extends Application {
 		int x, y;
 		int oldValue, newValue;
 		while (opponentTurn) {
-
+			
 			x = ai.nextX();
 			y = ai.nextY();
 
@@ -885,7 +909,7 @@ public class Battle extends Application {
 	 *            - root ( JavaFX game Stage)
 	 */
 	private void finalResultDisplay(String s, Stage personStage) {
-		
+
 		ButtonType buttonTypeOne = new ButtonType("YES");
 		ButtonType buttonTypeTwo = new ButtonType("NO");
 
@@ -976,11 +1000,13 @@ public class Battle extends Application {
 				int y = random.nextInt(10);
 				boolean direct = Math.random() < 0.5;
 				if (opponentBoard.positionShip(new Ship(shipLengths.get(i), direct), x, y, false)) {
-					if(!opponetShipDetails.containsKey(shipLengths.get(i))) {
-					opponetShipDetails.put(shipLengths.get(i), x + "-" + y + "-" + direct + "-" + shipLengths.get(i));
-					}else {
-					opponetShipDetails.put(shipLengths.get(i)-2, x + "-" + y + "-" + direct + "-" + shipLengths.get(i));
-							
+					if (!opponetShipDetails.containsKey(shipLengths.get(i))) {
+						opponetShipDetails.put(shipLengths.get(i),
+								x + "-" + y + "-" + direct + "-" + shipLengths.get(i));
+					} else {
+						opponetShipDetails.put(shipLengths.get(i) - 2,
+								x + "-" + y + "-" + direct + "-" + shipLengths.get(i));
+
 					}
 					if (direct) {
 						for (int k = y; k < y + shipLengths.get(i); k++) {
@@ -999,7 +1025,7 @@ public class Battle extends Application {
 			}
 		}
 		showGameMessage();
-		
+
 	}
 
 	private void showGameMessage() {
@@ -1081,6 +1107,7 @@ public class Battle extends Application {
 	 *            - root (JAVAFX Game Stage)
 	 */
 	private void intialise(Stage primaryStage) {
+		global_stage = primaryStage;
 		File n = new File(".");
 		String path = null;
 		try {
@@ -1154,66 +1181,68 @@ public class Battle extends Application {
 		adjust.setOnAction(e -> {
 			adjustShips();
 		});
-		
-		
-		p2p.setOnAction(e->{
-			if (numberOfShips == 0)
-			{
-				twoPlayer =true;
+
+		p2p.setOnAction(e -> {
+			if (numberOfShips == 0) {
+				twoPlayer = true;
 				runInit();
 				startGame();
-				
+
 			}
 		});
 
 		primaryStage.show();
 	}
-	
+
 	Runnable udp_task = new Runnable() {
 		public void run() {
-			System.out.println("System 1 Listening on 6000");
+			System.out.println("System 2 Listening on 6000");
 			udpReceive();
 		}
 	};
-	
+
 	public void runInit() {
 		Thread thread = new Thread(udp_task);
 		thread.start();
 	}
 
-
 	private void udpReceive() {
 		// TODO Auto-generated method stub
 		byte[] buffer = new byte[1000];
 		DatagramSocket aSocket = null;
-		
-		
+
 		try {
 			aSocket = new DatagramSocket(6000);
-		
-			while(true) {
-				Arrays.fill(buffer, (byte)0);
 
-				DatagramPacket reply = new DatagramPacket(buffer,
-						buffer.length);
-				
+			while (true) {
+				Arrays.fill(buffer, (byte) 0);
+
+				DatagramPacket reply = new DatagramPacket(buffer, buffer.length);
+
 				aSocket.receive(reply);
-				System.out.println("Player2");
+				System.out.println("Player2 Playing Here");
 				String receivedData[] = data(buffer).toString().split("->");
+
 				
-				String udpships[] = receivedData[1].split(",");
-				if(receivedData[0].trim().equals("playerShips")) {
-					for (int i = 0; i < udpships.length; i++) {
-						String udpTemp[] =udpships[i].substring(1, udpships[i].length()-1).split("-");
-						callPostionShip("opponent",Integer.parseInt(udpTemp[0].trim()),
-								Integer.parseInt(udpTemp[1].trim()),Boolean.parseBoolean(udpTemp[2].trim()),
+				if (receivedData[0].trim().equals("playerShips")) {
+					String udpData[] = receivedData[1].split(",");
+					for (int i = 0; i < udpData.length; i++) {
+						String udpTemp[] = udpData[i].substring(1, udpData[i].length() - 1).split("-");
+						callPostionShip("opponent", Integer.parseInt(udpTemp[0].trim()),
+								Integer.parseInt(udpTemp[1].trim()), Boolean.parseBoolean(udpTemp[2].trim()),
 								Integer.parseInt(udpTemp[3].trim()));
 					}
 					
-				}else {
-					
+				} else {
+					ArrayList<Cell> udpCell = new ArrayList<Cell>();
+					String udpTemp[]=receivedData[1].trim().substring(1, receivedData[1].length()-1).split("-");
+					//for (int i = 0; i < udpData.length; i++) {
+					Cell c = firstPlayerBoard.getCell(Integer.parseInt(udpTemp[0].trim()), Integer.parseInt(udpTemp[1].trim()));
+					udpCell.add(c);
+					//}
+					shootMultiPlayer(udpCell);
 				}
-				
+
 			}
 		} catch (SocketException e1) {
 			// TODO Auto-generated catch block
@@ -1224,22 +1253,97 @@ public class Battle extends Application {
 		}
 	}
 
+	private void shootMultiPlayer(ArrayList<Cell> udpCell) {
+		// TODO Auto-generated method stub
+		for (Cell cell : udpCell) {
+			if (cell.targetHit)
+				return;
+
+			// System.out.println("Player Shooting");
+			opponentTurn = cell.shoot();
+			// System.out.println("Player Shot done");
+
+			if (!opponentTurn) {
+				timelinePlayer1.play();
+
+				timelinePlayer2.pause();
+//				opponentBoard.setDisable(false);
+				/*if (suggSalvation) {
+					for (Rectangle rect : dragAndDropShipsOpponent.keySet()) {
+						String takeCordinates[] = dragAndDropShipsOpponent.get(rect).split("-");
+						Cell temp = opponentBoard.getCell(Integer.parseInt(takeCordinates[0]),
+								Integer.parseInt(takeCordinates[1]));
+						temp.setFill(Color.WHITE);
+						temp.setStroke(Color.BLACK);
+					}
+
+					checkTimeForSug = false;
+				}*/
+
+				
+			} else {
+/*				Rectangle deleteCell = null;
+				if (suggSalvation) {
+					if (checkForSugg) {
+						for (Rectangle rect : dragAndDropShipsOpponent.keySet()) {
+							String takeCordinates[] = dragAndDropShipsOpponent.get(rect).split("-");
+							if (Integer.parseInt(takeCordinates[0]) == cell.row
+									&& Integer.parseInt(takeCordinates[1]) == cell.col) {
+								deleteCell = rect;
+							} else {
+								Cell temp = opponentBoard.getCell(Integer.parseInt(takeCordinates[0]),
+										Integer.parseInt(takeCordinates[1]));
+								temp.setFill(Color.WHITE);
+								temp.setStroke(Color.BLACK);
+							}
+						}
+						dragAndDropShipsOpponent.remove(deleteCell);
+					}
+				}
+*/
+				currenttime2 = Integer.parseInt(timer2.getText().split(":")[0]) * 60
+						+ Integer.parseInt(timer2.getText().split(":")[1]);
+				// System.out.println("Previous Time" + previoustime);
+				// System.out.println("Cuurent Time " + currenttime);
+				if (currenttime2 - previoustime2 < 2)
+					player2Score += 5;
+				else if (currenttime2 - previoustime2 < 5 && currenttime2 - previoustime2 > 2)
+					player2Score += 3;
+				else if (currenttime2 - previoustime2 > 5 && currenttime2 - previoustime2 < 10)
+					player2Score += 2;
+				else if (currenttime2 - previoustime2 > 10)
+					player2Score += 1;
+
+				previoustime2 = currenttime2;
+				displayScore("player2");
+				
+				if (firstPlayerBoard.amountOfships == 0) {
+
+					timelinePlayer1.pause();
+					timelinePlayer2.pause();
+					String s = "You Lost This Game to the Player 1";
+					finalResultDisplay(s, global_stage);
+
+				}
+			}
+		}
+	}
+
 	private void udpSend(String textToSend) {
 		// TODO Auto-generated method stub
 		byte[] message = textToSend.getBytes();
 		DatagramSocket aSocket = null;
 		try {
 			aSocket = new DatagramSocket();
-		
+
 			InetAddress aHost = InetAddress.getByName("127.0.0.1");
 
 			// Sequencer port number
 			int serverPort = 6001;
 
 			DatagramPacket request = new DatagramPacket(message, message.length, aHost, serverPort);// request packet
-			aSocket.send(request);// request sent out		
-		}
-		 catch (IOException e) {
+			aSocket.send(request);// request sent out
+		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -1262,9 +1366,9 @@ public class Battle extends Application {
 		String opponentBoardInfo = getBoardInformation(opponentBoard);
 
 		String content = "Player_1 @ " + "Timer ->" + timer1.getText() + "; Score ->" + player1Score + ";"
-				 + getShiPosition("player") + ";" + "Board ->" + playerBoardInfo + ";" + "\n"
-				+ "Player_2 @ " + "Timer ->" + timer2.getText() + "; Score ->" + player2Score + ";"
-				+ getShiPosition("opponent") + ";" + "Board ->" + opponentBoardInfo + ";";
+				+ getShiPosition("player") + ";" + "Board ->" + playerBoardInfo + ";" + "\n" + "Player_2 @ "
+				+ "Timer ->" + timer2.getText() + "; Score ->" + player2Score + ";" + getShiPosition("opponent") + ";"
+				+ "Board ->" + opponentBoardInfo + ";";
 		try {
 			PrintWriter writer;
 			writer = new PrintWriter(file);
@@ -1306,7 +1410,7 @@ public class Battle extends Application {
 				else if (temp.getFill() == Color.BLACK)
 					finalDetails += "(" + i + "-" + j + "-" + "miss),";
 				else
-					finalDetails += "(" + i + "-" + j + "-" + "normal),";
+					finalDetails += "(" + i + "-" + j + "-" +  "normal),";
 
 			}
 		}
@@ -1319,13 +1423,13 @@ public class Battle extends Application {
 		try {
 			reader = new BufferedReader(new FileReader(file));
 			String line;
-			loadCheck=true;
+			loadCheck = true;
 			while ((line = reader.readLine()) != null) {
-				//System.out.println(line);
+				// System.out.println(line);
 				loading(line);
-				
+
 			}
-			loadCheck=true;
+			loadCheck = true;
 			ship1.setDisable(true);
 			ship2.setDisable(true);
 			ship3.setDisable(true);
@@ -1341,135 +1445,138 @@ public class Battle extends Application {
 		}
 
 	}
-	
-	
+
 	private void loading(String line) {
 		// TODO Auto-generated method stub
-		String tme [] =line.split("@");
-		if(tme[0].trim().equals("Player_1")) {
-			tme=tme[1].split(";");
+		String tme[] = line.split("@");
+		if (tme[0].trim().equals("Player_1")) {
+			tme = tme[1].split(";");
 			for (String playDetails : tme) {
-				String remainDetails[] =playDetails.split("->");
-				if(remainDetails[0].trim().equals("Timer")) { 
+				String remainDetails[] = playDetails.split("->");
+				if (remainDetails[0].trim().equals("Timer")) {
 					timer1.setText(remainDetails[1].trim());
 					String disintegrate[] = remainDetails[1].trim().split(":");
-					millis= Integer.parseInt(disintegrate[2].trim());
-					secs= Integer.parseInt(disintegrate[1].trim());
-					mins= Integer.parseInt(disintegrate[0].trim());
-				}
-				else if(remainDetails[0].trim().equals("Score")) {
-					player1Score=Integer.parseInt(remainDetails[1].trim());
+					millis = Integer.parseInt(disintegrate[2].trim());
+					secs = Integer.parseInt(disintegrate[1].trim());
+					mins = Integer.parseInt(disintegrate[0].trim());
+				} else if (remainDetails[0].trim().equals("Score")) {
+					player1Score = Integer.parseInt(remainDetails[1].trim());
 					displayScore("player1");
-				}
-				else if(remainDetails[0].trim().equals("playerShips")) {
-					String shipReceived []= remainDetails[1].trim().split(",");
+				} else if (remainDetails[0].trim().equals("playerShips")) {
+					String shipReceived[] = remainDetails[1].trim().split(",");
 					for (String shipDetailsR : shipReceived) {
-						shipDetailsR = shipDetailsR.substring(1, shipDetailsR.length()-1);
+						shipDetailsR = shipDetailsR.substring(1, shipDetailsR.length() - 1);
 						String shipDetailsRec[] = shipDetailsR.trim().split("-");
-						callPostionShip("Player_1",Integer.parseInt(shipDetailsRec[0].trim())
-								,Integer.parseInt(shipDetailsRec[1].trim())
-								,Boolean.parseBoolean(shipDetailsRec[2].trim())
-								,Integer.parseInt(shipDetailsRec[3].trim()));
+						callPostionShip("Player_1", Integer.parseInt(shipDetailsRec[0].trim()),
+								Integer.parseInt(shipDetailsRec[1].trim()),
+								Boolean.parseBoolean(shipDetailsRec[2].trim()),
+								Integer.parseInt(shipDetailsRec[3].trim()));
 					}
-				}else if(remainDetails[0].trim().equals("Board")) {
+				} else if (remainDetails[0].trim().equals("Board")) {
 					File hitRate = new File(".");
-					Image hitFile=null;
+					Image hitFile = null;
 					try {
-						hitFile = new Image("file:///"+hitRate.getCanonicalFile()+"/hitShip.png");
+						hitFile = new Image("file:///" + hitRate.getCanonicalFile() + "/hitShip.png");
 
-						/** 
-						 @throws io exception
+						/**
+						 * @throws io
+						 *             exception
 						 */
 					} catch (IOException e) {
-						
+
 						e.printStackTrace();
 					}
-					String shipReceived []= remainDetails[1].trim().split(",");
+					String shipReceived[] = remainDetails[1].trim().split(",");
 					for (String shipDetailsR : shipReceived) {
-						shipDetailsR = shipDetailsR.substring(1, shipDetailsR.length()-1);
+						shipDetailsR = shipDetailsR.substring(1, shipDetailsR.length() - 1);
 						String shipDetailsRec[] = shipDetailsR.trim().split("-");
-						if(shipDetailsRec[2].trim().equals("miss")) {
-						firstPlayerBoard.getCell(Integer.parseInt(shipDetailsRec[0].trim()), 
-								Integer.parseInt(shipDetailsRec[1].trim())).targetHit=false;
-						firstPlayerBoard.getCell(Integer.parseInt(shipDetailsRec[0].trim()), 
-								Integer.parseInt(shipDetailsRec[1].trim())).setFill(Color.BLACK);
-						}else if(shipDetailsRec[2].trim().equals("hit")) {
-							firstPlayerBoard.getCell(Integer.parseInt(shipDetailsRec[0].trim()), 
-									Integer.parseInt(shipDetailsRec[1].trim())).targetHit=true;
-							firstPlayerBoard.getCell(Integer.parseInt(shipDetailsRec[0].trim()), 
+						if (shipDetailsRec[2].trim().equals("miss")) {
+							firstPlayerBoard.getCell(Integer.parseInt(shipDetailsRec[0].trim()),
+									Integer.parseInt(shipDetailsRec[1].trim())).targetHit = false;
+							firstPlayerBoard.getCell(Integer.parseInt(shipDetailsRec[0].trim()),
+									Integer.parseInt(shipDetailsRec[1].trim())).setFill(Color.BLACK);
+						} else if (shipDetailsRec[2].trim().equals("hit")) {
+							firstPlayerBoard.getCell(Integer.parseInt(shipDetailsRec[0].trim()),
+									Integer.parseInt(shipDetailsRec[1].trim())).targetHit = true;
+							firstPlayerBoard.getCell(Integer.parseInt(shipDetailsRec[0].trim()),
 									Integer.parseInt(shipDetailsRec[1].trim())).ship.shipPartHit();
-							firstPlayerBoard.getCell(Integer.parseInt(shipDetailsRec[0].trim()), 
-									Integer.parseInt(shipDetailsRec[1].trim())).ship.shotCellsOfShips.add(firstPlayerBoard.getCell(Integer.parseInt(shipDetailsRec[0].trim()), 
-											Integer.parseInt(shipDetailsRec[1].trim())));
-							firstPlayerBoard.getCell(Integer.parseInt(shipDetailsRec[0].trim()), 
-									Integer.parseInt(shipDetailsRec[1].trim())).setFill(new ImagePattern(hitFile));
+							firstPlayerBoard.getCell(Integer.parseInt(shipDetailsRec[0].trim()),
+									Integer.parseInt(shipDetailsRec[1].trim())).ship.shotCellsOfShips
+											.add(firstPlayerBoard.getCell(Integer.parseInt(shipDetailsRec[0].trim()),
+													Integer.parseInt(shipDetailsRec[1].trim())));
+							firstPlayerBoard
+									.getCell(Integer.parseInt(shipDetailsRec[0].trim()),
+											Integer.parseInt(shipDetailsRec[1].trim()))
+									.setFill(new ImagePattern(hitFile));
 						}
 					}
 				}
 			}
-		}else {
-			
-			tme=tme[1].split(";");
+		} else {
+
+			tme = tme[1].split(";");
 			for (String playDetails : tme) {
-				String remainDetails[] =playDetails.split("->");
-				if(remainDetails[0].trim().equals("Timer")) {
+				String remainDetails[] = playDetails.split("->");
+				if (remainDetails[0].trim().equals("Timer")) {
 					timer2.setText(remainDetails[1].trim());
 					String disintegrate[] = remainDetails[1].trim().split(":");
 					millis1 = Integer.parseInt(disintegrate[2].trim());
 					secs1 = Integer.parseInt(disintegrate[1].trim());
 					mins1 = Integer.parseInt(disintegrate[0].trim());
-				}
-				else if(remainDetails[0].trim().equals("Score")) {
-					player2Score=Integer.parseInt(remainDetails[1].trim());
+				} else if (remainDetails[0].trim().equals("Score")) {
+					player2Score = Integer.parseInt(remainDetails[1].trim());
 					displayScore("Opponent");
-				}
-				else if(remainDetails[0].trim().equals("Opponent")) {
-					String shipReceived []= remainDetails[1].trim().split(",");
+				} else if (remainDetails[0].trim().equals("Opponent")) {
+					String shipReceived[] = remainDetails[1].trim().split(",");
 					for (String shipDetailsR : shipReceived) {
-						shipDetailsR = shipDetailsR.substring(1, shipDetailsR.length()-1);
+						shipDetailsR = shipDetailsR.substring(1, shipDetailsR.length() - 1);
 						String shipDetailsRec[] = shipDetailsR.trim().split("-");
-						callPostionShip("Opponent",Integer.parseInt(shipDetailsRec[0].trim())
-								,Integer.parseInt(shipDetailsRec[1].trim())
-								,Boolean.parseBoolean(shipDetailsRec[2].trim())
-								,Integer.parseInt(shipDetailsRec[3].trim()));
+						callPostionShip("Opponent", Integer.parseInt(shipDetailsRec[0].trim()),
+								Integer.parseInt(shipDetailsRec[1].trim()),
+								Boolean.parseBoolean(shipDetailsRec[2].trim()),
+								Integer.parseInt(shipDetailsRec[3].trim()));
 					}
-				}else if(remainDetails[0].trim().equals("Board")) {
+				} else if (remainDetails[0].trim().equals("Board")) {
 					File hitRate = new File(".");
-					Image hitFile=null;
+					Image hitFile = null;
 					try {
-						hitFile = new Image("file:///"+hitRate.getCanonicalFile()+"/hitShip.png");
+						hitFile = new Image("file:///" + hitRate.getCanonicalFile() + "/hitShip.png");
 
-						/** 
-						 @throws io exception
+						/**
+						 * @throws io
+						 *             exception
 						 */
 					} catch (IOException e) {
-						
+
 						e.printStackTrace();
 					}
-					String shipReceived []= remainDetails[1].trim().split(",");
+					String shipReceived[] = remainDetails[1].trim().split(",");
 					for (String shipDetailsR : shipReceived) {
-						shipDetailsR = shipDetailsR.substring(1, shipDetailsR.length()-1);
+						shipDetailsR = shipDetailsR.substring(1, shipDetailsR.length() - 1);
 						String shipDetailsRec[] = shipDetailsR.trim().split("-");
-						if(shipDetailsRec[2].trim().equals("miss")) {
-						opponentBoard.getCell(Integer.parseInt(shipDetailsRec[0].trim()), 
-								Integer.parseInt(shipDetailsRec[1].trim())).targetHit=false;
-						opponentBoard.getCell(Integer.parseInt(shipDetailsRec[0].trim()), 
-								Integer.parseInt(shipDetailsRec[1].trim())).setFill(Color.BLACK);
-						}else if(shipDetailsRec[2].trim().equals("hit")) {
-							opponentBoard.getCell(Integer.parseInt(shipDetailsRec[0].trim()), 
-									Integer.parseInt(shipDetailsRec[1].trim())).targetHit=true;
-							opponentBoard.getCell(Integer.parseInt(shipDetailsRec[0].trim()), 
+						if (shipDetailsRec[2].trim().equals("miss")) {
+							opponentBoard.getCell(Integer.parseInt(shipDetailsRec[0].trim()),
+									Integer.parseInt(shipDetailsRec[1].trim())).targetHit = false;
+							opponentBoard.getCell(Integer.parseInt(shipDetailsRec[0].trim()),
+									Integer.parseInt(shipDetailsRec[1].trim())).setFill(Color.BLACK);
+						} else if (shipDetailsRec[2].trim().equals("hit")) {
+							opponentBoard.getCell(Integer.parseInt(shipDetailsRec[0].trim()),
+									Integer.parseInt(shipDetailsRec[1].trim())).targetHit = true;
+							opponentBoard.getCell(Integer.parseInt(shipDetailsRec[0].trim()),
 									Integer.parseInt(shipDetailsRec[1].trim())).ship.shipPartHit();
-							opponentBoard.getCell(Integer.parseInt(shipDetailsRec[0].trim()), 
-									Integer.parseInt(shipDetailsRec[1].trim())).ship.shotCellsOfShips.add(opponentBoard.getCell(Integer.parseInt(shipDetailsRec[0].trim()), 
-											Integer.parseInt(shipDetailsRec[1].trim())));
-							opponentBoard.getCell(Integer.parseInt(shipDetailsRec[0].trim()), 
-									Integer.parseInt(shipDetailsRec[1].trim())).setFill(new ImagePattern(hitFile));
+							opponentBoard.getCell(Integer.parseInt(shipDetailsRec[0].trim()),
+									Integer.parseInt(shipDetailsRec[1].trim())).ship.shotCellsOfShips
+											.add(opponentBoard.getCell(Integer.parseInt(shipDetailsRec[0].trim()),
+													Integer.parseInt(shipDetailsRec[1].trim())));
+							opponentBoard
+									.getCell(Integer.parseInt(shipDetailsRec[0].trim()),
+											Integer.parseInt(shipDetailsRec[1].trim()))
+									.setFill(new ImagePattern(hitFile));
 						}
 					}
 				}
 			}
-			
+
 		}
 	}
 
@@ -1480,15 +1587,15 @@ public class Battle extends Application {
 	 * @param string3
 	 * @param string4
 	 */
-	private void callPostionShip(String name,int xCor, int yCor, boolean orient, int len) {
-		if(name.trim().equals("Player_1")) {
+	private void callPostionShip(String name, int xCor, int yCor, boolean orient, int len) {
+		if (name.trim().equals("Player_1")) {
 			firstPlayerBoard.positionShip(new Ship(len, orient), xCor, yCor, false);
 			numberOfShips--;
-		}else {
+		} else {
 			opponentBoard.positionShip(new Ship(len, orient), xCor, yCor, false);
-			
+
 		}
-		
+
 	}
 
 	/**
@@ -1518,7 +1625,7 @@ public class Battle extends Application {
 	 */
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		
+
 		intialise(primaryStage);
 
 	}
@@ -1571,7 +1678,10 @@ public class Battle extends Application {
 					checkTimeForSug = false;
 				}
 
-				opponentNormalMove(personStage);
+				//opponentBoard.setDisable(true);
+				//if(!twoPlayer) {
+				//	opponentNormalMove(personStage);
+				//}
 			} else {
 				Rectangle deleteCell = null;
 				if (suggSalvation) {
