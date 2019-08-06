@@ -1499,15 +1499,12 @@ public class Battle extends Application {
 							firstPlayerBoard.getCell(Integer.parseInt(shipDetailsRec[0].trim()),
 									Integer.parseInt(shipDetailsRec[1].trim())).targetHit = true;
 							firstPlayerBoard.getCell(Integer.parseInt(shipDetailsRec[0].trim()),
-									Integer.parseInt(shipDetailsRec[1].trim())).ship.shipPartHit();
-							firstPlayerBoard.getCell(Integer.parseInt(shipDetailsRec[0].trim()),
 									Integer.parseInt(shipDetailsRec[1].trim())).ship.shotCellsOfShips
 											.add(firstPlayerBoard.getCell(Integer.parseInt(shipDetailsRec[0].trim()),
 													Integer.parseInt(shipDetailsRec[1].trim())));
-							firstPlayerBoard
-									.getCell(Integer.parseInt(shipDetailsRec[0].trim()),
-											Integer.parseInt(shipDetailsRec[1].trim()))
-									.setFill(new ImagePattern(hitFile));
+							firstPlayerBoard.getCell(Integer.parseInt(shipDetailsRec[0].trim()),
+									Integer.parseInt(shipDetailsRec[1].trim())).shoot();
+							
 						}
 					}
 				}
@@ -1562,16 +1559,14 @@ public class Battle extends Application {
 						} else if (shipDetailsRec[2].trim().equals("hit")) {
 							opponentBoard.getCell(Integer.parseInt(shipDetailsRec[0].trim()),
 									Integer.parseInt(shipDetailsRec[1].trim())).targetHit = true;
-							opponentBoard.getCell(Integer.parseInt(shipDetailsRec[0].trim()),
-									Integer.parseInt(shipDetailsRec[1].trim())).ship.shipPartHit();
+							
 							opponentBoard.getCell(Integer.parseInt(shipDetailsRec[0].trim()),
 									Integer.parseInt(shipDetailsRec[1].trim())).ship.shotCellsOfShips
 											.add(opponentBoard.getCell(Integer.parseInt(shipDetailsRec[0].trim()),
 													Integer.parseInt(shipDetailsRec[1].trim())));
-							opponentBoard
-									.getCell(Integer.parseInt(shipDetailsRec[0].trim()),
-											Integer.parseInt(shipDetailsRec[1].trim()))
-									.setFill(new ImagePattern(hitFile));
+							opponentBoard.getCell(Integer.parseInt(shipDetailsRec[0].trim()),
+									Integer.parseInt(shipDetailsRec[1].trim())).shoot();
+							
 						}
 					}
 				}
@@ -1679,9 +1674,9 @@ public class Battle extends Application {
 				}
 
 				//opponentBoard.setDisable(true);
-				//if(!twoPlayer) {
-				//	opponentNormalMove(personStage);
-				//}
+				if(!twoPlayer) {
+					opponentNormalMove(personStage);
+				}
 			} else {
 				Rectangle deleteCell = null;
 				if (suggSalvation) {
