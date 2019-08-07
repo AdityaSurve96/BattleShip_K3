@@ -1121,24 +1121,29 @@ public class Battle extends Application {
 	 *            - root ( JavaFX game Stage)
 	 */
 	private void finalResultDisplay(String s, Stage personStage) {
+		
+		Platform.runLater(new Runnable() {
+			  @Override public void run() {
+				  ButtonType buttonTypeOne = new ButtonType("YES");
+					ButtonType buttonTypeTwo = new ButtonType("NO");
 
-		ButtonType buttonTypeOne = new ButtonType("YES");
-		ButtonType buttonTypeTwo = new ButtonType("NO");
+					Alert winOrLose = new Alert(AlertType.CONFIRMATION);
+					winOrLose.setTitle("WINNER ANNOUCEMENT");
+					winOrLose.setHeaderText(s);
 
-		Alert winOrLose = new Alert(AlertType.CONFIRMATION);
-		winOrLose.setTitle("WINNER ANNOUCEMENT");
-		winOrLose.setHeaderText(s);
+					winOrLose.setContentText("Click YES to Restart the Game\nClick NO to Exit the Game");
+					winOrLose.getButtonTypes().setAll(buttonTypeOne, buttonTypeTwo);
 
-		winOrLose.setContentText("Click YES to Restart the Game\nClick NO to Exit the Game");
-		winOrLose.getButtonTypes().setAll(buttonTypeOne, buttonTypeTwo);
+					Optional<ButtonType> result = winOrLose.showAndWait();
 
-		Optional<ButtonType> result = winOrLose.showAndWait();
-
-		if (result.get() == buttonTypeOne) {
-			restart(personStage);
-		} else if (result.get() == buttonTypeTwo) {
-			System.exit(0);
-		}
+					if (result.get() == buttonTypeOne) {
+						restart(personStage);
+					} else if (result.get() == buttonTypeTwo) {
+						System.exit(0);
+					}                       
+			  }
+			});
+		
 
 	}
 
@@ -1219,6 +1224,7 @@ public class Battle extends Application {
 		}
 		String playerBoardInfo = getShiPosition("player");
 		udpSend(playerBoardInfo);
+		
 		executing = true;
 		timelinePlayer1.play();
 		previoustime = Integer.parseInt(timer1.getText().split(":")[0]) * 60
@@ -1401,6 +1407,7 @@ public class Battle extends Application {
 				DatagramPacket reply = new DatagramPacket(buffer, buffer.length);
 
 				aSocket.receive(reply);
+				System.out.println("DATA FROM RAJ");
 				System.out.println("Player2 Playing Here");
 				String receivedData[] = data(buffer).toString().split("->");
 
@@ -1517,13 +1524,20 @@ public class Battle extends Application {
 		try {
 			aSocket = new DatagramSocket();
 
-			InetAddress aHost = InetAddress.getByName("127.0.0.1");
+			InetAddress aHost = InetAddress.getByName("192.168.43.165");
 
 			// Sequencer port number
-			int serverPort = 6001;
+			int serverPort = 9999;
 
 			DatagramPacket request = new DatagramPacket(message, message.length, aHost, serverPort);// request packet
 			aSocket.send(request);// request sent out
+			if(textToSend.length()>50) {
+				System.out.println("Board info Sent");
+			}
+			else {
+				System.out.println("HIT coordinates sent");
+			}
+			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

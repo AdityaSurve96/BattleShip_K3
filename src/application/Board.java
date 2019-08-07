@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.scene.Parent;
@@ -395,14 +396,18 @@ public class Board extends Parent {
 	 * @param y-y coordinate of the alert position
 	 */
 	private static void shipDestructionMessage(String s,double x, double y) {
-
-		Alert shipSinkAlert = new Alert(AlertType.WARNING);
-		shipSinkAlert.setTitle("SHIP SUNK");
-		shipSinkAlert.setHeaderText(null);
-		shipSinkAlert.setContentText(s+" ship has been destroyed");
-		shipSinkAlert.setX(x);
-		shipSinkAlert.setY(y);
-		shipSinkAlert.showAndWait();
+		Platform.runLater(new Runnable() {
+			  @Override public void run() {
+				  Alert shipSinkAlert = new Alert(AlertType.WARNING);
+					shipSinkAlert.setTitle("SHIP SUNK");
+					shipSinkAlert.setHeaderText(null);
+					shipSinkAlert.setContentText(s+" ship has been destroyed");
+					shipSinkAlert.setX(x);
+					shipSinkAlert.setY(y);
+					shipSinkAlert.showAndWait();                      
+			  }
+			});
+		
 	}
 
 }
