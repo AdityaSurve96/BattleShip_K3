@@ -1267,7 +1267,7 @@ public class Battle extends Application {
 				timelinePlayer1.play();
 
 				timelinePlayer2.pause();
-				opponentBoard.setDisable(false);
+//				opponentBoard.setDisable(false);
 				/*if (suggSalvation) {
 					for (Rectangle rect : dragAndDropShipsOpponent.keySet()) {
 						String takeCordinates[] = dragAndDropShipsOpponent.get(rect).split("-");
@@ -1673,12 +1673,9 @@ public class Battle extends Application {
 					checkTimeForSug = false;
 				}
 
-				
+				//opponentBoard.setDisable(true);
 				if(!twoPlayer) {
 					opponentNormalMove(personStage);
-				}else {
-					opponentBoard.setDisable(true);
-					//opponentNormalMove(personStage);
 				}
 			} else {
 				Rectangle deleteCell = null;
