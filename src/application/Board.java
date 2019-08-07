@@ -5,12 +5,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.scene.Parent;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
@@ -20,28 +17,31 @@ import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 
 /**
- * <p>Class where the Board is being Created and all the Cells are Placed.
+ * <p>
+ * Class where the Board is being Created and all the Cells are Placed.
  * </p>
+ * 
  * @author K3
  *
  */
 
 public class Board extends Parent {
 
-
 	private VBox rows = new VBox();
 
 	private boolean opponent = false;
 
-
 	public int amountOfships = 5;
 
 	/**
-	 * <p>This Constructor will help in the following
+	 * <p>
+	 * This Constructor will help in the following
 	 * </p>
 	 * 
-	 * @param opponent - Boolean to keep the track of Opponent Board or Player Board
-	 * @param handler - Handler registration  for each cell
+	 * @param opponent
+	 *            - Boolean to keep the track of Opponent Board or Player Board
+	 * @param handler
+	 *            - Handler registration for each cell
 	 */
 	public Board(boolean opponent, EventHandler<? super MouseEvent> handler) {
 
@@ -64,26 +64,34 @@ public class Board extends Parent {
 	}
 
 	/**
-	 * <p>Method that helps to Position the Ship.</p>
-	 * <p>Tasks carried out here are as follows :</p>
+	 * <p>
+	 * Method that helps to Position the Ship.
+	 * </p>
+	 * <p>
+	 * Tasks carried out here are as follows :
+	 * </p>
 	 * <ol>
-	 * <li>Considering the direction for placement.If true then placement of ship is vertical else its in the horizontal direction</li>
-	 * <li>Horizontal thus considering X coordinates and Y if vertical are considered for ship placement of various type.</li>
-	 * <li>Appropriate Placement of ships i.e Checking if the placement is on opponent grid then placement should not happen else place the type of ship specified on player 1 grid.</li>
+	 * <li>Considering the direction for placement.If true then placement of ship is
+	 * vertical else its in the horizontal direction</li>
+	 * <li>Horizontal thus considering X coordinates and Y if vertical are
+	 * considered for ship placement of various type.</li>
+	 * <li>Appropriate Placement of ships i.e Checking if the placement is on
+	 * opponent grid then placement should not happen else place the type of ship
+	 * specified on player 1 grid.</li>
 	 * <li>Checking the ship placement validity for horizontal ships.</li>
 	 * </ol>
 	 * 
-	 * @param ship - Ship Object which will be placed
-	 * @param x - Coordinate X of ship
-	 * @param y - Coordinate Y of ship
+	 * @param ship
+	 *            - Ship Object which will be placed
+	 * @param x
+	 *            - Coordinate X of ship
+	 * @param y
+	 *            - Coordinate Y of ship
 	 * @return if the ship is placed correctly or not
 	 */
 	public boolean positionShip(Ship ship, int x, int y, boolean moveableShip) {
 
-	
-
-
-		if(!moveableShip) {
+		if (!moveableShip) {
 			if (validPlacementShip(ship, x, y)) {
 				int length = ship.type;
 
@@ -98,10 +106,9 @@ public class Board extends Parent {
 							cell.setFill(Color.GREEN);
 							cell.setStroke(Color.BLACK);
 						}
-						
+
 					}
-				}
-				else {
+				} else {
 
 					for (int i = x; i < x + length; i++) {
 
@@ -121,8 +128,7 @@ public class Board extends Parent {
 				return true;
 			}
 			return false;
-		}else {
-
+		} else {
 
 			int length = ship.type;
 
@@ -140,8 +146,7 @@ public class Board extends Parent {
 					}
 
 				}
-			}
-			else {
+			} else {
 
 				for (int i = x; i < x + length; i++) {
 
@@ -164,19 +169,21 @@ public class Board extends Parent {
 
 	/**
 	 * This will get the Cell Object for a particular Coordinate
-	 * @param x -Coordinate X
-	 * @param y -Coordinate Y
+	 * 
+	 * @param x
+	 *            -Coordinate X
+	 * @param y
+	 *            -Coordinate Y
 	 * @return -gets the Cell Object
 	 */
 	public Cell getCell(int x, int y) {
 
-		return (Cell)((HBox)rows.getChildren().get(y)).getChildren().get(x);
+		return (Cell) ((HBox) rows.getChildren().get(y)).getChildren().get(x);
 
 	}
 
-
 	/**
-	 * This method will check and get the neighbors and checks for validity. 
+	 * This method will check and get the neighbors and checks for validity.
 	 * 
 	 * @param x
 	 * @param y
@@ -184,22 +191,15 @@ public class Board extends Parent {
 	 */
 	private Cell[] checkAndGetNeighbors(int x, int y) {
 
-		Point2D[] points = new Point2D[] {
-				new Point2D(x - 1, y),
-				new Point2D(x + 1, y),
-				new Point2D(x, y - 1),
-				new Point2D(x, y + 1),
-				new Point2D(x - 1, y - 1),
-				new Point2D(x + 1, y + 1),
-				new Point2D(x - 1, y + 1),
-				new Point2D(x + 1, y - 1)
-		};
+		Point2D[] points = new Point2D[] { new Point2D(x - 1, y), new Point2D(x + 1, y), new Point2D(x, y - 1),
+				new Point2D(x, y + 1), new Point2D(x - 1, y - 1), new Point2D(x + 1, y + 1), new Point2D(x - 1, y + 1),
+				new Point2D(x + 1, y - 1) };
 
 		List<Cell> neighbors = new ArrayList<Cell>();
 
 		for (Point2D p : points) {
 			if (isValidPoint(p)) {
-				neighbors.add(getCell((int)p.getX(), (int)p.getY()));
+				neighbors.add(getCell((int) p.getX(), (int) p.getY()));
 			}
 		}
 
@@ -207,10 +207,17 @@ public class Board extends Parent {
 	}
 
 	/**
-	 * Checking constraints i.e. all cells that form ships are within the grids, also tracking its associated neighboring cells are within the grid for further hitting related cells.
-	 * @param ship it takes type(size) of ship along with direction whether the ship placed is vertical or horizontal.
-	 * @param x X coordinate for placement of ship
-	 * @param y Y coordinate for placement of ship
+	 * Checking constraints i.e. all cells that form ships are within the grids,
+	 * also tracking its associated neighboring cells are within the grid for
+	 * further hitting related cells.
+	 * 
+	 * @param ship
+	 *            it takes type(size) of ship along with direction whether the ship
+	 *            placed is vertical or horizontal.
+	 * @param x
+	 *            X coordinate for placement of ship
+	 * @param y
+	 *            Y coordinate for placement of ship
 	 * @return
 	 */
 	public boolean validPlacementShip(Ship ship, int x, int y) {
@@ -218,7 +225,7 @@ public class Board extends Parent {
 		int length = ship.type;
 
 		if (ship.direction) {
-			//Checking the ship placement validity for vertical ships.
+			// Checking the ship placement validity for vertical ships.
 			for (int i = y; i < y + length; i++) {
 				if (!isValidPoint(x, i))
 					return false;
@@ -235,8 +242,7 @@ public class Board extends Parent {
 						return false;
 				}
 			}
-		}
-		else {
+		} else {
 
 			for (int i = x; i < x + length; i++) {
 				if (!isValidPoint(i, y))
@@ -261,26 +267,31 @@ public class Board extends Parent {
 
 	/**
 	 * Same method OverLoading Technique used as the parameters is a point Object
-	 * @param point takes x and y coordinate of the ship together as a 2D point and checks their placement validity i.e if they are properly placed within the grid,two ships coordinates do not interfere etc.
+	 * 
+	 * @param point
+	 *            takes x and y coordinate of the ship together as a 2D point and
+	 *            checks their placement validity i.e if they are properly placed
+	 *            within the grid,two ships coordinates do not interfere etc.
 	 * @return
 	 */
 	public boolean isValidPoint(Point2D point) {
 		return isValidPoint(point.getX(), point.getY());
 	}
 
-	//for Unit test purpose
-
+	// for Unit test purpose
 
 	/**
 	 * Method that will help to validate the Point if it is in the Board
-	 * @param x X coordinate of ship
-	 * @param y Y coordinate of ship
+	 * 
+	 * @param x
+	 *            X coordinate of ship
+	 * @param y
+	 *            Y coordinate of ship
 	 * @return
 	 */
 	private boolean isValidPoint(double x, double y) {
 		return x >= 0 && x < 10 && y >= 0 && y < 10;
 	}
-
 
 	public static class Cell extends Rectangle {
 
@@ -294,9 +305,13 @@ public class Board extends Parent {
 
 		/**
 		 * 
-		 * @param x X coordinate of ship 
-		 * @param y Y coordinate of ship
-		 * @param board checks for opponent or player 1 board and accordingly does further mouse events for playing the game.
+		 * @param x
+		 *            X coordinate of ship
+		 * @param y
+		 *            Y coordinate of ship
+		 * @param board
+		 *            checks for opponent or player 1 board and accordingly does further
+		 *            mouse events for playing the game.
 		 */
 		public Cell(int x, int y, Board board) {
 
@@ -310,9 +325,9 @@ public class Board extends Parent {
 
 		}
 
-
 		/**
-		 * This will help to check if the  was on target or not 
+		 * This will help to check if the was on target or not
+		 * 
 		 * @return boolean
 		 */
 		public boolean shoot() {
@@ -321,34 +336,27 @@ public class Board extends Parent {
 
 			/**
 			 * Prints new image of hitship.
-			 * <p>If one ship is destroyed completely it gets highlighted.
-			 * This is done by:
-			 * <code>
-			 * if (!ship.shipIsAlive()) {
-			 * for (Cell c : ship.shotCellsOfShips) {
-			 * c.setFill(Color.RED);
-			 * }
-			 * board.amountOfships--;
-			 * ship.shotCellsOfShips.clear();
+			 * <p>
+			 * If one ship is destroyed completely it gets highlighted. This is done by:
+			 * <code> if (!ship.shipIsAlive()) { for (Cell c : ship.shotCellsOfShips) {
+			 * c.setFill(Color.RED); } board.amountOfships--; ship.shotCellsOfShips.clear();
 			 * </p>
 			 */
 
-			Image hitFile=null;
+			Image hitFile = null;
 			try {
-				hitFile = new Image("file:///"+hitRate.getCanonicalFile()+"/hitimg.png");
+				hitFile = new Image("file:///" + hitRate.getCanonicalFile() + "/hitimg.png");
 
-				/** 
-				 @throws io exception
+				/**
+				 * @throws io
+				 *             exception
 				 */
 			} catch (IOException e) {
 
 				e.printStackTrace();
 			}
 
-
-
 			setFill(Color.BLACK);
-
 
 			if (ship != null) {
 				targetHit = true;
@@ -356,25 +364,22 @@ public class Board extends Parent {
 				ship.shotCellsOfShips.add(this);
 				setFill(new ImagePattern(hitFile));
 
-
 				if (!ship.shipIsAlive()) {
 					for (Cell c : ship.shotCellsOfShips) {
 
 						c.setFill(Color.RED);
 					}
 
-
-					if(board.opponent) {
-						shipDestructionMessage("OPPONENT",1000,600);
-					}
-					else {
-						shipDestructionMessage("PLAYER",500,600);
+					if (board.opponent) {
+						Battle.shipDestructionMessage("OPPONENT", 1000, 600);
+					} else {
+						Battle.shipDestructionMessage("PLAYER", 500, 600);
 					}
 
-					if(board.opponent)
-						Battle.player1Score +=20;
+					if (board.opponent)
+						Battle.player1Score += 20;
 					else
-						Battle.player2Score +=20;
+						Battle.player2Score += 20;
 
 					board.amountOfships--;
 					ship.shotCellsOfShips.clear();
@@ -385,29 +390,6 @@ public class Board extends Parent {
 			return false;
 		}
 
-
-	}
-	/**
-	 * <p>This method generated an alert when a ship is sunk 
-	 * on either player board or opponent board
-	 * </p>
-	 * @param s-this is to denote player/opponent
-	 * @param x-x coordinate of the alert position
-	 * @param y-y coordinate of the alert position
-	 */
-	private static void shipDestructionMessage(String s,double x, double y) {
-		Platform.runLater(new Runnable() {
-			  @Override public void run() {
-				  Alert shipSinkAlert = new Alert(AlertType.WARNING);
-					shipSinkAlert.setTitle("SHIP SUNK");
-					shipSinkAlert.setHeaderText(null);
-					shipSinkAlert.setContentText(s+" ship has been destroyed");
-					shipSinkAlert.setX(x);
-					shipSinkAlert.setY(y);
-					shipSinkAlert.showAndWait();                      
-			  }
-			});
-		
 	}
 
 }
