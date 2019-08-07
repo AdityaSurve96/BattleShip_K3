@@ -889,9 +889,12 @@ public class Battle extends Application {
 					checkTimeForSug = false;
 				}
 
-				// opponentBoard.setDisable(true);
+				
 				if (!twoPlayer) {
 					opponentNormalMove(personStage);
+				}else {
+					opponentBoard.setDisable(true);
+					//opponentNormalMove(personStage);
 				}
 			} else {
 				Rectangle deleteCell = null;
