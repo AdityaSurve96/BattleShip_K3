@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.scene.Parent;
@@ -79,62 +80,63 @@ public class Board extends Parent {
 	 */
 	public boolean positionShip(Ship ship, int x, int y, boolean moveableShip) {
 
-		
-		
-		
+	
+
+
 		if(!moveableShip) {
 			if (validPlacementShip(ship, x, y)) {
 				int length = ship.type;
-	
+
 				if (ship.direction) {
-					
+
 					for (int i = y; i < y + length; i++) {
-	
+
 						Cell cell = getCell(x, i);
 						cell.ship = ship;
-						
+
 						if (!opponent) {
 							cell.setFill(Color.GREEN);
 							cell.setStroke(Color.BLACK);
 						}
-	
+						
 					}
 				}
 				else {
-	
+
 					for (int i = x; i < x + length; i++) {
-	
+
 						Cell cell = getCell(i, y);
 						cell.ship = ship;
-	
+
 						if (!opponent) {
-	
+
 							cell.setFill(Color.GREEN);
 							cell.setStroke(Color.BLACK);
-	
+
 						}
-	
+
 					}
 				}
-	
+
 				return true;
 			}
 			return false;
 		}else {
-			
-			
+
+
 			int length = ship.type;
-			
+
 			if (ship.direction) {
-				
+
 				for (int i = y; i < y + length; i++) {
 
 					Cell cell = getCell(x, i);
 					cell.ship = null;
-					
+
 					if (!opponent) {
 						cell.setFill(Color.WHITE);
 						cell.setStroke(Color.BLACK);
+
 					}
 
 				}
@@ -157,7 +159,7 @@ public class Board extends Parent {
 			}
 			return true;
 		}
-		
+
 	}
 
 	/**
@@ -235,7 +237,7 @@ public class Board extends Parent {
 			}
 		}
 		else {
-			
+
 			for (int i = x; i < x + length; i++) {
 				if (!isValidPoint(i, y))
 					return false;
@@ -265,9 +267,9 @@ public class Board extends Parent {
 	public boolean isValidPoint(Point2D point) {
 		return isValidPoint(point.getX(), point.getY());
 	}
-	
+
 	//for Unit test purpose
-	
+
 
 	/**
 	 * Method that will help to validate the Point if it is in the Board
@@ -314,7 +316,7 @@ public class Board extends Parent {
 		 * @return boolean
 		 */
 		public boolean shoot() {
-			
+
 			File hitRate = new File(".");
 
 			/**
@@ -333,20 +335,20 @@ public class Board extends Parent {
 
 			Image hitFile=null;
 			try {
-				hitFile = new Image("file:///"+hitRate.getCanonicalFile()+"/hitShip.png");
+				hitFile = new Image("file:///"+hitRate.getCanonicalFile()+"/hitimg.png");
 
 				/** 
 				 @throws io exception
 				 */
 			} catch (IOException e) {
-				
+
 				e.printStackTrace();
 			}
 
 
-			
+
 			setFill(Color.BLACK);
-		
+
 
 			if (ship != null) {
 				targetHit = true;
@@ -360,7 +362,7 @@ public class Board extends Parent {
 
 						c.setFill(Color.RED);
 					}
-					
+
 
 					if(board.opponent) {
 						shipDestructionMessage("OPPONENT",1000,600);
@@ -368,22 +370,22 @@ public class Board extends Parent {
 					else {
 						shipDestructionMessage("PLAYER",500,600);
 					}
-					
+
 					if(board.opponent)
 						Battle.player1Score +=20;
 					else
 						Battle.player2Score +=20;
-					
+
 					board.amountOfships--;
 					ship.shotCellsOfShips.clear();
 				}
 				return true;
 			}
-			
+
 			return false;
 		}
-		
-		
+
+
 	}
 	/**
 	 * <p>This method generated an alert when a ship is sunk 
@@ -394,14 +396,18 @@ public class Board extends Parent {
 	 * @param y-y coordinate of the alert position
 	 */
 	private static void shipDestructionMessage(String s,double x, double y) {
+		Platform.runLater(new Runnable() {
+			  @Override public void run() {
+				  Alert shipSinkAlert = new Alert(AlertType.WARNING);
+					shipSinkAlert.setTitle("SHIP SUNK");
+					shipSinkAlert.setHeaderText(null);
+					shipSinkAlert.setContentText(s+" ship has been destroyed");
+					shipSinkAlert.setX(x);
+					shipSinkAlert.setY(y);
+					shipSinkAlert.showAndWait();                      
+			  }
+			});
 		
-		Alert shipSinkAlert = new Alert(AlertType.WARNING);
-		shipSinkAlert.setTitle("SHIP SUNK");
-		shipSinkAlert.setHeaderText(null);
-		shipSinkAlert.setContentText(s+" ship has been destroyed");
-		shipSinkAlert.setX(x);
-		shipSinkAlert.setY(y);
-		shipSinkAlert.showAndWait();
 	}
 
 }
