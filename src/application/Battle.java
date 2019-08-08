@@ -1385,6 +1385,7 @@ public class Battle extends Application {
 			if (numberOfShips == 0) {
 				startGame();
 				adjust.setDisable(true);
+				p2p.setDisable(true);
 			}
 			else {
 				try {
@@ -1449,6 +1450,13 @@ public class Battle extends Application {
 				startGame();
 				adjust.setDisable(true);
 				st.setDisable(true);
+			}
+			else {
+				try {
+					throw new StartGameException("Cannot start 2 player game till player 1 places all the ships");
+				} catch (Exception e2) {
+					System.out.println("Checked Exception "+e2);
+				}
 			}
 		});
 
