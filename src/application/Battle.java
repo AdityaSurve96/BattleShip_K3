@@ -620,6 +620,13 @@ public class Battle extends Application {
 					}
 
 				} else {
+					try {
+						if (!firstPlayerBoard.contains(localX, localY)) {
+							throw new ValidShipPlacementException("Ship has not been placed Properly");
+						}
+					} catch (ValidShipPlacementException e) {
+						System.out.println("Checked Exception "+ e);
+					}
 					backtoHome(shipLength, selectedShip);
 				}
 			}
