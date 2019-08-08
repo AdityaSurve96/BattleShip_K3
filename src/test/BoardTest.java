@@ -22,42 +22,8 @@ public class BoardTest {
 	static Board board;
 	static Cell cell;
 	
-	/**
-	 * @throws java.lang.Exception
-	 */
-	@BeforeClass
-	public static void setUpBeforeClass() throws Exception {
-	}
+	
 
-	/**
-	 * @throws java.lang.Exception
-	 */
-	@Before
-	public void setUp() throws Exception {
-	}
-
-	/**
-	 * @throws java.lang.Exception
-	 */
-	@After
-	public void tearDown() throws Exception {
-	}
-	
-	
-	@Before
-	public  void check() {
-		board = new Board(false, null);
-	
-		cell = new Cell(3, 4,board);
-		
-	
-	}
-	
-	@After
-	public  void clear() {
-		board =null;
-		cell = null;
-	}
 	
 	
 	/**
