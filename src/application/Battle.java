@@ -1389,10 +1389,10 @@ public class Battle extends Application {
 			else {
 				try {
 					if(numberOfShips!=0) {
-						throw new StartGameException("Cannot Start Game till Player places all the ships");
+						throw new StartGameException("Cannot start single player game till player places all the ships");
 					}
 				} catch (Exception e1) {
-					System.out.println("Checked Exception"+ e1);
+					System.out.println("Checked Exception "+ e1);
 				}
 			}
 		});
@@ -1402,7 +1402,7 @@ public class Battle extends Application {
 		});
 
 		doNotCheat.setOnAction(e -> {
-
+			
 			seeOpponentShips(opponentBoard);
 
 			isCheating = !isCheating;
@@ -1443,10 +1443,12 @@ public class Battle extends Application {
 
 		p2p.setOnAction(e -> {
 			if (numberOfShips == 0) {
+				System.out.println("2 Player Mode Started");
 				twoPlayer = true;
 				runInit();
 				startGame();
-
+				adjust.setDisable(true);
+				st.setDisable(true);
 			}
 		});
 
