@@ -176,6 +176,26 @@ public class BoardTest {
 		
 	}
 
+	@Test
+	public void testShoot1() {
+		
+		Cell c = new Cell(8, 1, board);
+		c.ship = null;
+		boolean isShipHit =c.shoot();
+		assertFalse(isShipHit);
+		
+	}
+
+	
+	@Test
+	public void testShoot3() {
+		
+		Cell c = new Cell(3, 1, board);
+		c.ship = null;
+		boolean isShipHit =c.shoot();
+		assertFalse(isShipHit);
+		
+	}
 
 	@Test
 	public void testShoot2() {
@@ -201,6 +221,23 @@ public class BoardTest {
 		Cell ce = board.getCell(9, 9);
 		assertNotNull(ce);
 	}
+	
+	
+	@Test
+	public void testGetCell3() {
+		
+		Cell ce = board.getCell(4, 5);
+		assertNotNull(ce);
+	}
+	
+	
+	@Test
+	public void testGetCell4() {
+		
+		Cell ce = board.getCell(5, 5);
+		assertNotNull(ce);
+	}
+	
 
 	@Test
 	public void testValidPlacementMethod() {
@@ -209,6 +246,22 @@ public class BoardTest {
 		board.getCell(2, 8).ship = s1;
 		boolean valid =board.validPlacementShip(s, 1, 8);
 		assertFalse(valid);
+	}
+	
+	
+	@Test
+	public void testValidPlacementMethodValid() {
+		Ship s = new Ship(3, false);
+		boolean valid =board.validPlacementShip(s, 1, 8);
+		assertTrue(valid);
+	}
+	
+	
+	@Test
+	public void testValidPlacementMethodValidCheck() {
+		Ship s = new Ship(4, true);
+		boolean valid =board.validPlacementShip(s, 1, 5);
+		assertTrue(valid);
 	}
 	
 	@Test
