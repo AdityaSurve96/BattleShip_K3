@@ -20,6 +20,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import Exceptions.BeyondGridBoundsException;
+import Exceptions.DataNotSentException;
+import Exceptions.InvalidDataReceivedException;
 import Exceptions.InvalidShipPlacementException;
 import Exceptions.StartGameException;
 import application.Board.Cell;
@@ -620,7 +622,7 @@ public class Battle extends Application {
 					} else {
 						try {
 							if ( !(firstPlayerBoard.positionShip(new Ship(shipLength, isRotated == true), x, y, false)) ) {
-								throw new InvalidShipPlacementException("Ship has not been placed Properly - Ships should not overlap each other");
+								throw new InvalidShipPlacementException("Ship has not been placed Properly - Ships should not touch/overlap each other");
 							}
 						} catch (InvalidShipPlacementException e) {
 							System.out.println("Checked Exception "+ e);
@@ -1502,7 +1504,7 @@ public class Battle extends Application {
 								Integer.parseInt(udpTemp[3].trim()));
 					}
 
-				} else {
+				} else if(receivedData[0].trim().equals("shootShip")) {
 					ArrayList<Cell> udpCell = new ArrayList<Cell>();
 					String udpData[] = receivedData[1].split(",");
 
@@ -1519,9 +1521,16 @@ public class Battle extends Application {
 						shootMutliPlayerSal(udpCell);
 					}
 				}
+				else {
+					throw new InvalidDataReceivedException("Data received is invalid");
+				}
 
 			}
-		} catch (SocketException e1) {
+		}
+		catch (InvalidDataReceivedException e) {
+			System.out.println("Checked Exception "+e);
+		} 
+		catch (SocketException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		} catch (IOException e) {
@@ -1636,7 +1645,7 @@ public class Battle extends Application {
 		DatagramSocket aSocket = null;
 		try {
 			aSocket = new DatagramSocket();
-
+			
 			InetAddress aHost = InetAddress.getByName("localhost");
 
 			// Sequencer port number
@@ -1644,13 +1653,21 @@ public class Battle extends Application {
 
 			DatagramPacket request = new DatagramPacket(message, message.length, aHost, serverPort);// request packet
 			aSocket.send(request);// request sent out
+			
+			if(request.getLength()==0) {
+				throw new DataNotSentException("Data could not be sent over the connection");
+			}
 			if (textToSend.length() > 50) {
 				System.out.println("Board info Sent");
 			} else {
 				System.out.println("HIT coordinates sent");
 			}
 
-		} catch (IOException e) {
+		}
+		catch (DataNotSentException e) {
+			System.out.println("Checked Exception "+e);
+		}
+		catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
