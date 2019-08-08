@@ -19,6 +19,9 @@ import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import Exceptions.BeyondGridBoundsException;
+import Exceptions.InvalidShipPlacementException;
+import Exceptions.StartGameException;
 import application.Board.Cell;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -615,6 +618,13 @@ public class Battle extends Application {
 						}
 
 					} else {
+						try {
+							if ( !(firstPlayerBoard.positionShip(new Ship(shipLength, isRotated == true), x, y, false)) ) {
+								throw new InvalidShipPlacementException("Ship has not been placed Properly - Ships should not overlap each other");
+							}
+						} catch (InvalidShipPlacementException e) {
+							System.out.println("Checked Exception "+ e);
+						}
 
 						backtoHome(shipLength, selectedShip);
 
@@ -622,10 +632,10 @@ public class Battle extends Application {
 
 				} else {
 					try {
-						if (!firstPlayerBoard.contains(localX, localY)) {
-							throw new ValidShipPlacementException("Ship has not been placed Properly");
+						if (! (firstPlayerBoard.contains(localX, localY)) ) {
+							throw new BeyondGridBoundsException("Ship has not been released within the board Coordinate bounds");
 						}
-					} catch (ValidShipPlacementException e) {
+					} catch (BeyondGridBoundsException e) {
 						System.out.println("Checked Exception "+ e);
 					}
 					backtoHome(shipLength, selectedShip);
@@ -1370,10 +1380,21 @@ public class Battle extends Application {
 			System.exit(0);
 		});
 
+
 		st.setOnAction(e -> {
-			if (numberOfShips == 0)
+			if (numberOfShips == 0) {
 				startGame();
-			adjust.setDisable(true);
+				adjust.setDisable(true);
+			}
+			else {
+				try {
+					if(numberOfShips!=0) {
+						throw new StartGameException("Cannot Start Game till Player places all the ships");
+					}
+				} catch (Exception e1) {
+					System.out.println("Checked Exception"+ e1);
+				}
+			}
 		});
 
 		reset.setOnAction(e -> {
