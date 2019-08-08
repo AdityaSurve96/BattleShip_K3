@@ -21,6 +21,7 @@ import java.util.logging.Logger;
 
 import Exceptions.BeyondGridBoundsException;
 import Exceptions.DataNotSentException;
+import Exceptions.InvalidButtonPressException;
 import Exceptions.InvalidDataReceivedException;
 import Exceptions.InvalidShipPlacementException;
 import Exceptions.StartGameException;
@@ -483,15 +484,15 @@ public class Battle extends Application {
 	 * ship3.setFill(img); ship4.setFill(img); ship5.setFill(img); //}
 	 * 
 	 *//**
-		 * @throws io
-		 *             exception
-		 *//*
-			 * } catch (IOException e) {
-			 * 
-			 * e.printStackTrace(); }
-			 * 
-			 * }
-			 */
+	 * @throws io
+	 *             exception
+	 *//*
+	 * } catch (IOException e) {
+	 * 
+	 * e.printStackTrace(); }
+	 * 
+	 * }
+	 */
 
 	/**
 	 * <p>
@@ -887,7 +888,7 @@ public class Battle extends Application {
 		for (Cell cell : cellHits) {
 			if (cell.targetHit)
 				return;
-			
+
 			if(twoPlayer)
 				udpSend("shootShip->(" + cell.row + "-" + cell.col + ")");
 			// System.out.println("Player Shooting");
@@ -979,16 +980,16 @@ public class Battle extends Application {
 	public void shootSalvationShip(ArrayList<Cell> cellHits, Stage personStage) {
 		currenttime = Integer.parseInt(timer1.getText().split(":")[1]);
 		String sendString ="shootShip->";
-		
+
 		for (Cell cell : cellHits) {
 			sendString = sendString + "(" + cell.row + "-" + cell.col + "),";
 		}
-		
+
 		if(twoPlayer)
 			udpSend(sendString);
-		
+
 		for (Cell cell : cellHits) {
-			
+
 			System.out.println("Player Shooting");
 			opponentTurn = !cell.shoot();
 			System.out.println("Player Shot done");
@@ -1010,8 +1011,8 @@ public class Battle extends Application {
 
 			}
 		}
-		
-		
+
+
 		displayScore("player1");
 
 		previoustime = currenttime;
@@ -1405,7 +1406,7 @@ public class Battle extends Application {
 		});
 
 		doNotCheat.setOnAction(e -> {
-			
+
 			seeOpponentShips(opponentBoard);
 
 			isCheating = !isCheating;
@@ -1425,19 +1426,36 @@ public class Battle extends Application {
 		});
 
 		save.setOnAction(event -> {
-			FileChooser fileChooser = new FileChooser();
-			timelinePlayer1.pause();
-			timelinePlayer2.pause();
-			// Set extension filter for text files
-			FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
-			fileChooser.getExtensionFilters().add(extFilter);
+			if(numberOfShips ==5) {
+				try {
 
-			// Show save file dialog
-			File file = fileChooser.showSaveDialog(primaryStage);
+					throw new InvalidButtonPressException("Save cannot be pressed when both boards are empty");
 
-			if (file != null) {
-				saveTextToFile(file);
+
+				} 	catch (InvalidButtonPressException e) {
+					System.out.println("Checked Exception "+e);
+				}
+
 			}
+			else {
+
+				FileChooser fileChooser = new FileChooser();
+				timelinePlayer1.pause();
+				timelinePlayer2.pause();
+				// Set extension filter for text files
+				FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
+				fileChooser.getExtensionFilters().add(extFilter);
+
+				// Show save file dialog
+				File file = fileChooser.showSaveDialog(primaryStage);
+
+				if (file != null) {
+					saveTextToFile(file);
+
+				}
+			}
+
+
 		});
 
 		adjust.setOnAction(e -> {
@@ -1538,8 +1556,8 @@ public class Battle extends Application {
 			e.printStackTrace();
 		}
 	}
-	
-	
+
+
 	private void shootMultiPlayer(ArrayList<Cell> udpCell) {
 		// TODO Auto-generated method stub
 		for (Cell cell : udpCell) {
@@ -1605,47 +1623,47 @@ public class Battle extends Application {
 		}
 	}
 
-	
+
 	private void shootMutliPlayerSal(ArrayList<Cell> udpCell) {
-		
-	for (Cell cell : udpCell) {
 
-		System.out.println("Opponent Shooting");
-		opponentTurn = cell.shoot();
-		System.out.println("Opponent shot done");
-		if (opponentTurn) {
-			player2Score += 5;
-			displayScore("player2");
+		for (Cell cell : udpCell) {
+
+			System.out.println("Opponent Shooting");
+			opponentTurn = cell.shoot();
+			System.out.println("Opponent shot done");
+			if (opponentTurn) {
+				player2Score += 5;
+				displayScore("player2");
+			}
+			if (firstPlayerBoard.amountOfships == 0) {
+
+				String s = "You Lost This Game to the Computer";
+				finalResultDisplay(s, global_stage);
+
+			}
+
 		}
-		if (firstPlayerBoard.amountOfships == 0) {
+		timelinePlayer2.pause();
 
-			String s = "You Lost This Game to the Computer";
-			finalResultDisplay(s, global_stage);
-
-		}
+		timelinePlayer1.play();
+		numberOfShots.clear();
+		hits = 1;
+		opponentBoard.setDisable(false);
 
 	}
-	timelinePlayer2.pause();
 
-	timelinePlayer1.play();
-	numberOfShots.clear();
-	hits = 1;
-	opponentBoard.setDisable(false);
-	
-}
-	
-	
-	
-	
-	
-	
+
+
+
+
+
 	private void udpSend(String textToSend) {
 		// TODO Auto-generated method stub
 		byte[] message = textToSend.getBytes();
 		DatagramSocket aSocket = null;
 		try {
 			aSocket = new DatagramSocket();
-			
+
 			InetAddress aHost = InetAddress.getByName("localhost");
 
 			// Sequencer port number
@@ -1653,7 +1671,7 @@ public class Battle extends Application {
 
 			DatagramPacket request = new DatagramPacket(message, message.length, aHost, serverPort);// request packet
 			aSocket.send(request);// request sent out
-			
+
 			if(request.getLength()==0) {
 				throw new DataNotSentException("Data could not be sent over the connection");
 			}
