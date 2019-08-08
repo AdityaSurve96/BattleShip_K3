@@ -25,9 +25,6 @@ public class ShipTest {
 		
 	}
 	
-	/**
-	 * Test method for {@link ship#alivesucess()}.
-	 */
 	
 	@Test
 	public void testShipIsAliveSuccess() {

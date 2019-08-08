@@ -23,7 +23,21 @@ public class BoardTest {
 	static Cell cell;
 	
 	
-
+	@Before
+	public  void check() {
+		board = new Board(false, null);
+	
+		cell = new Cell(3, 4,board);
+		
+	
+	}
+	
+	@After
+	public  void clear() {
+		board =null;
+		cell = null;
+	}
+	
 	
 	
 	/**
@@ -111,10 +125,16 @@ public class BoardTest {
 		
 		Ship s = new Ship(5, false);
 		board.positionShip(s, 5, 4 , false);
-		
-		
 		boolean removed = board.positionShip(s, 5, 4, true);
+		assertTrue(removed);
+	}
+	
+	@Test
+	public void testMovableShip2() {
 		
+		Ship s = new Ship(1, false);
+		board.positionShip(s, 0, 0 , false);
+		boolean removed = board.positionShip(s, 0, 0, true);
 		assertTrue(removed);
 	}
 	
@@ -122,24 +142,64 @@ public class BoardTest {
 	public void testInvMovableShip() {
 		
 		Ship s1 = new Ship(3, false);
-		board.positionShip(s1, 3, 6 , false);
-		
-		
-		
-		
-		assertNull(cell.ship);
+		board.positionShip(s1, 5, 4 , false);
+		boolean removed = board.positionShip(s1, 3, 6 , true);
+		assertFalse(removed);
 	}
+	
+	
 
 	@Test
 	public void testInvMovableShip2() {
 		
 		Ship s1 = new Ship(3, false);
+		boolean removed = board.positionShip(s1, 5, 6, true);
+		assertFalse(removed);
+	}
+	
+	@Test
+	public void testInvMovableShip3() {
 		
+		Ship s1 = new Ship(1, false);
+		board.positionShip(s1, 9, 9 , false);
+		boolean removed = board.positionShip(s1, 8, 9, true);
+		assertFalse(removed);
+	}
+	
+	@Test
+	public void testShoot() {
 		
+		Cell c = new Cell(6, 1, board);
+		c.ship = null;
+		boolean isShipHit =c.shoot();
+		assertFalse(isShipHit);
 		
-		board.positionShip(s1, 5, 6, true);
+	}
+
+
+	@Test
+	public void testShoot2() {
 		
-		assertNull(cell.ship);
+		Cell c = new Cell(0, 5, board);
+		c.ship = null;
+		boolean isShipHit =c.shoot();
+		int a = board.amountOfships;
+		assertEquals(5, a);
+	}
+	
+	@Test
+	public void testGetCell() {
+		
+		Cell ce = board.getCell(3, 9);
+		assertNotNull(ce);
+	}
+	
+	
+	@Test
+	public void testGetCell2() {
+		
+		Cell ce = board.getCell(10, 10);
+		assertNotNull(ce);
 	}
 
 	

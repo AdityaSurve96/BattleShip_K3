@@ -137,12 +137,19 @@ public class Board extends Parent {
 				for (int i = y; i < y + length; i++) {
 
 					Cell cell = getCell(x, i);
-					cell.ship = null;
+					
+					if(cell.ship!=null) {
+						cell.ship = null;
 
-					if (!opponent) {
-						cell.setFill(Color.WHITE);
-						cell.setStroke(Color.BLACK);
+						if (!opponent) {
 
+							cell.setFill(Color.WHITE);
+							cell.setStroke(Color.BLACK);
+
+						}
+					}
+					else {
+						return false;
 					}
 
 				}
@@ -151,13 +158,19 @@ public class Board extends Parent {
 				for (int i = x; i < x + length; i++) {
 
 					Cell cell = getCell(i, y);
-					cell.ship = null;
+					
+					if(cell.ship!=null) {
+						cell.ship = null;
 
-					if (!opponent) {
+						if (!opponent) {
 
-						cell.setFill(Color.WHITE);
-						cell.setStroke(Color.BLACK);
+							cell.setFill(Color.WHITE);
+							cell.setStroke(Color.BLACK);
 
+						}
+					}
+					else {
+						return false;
 					}
 
 				}
@@ -191,9 +204,17 @@ public class Board extends Parent {
 	 */
 	private Cell[] checkAndGetNeighbors(int x, int y) {
 
-		Point2D[] points = new Point2D[] { new Point2D(x - 1, y), new Point2D(x + 1, y), new Point2D(x, y - 1),
-				new Point2D(x, y + 1), new Point2D(x - 1, y - 1), new Point2D(x + 1, y + 1), new Point2D(x - 1, y + 1),
-				new Point2D(x + 1, y - 1) };
+		Point2D[] points = new Point2D[] {
+
+				new Point2D(x - 1, y), 
+				new Point2D(x + 1, y), 
+				new Point2D(x, y - 1),
+				new Point2D(x, y + 1), 
+				new Point2D(x - 1, y - 1), 
+				new Point2D(x + 1, y + 1), 
+				new Point2D(x - 1, y + 1),
+				new Point2D(x + 1, y - 1) 
+		};
 
 		List<Cell> neighbors = new ArrayList<Cell>();
 
@@ -332,36 +353,41 @@ public class Board extends Parent {
 		 */
 		public boolean shoot() {
 
-			File hitRate = new File(".");
 
-			/**
-			 * Prints new image of hitship.
-			 * <p>
-			 * If one ship is destroyed completely it gets highlighted. This is done by:
-			 * <code> if (!ship.shipIsAlive()) { for (Cell c : ship.shotCellsOfShips) {
-			 * c.setFill(Color.RED); } board.amountOfships--; ship.shotCellsOfShips.clear();
-			 * </p>
-			 */
-
-			Image hitFile = null;
-			try {
-				hitFile = new Image("file:///" + hitRate.getCanonicalFile() + "/hitimg.png");
-
-				/**
-				 * @throws io
-				 *             exception
-				 */
-			} catch (IOException e) {
-
-				e.printStackTrace();
-			}
 
 			setFill(Color.BLACK);
 
 			if (ship != null) {
+				
 				targetHit = true;
 				ship.shipPartHit();
 				ship.shotCellsOfShips.add(this);
+				
+				File hitRate = new File(".");
+
+				/**
+				 * Prints new image of hitship.
+				 * <p>
+				 * If one ship is destroyed completely it gets highlighted. This is done by:
+				 * <code> if (!ship.shipIsAlive()) { for (Cell c : ship.shotCellsOfShips) {
+				 * c.setFill(Color.RED); } board.amountOfships--; ship.shotCellsOfShips.clear();
+				 * </p>
+				 */
+
+				Image hitFile = null;
+				try {
+					hitFile = new Image("file:///" + hitRate.getCanonicalFile() + "/hitimg.png");
+
+					/**
+					 * @throws io
+					 *             exception
+					 */
+				} catch (IOException e) {
+
+					e.printStackTrace();
+				}
+
+			
 				setFill(new ImagePattern(hitFile));
 
 				if (!ship.shipIsAlive()) {
