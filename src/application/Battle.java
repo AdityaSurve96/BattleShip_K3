@@ -1481,7 +1481,7 @@ public class Battle extends Application {
 		DatagramSocket aSocket = null;
 
 		try {
-			aSocket = new DatagramSocket(6000);
+			aSocket = new DatagramSocket(6001);
 
 			while (true) {
 				Arrays.fill(buffer, (byte) 0);
@@ -1490,7 +1490,7 @@ public class Battle extends Application {
 
 				aSocket.receive(reply);
 			
-				System.out.println("Player1 Playing Here");
+				System.out.println("Darshan Playing Here");
 				String receivedData[] = data(buffer).toString().split("->");
 
 				if (receivedData[0].trim().equals("playerShips")) {
@@ -1507,13 +1507,13 @@ public class Battle extends Application {
 					String udpData[] = receivedData[1].split(",");
 
 					for (int i = 0; i < udpData.length; i++) {
-						String udpTemp[] = udpData[i].trim().substring(1, udpData[1].length() - 1).split("-");
+						String udpTemp[] = udpData[i].trim().substring(1, udpData[i].length() - 1).split("-");
 						Cell c = firstPlayerBoard.getCell(Integer.parseInt(udpTemp[0].trim()),
 								Integer.parseInt(udpTemp[1].trim()));
 						udpCell.add(c);
 
 					}
-					if(udpCell.size()==1)
+					if(udpCell.size()==1 && !salvation)
 						shootMultiPlayer(udpCell);
 					else{
 						shootMutliPlayerSal(udpCell);
@@ -1626,10 +1626,10 @@ public class Battle extends Application {
 		try {
 			aSocket = new DatagramSocket();
 
-			InetAddress aHost = InetAddress.getByName("localhost");
+			InetAddress aHost = InetAddress.getByName("192.168.43.29");
 
 			// Sequencer port number
-			int serverPort = 6001;
+			int serverPort = 6000;
 
 			DatagramPacket request = new DatagramPacket(message, message.length, aHost, serverPort);// request packet
 			
