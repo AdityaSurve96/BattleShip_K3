@@ -81,7 +81,7 @@ public class BoardTest {
 	
 	@Test
 	public void testPositionShip() {
-		Ship s = new Ship(5, true);
+		Ship s = new Ship(2, true);
 		
 		boolean placed = board.positionShip(s, 3, 5, false);
 		
@@ -198,10 +198,29 @@ public class BoardTest {
 	@Test
 	public void testGetCell2() {
 		
-		Cell ce = board.getCell(10, 10);
+		Cell ce = board.getCell(9, 9);
 		assertNotNull(ce);
 	}
 
+	@Test
+	public void testValidPlacementMethod() {
+		Ship s = new Ship(3, false);
+		Ship s1 = new Ship(2,true);
+		board.getCell(2, 8).ship = s1;
+		boolean valid =board.validPlacementShip(s, 1, 8);
+		assertFalse(valid);
+	}
+	
+	@Test
+	public void testValidPlacementMethod2() {
+		
+		Ship s1 = new Ship(3,false);
+		board.positionShip(s1, 7, 9, false);
+		Ship s = new Ship(5, false);
+		boolean valid =board.validPlacementShip(s, 3, 9);
+		assertFalse(valid);
+	}
+	
 	
 
 }

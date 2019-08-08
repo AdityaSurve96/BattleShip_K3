@@ -101,6 +101,7 @@ public class Board extends Parent {
 
 						Cell cell = getCell(x, i);
 						cell.ship = ship;
+						System.out.println("COl : "+ cell.col+" ROW :"+cell.row+" "+x+" "+i );
 
 						if (!opponent) {
 							cell.setFill(Color.GREEN);
@@ -114,7 +115,7 @@ public class Board extends Parent {
 
 						Cell cell = getCell(i, y);
 						cell.ship = ship;
-
+						System.out.println("COl : "+ cell.col+" ROW :"+cell.row+" "+i+" "+y);
 						if (!opponent) {
 
 							cell.setFill(Color.GREEN);
