@@ -125,6 +125,18 @@ public class BoardTest {
 		board.positionShip(s1, 3, 6 , false);
 		
 		
+		
+		
+		assertNull(cell.ship);
+	}
+
+	@Test
+	public void testInvMovableShip2() {
+		
+		Ship s1 = new Ship(3, false);
+		
+		
+		
 		board.positionShip(s1, 5, 6, true);
 		
 		assertNull(cell.ship);
