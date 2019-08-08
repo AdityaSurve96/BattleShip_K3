@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import Exceptions.ShipNullCheckException;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.scene.Parent;
@@ -101,7 +102,7 @@ public class Board extends Parent {
 
 						Cell cell = getCell(x, i);
 						cell.ship = ship;
-						System.out.println("COl : "+ cell.col+" ROW :"+cell.row+" "+x+" "+i );
+						
 
 						if (!opponent) {
 							cell.setFill(Color.GREEN);
@@ -115,7 +116,7 @@ public class Board extends Parent {
 
 						Cell cell = getCell(i, y);
 						cell.ship = ship;
-						System.out.println("COl : "+ cell.col+" ROW :"+cell.row+" "+i+" "+y);
+						
 						if (!opponent) {
 
 							cell.setFill(Color.GREEN);
@@ -265,7 +266,7 @@ public class Board extends Parent {
 				}
 			}
 		} else {
-
+			// Checking the ship placement validity for horizontal ships.
 			for (int i = x; i < x + length; i++) {
 				if (!isValidPoint(i, y))
 					return false;
@@ -299,8 +300,6 @@ public class Board extends Parent {
 	public boolean isValidPoint(Point2D point) {
 		return isValidPoint(point.getX(), point.getY());
 	}
-
-	// for Unit test purpose
 
 	/**
 	 * Method that will help to validate the Point if it is in the Board
@@ -412,6 +411,14 @@ public class Board extends Parent {
 					ship.shotCellsOfShips.clear();
 				}
 				return true;
+			}
+			else if(ship == null) {
+				try {
+					throw new ShipNullCheckException("There is no ship present in this cell");
+				} catch ( ShipNullCheckException e) {
+					System.out.println("Unchecked Exception "+ e);
+				}
+				
 			}
 
 			return false;

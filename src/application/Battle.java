@@ -430,7 +430,6 @@ public class Battle extends Application {
 						numberOfShots.clear();
 					}
 				} else {
-					// udpSend("shootShip->(" + cell.row + "-" + cell.col + ")");
 
 					previoustime2 = Integer.parseInt(timer2.getText().split(":")[0]) * 60
 							+ Integer.parseInt(timer2.getText().split(":")[1]);
@@ -476,23 +475,7 @@ public class Battle extends Application {
 		return root;
 	}
 
-	/*
-	 * public void setBackgroundShip() { Image hitFile=null; try { //for(int
-	 * i=0;i<5;i++) { hitFile = new
-	 * Image("file:///"+shipFile.getCanonicalFile()+"/shipstag.png"); ImagePattern
-	 * img = new ImagePattern(hitFile); ship1.setFill(img); ship2.setFill(img);
-	 * ship3.setFill(img); ship4.setFill(img); ship5.setFill(img); //}
-	 * 
-	 *//**
-	 * @throws io
-	 *             exception
-	 *//*
-	 * } catch (IOException e) {
-	 * 
-	 * e.printStackTrace(); }
-	 * 
-	 * }
-	 */
+	
 
 	/**
 	 * <p>
@@ -891,10 +874,9 @@ public class Battle extends Application {
 
 			if(twoPlayer)
 				udpSend("shootShip->(" + cell.row + "-" + cell.col + ")");
-			// System.out.println("Player Shooting");
+			
 			opponentTurn = !cell.shoot();
-			// System.out.println("Player Shot done");
-
+			
 			if (opponentTurn) {
 				timelinePlayer1.pause();
 
@@ -916,7 +898,7 @@ public class Battle extends Application {
 					opponentNormalMove(personStage);
 				} else {
 					opponentBoard.setDisable(true);
-					// opponentNormalMove(personStage);
+				
 				}
 			} else {
 				Rectangle deleteCell = null;
@@ -940,8 +922,7 @@ public class Battle extends Application {
 
 				currenttime = Integer.parseInt(timer1.getText().split(":")[0]) * 60
 						+ Integer.parseInt(timer1.getText().split(":")[1]);
-				// System.out.println("Previous Time" + previoustime);
-				// System.out.println("Cuurent Time " + currenttime);
+				
 				if (currenttime - previoustime < 2)
 					player1Score += 5;
 				else if (currenttime - previoustime < 5 && currenttime - previoustime > 2)
@@ -990,9 +971,9 @@ public class Battle extends Application {
 
 		for (Cell cell : cellHits) {
 
-			System.out.println("Player Shooting");
+			
 			opponentTurn = !cell.shoot();
-			System.out.println("Player Shot done");
+			
 			if (!opponentTurn) {
 				if (currenttime - previoustime < 2)
 					player1Score += 5;
@@ -1049,9 +1030,9 @@ public class Battle extends Application {
 				continue;
 			}
 			oldValue = firstPlayerBoard.amountOfships;
-			// System.out.println("Opponent Shooting");
+			
 			opponentTurn = cell.shoot();
-			// System.out.println("Opponent shot done");
+			
 			if (!opponentTurn) {
 				ai.feedback(false, false);
 				timelinePlayer2.pause();
@@ -1065,7 +1046,7 @@ public class Battle extends Application {
 
 			} else {
 				newValue = firstPlayerBoard.amountOfships;
-				if (oldValue != newValue) { // if PC is guessing AND ship is destroyed
+				if (oldValue != newValue) { 	// if PC is guessing AND ship is destroyed
 					ai.feedback(true, true);
 				} else {
 					ai.feedback(true, false);
@@ -1116,9 +1097,8 @@ public class Battle extends Application {
 
 		for (Cell cell : numberOfShots) {
 
-			System.out.println("Opponent Shooting");
 			opponentTurn = cell.shoot();
-			System.out.println("Opponent shot done");
+		
 			if (opponentTurn) {
 				player2Score += 5;
 				displayScore("player2");
@@ -1258,7 +1238,7 @@ public class Battle extends Application {
 	}
 
 	private void showGameMessage() {
-		// TODO Auto-generated method stub
+		
 		Alert gameModeAlert = new Alert(AlertType.INFORMATION);
 
 		ButtonType buttonSalva = new ButtonType("SALVA");
@@ -1496,7 +1476,7 @@ public class Battle extends Application {
 	}
 
 	private void udpReceive() {
-		// TODO Auto-generated method stub
+	
 		byte[] buffer = new byte[1000];
 		DatagramSocket aSocket = null;
 
@@ -1509,7 +1489,7 @@ public class Battle extends Application {
 				DatagramPacket reply = new DatagramPacket(buffer, buffer.length);
 
 				aSocket.receive(reply);
-				// System.out.println("DATA FROM RAJ");
+			
 				System.out.println("Player1 Playing Here");
 				String receivedData[] = data(buffer).toString().split("->");
 
@@ -1549,10 +1529,10 @@ public class Battle extends Application {
 			System.out.println("Checked Exception "+e);
 		} 
 		catch (SocketException e1) {
-			// TODO Auto-generated catch block
+		
 			e1.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}finally {
 			aSocket.close();
@@ -1561,46 +1541,26 @@ public class Battle extends Application {
 
 
 	private void shootMultiPlayer(ArrayList<Cell> udpCell) {
-		// TODO Auto-generated method stub
+		
 		for (Cell cell : udpCell) {
 			if (cell.targetHit)
 				return;
 
-			// System.out.println("Player Shooting");
+			
 			opponentTurn = cell.shoot();
-			// System.out.println("Player Shot done");
+		
 
 			if (!opponentTurn) {
 				timelinePlayer1.play();
 
 				timelinePlayer2.pause();
 				opponentBoard.setDisable(false);
-				/*
-				 * if (suggSalvation) { for (Rectangle rect : dragAndDropShipsOpponent.keySet())
-				 * { String takeCordinates[] = dragAndDropShipsOpponent.get(rect).split("-");
-				 * Cell temp = opponentBoard.getCell(Integer.parseInt(takeCordinates[0]),
-				 * Integer.parseInt(takeCordinates[1])); temp.setFill(Color.WHITE);
-				 * temp.setStroke(Color.BLACK); }
-				 * 
-				 * checkTimeForSug = false; }
-				 */
-
+				
 			} else {
-				/*
-				 * Rectangle deleteCell = null; if (suggSalvation) { if (checkForSugg) { for
-				 * (Rectangle rect : dragAndDropShipsOpponent.keySet()) { String
-				 * takeCordinates[] = dragAndDropShipsOpponent.get(rect).split("-"); if
-				 * (Integer.parseInt(takeCordinates[0]) == cell.row &&
-				 * Integer.parseInt(takeCordinates[1]) == cell.col) { deleteCell = rect; } else
-				 * { Cell temp = opponentBoard.getCell(Integer.parseInt(takeCordinates[0]),
-				 * Integer.parseInt(takeCordinates[1])); temp.setFill(Color.WHITE);
-				 * temp.setStroke(Color.BLACK); } } dragAndDropShipsOpponent.remove(deleteCell);
-				 * } }
-				 */
+				
 				currenttime2 = Integer.parseInt(timer2.getText().split(":")[0]) * 60
 						+ Integer.parseInt(timer2.getText().split(":")[1]);
-				// System.out.println("Previous Time" + previoustime);
-				// System.out.println("Cuurent Time " + currenttime);
+				
 				if (currenttime2 - previoustime2 < 2)
 					player2Score += 5;
 				else if (currenttime2 - previoustime2 < 5 && currenttime2 - previoustime2 > 2)
@@ -1630,9 +1590,9 @@ public class Battle extends Application {
 
 		for (Cell cell : udpCell) {
 
-			System.out.println("Opponent Shooting");
+			
 			opponentTurn = cell.shoot();
-			System.out.println("Opponent shot done");
+		
 			if (opponentTurn) {
 				player2Score += 5;
 				displayScore("player2");
@@ -1660,7 +1620,7 @@ public class Battle extends Application {
 
 
 	private void udpSend(String textToSend) {
-		// TODO Auto-generated method stub
+		
 		byte[] message = textToSend.getBytes();
 		DatagramSocket aSocket = null;
 		try {
@@ -1672,7 +1632,9 @@ public class Battle extends Application {
 			int serverPort = 6001;
 
 			DatagramPacket request = new DatagramPacket(message, message.length, aHost, serverPort);// request packet
-			aSocket.send(request);// request sent out
+			
+			// request sent out
+			aSocket.send(request);
 
 			if(request.getLength()==0) {
 				throw new DataNotSentException("Data could not be sent over the connection");
@@ -1688,7 +1650,7 @@ public class Battle extends Application {
 			System.out.println("Checked Exception "+e);
 		}
 		catch (IOException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 	}
@@ -1739,12 +1701,12 @@ public class Battle extends Application {
 			}
 
 		}
-		// TODO Auto-generated method stub
+		
 		return shipDetails;
 	}
 
-	private String getBoardInformation(Board boardDetails) {
-		// TODO Auto-generated method stub
+	public String getBoardInformation(Board boardDetails) {
+		
 		String finalDetails = "";
 		for (int i = 0; i < 10; i++) {
 			for (int j = 0; j < 10; j++) {
@@ -1771,7 +1733,7 @@ public class Battle extends Application {
 			String line;
 			loadCheck = true;
 			while ((line = reader.readLine()) != null) {
-				// System.out.println(line);
+				
 				loading(line);
 
 			}
@@ -1783,17 +1745,17 @@ public class Battle extends Application {
 			ship5.setDisable(true);
 			st.setText("Resume");
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 
 	}
 
 	private void loading(String line) {
-		// TODO Auto-generated method stub
+		
 		String tme[] = line.split("@");
 		if (tme[0].trim().equals("Player_1")) {
 			tme = tme[1].split(";");
@@ -1908,8 +1870,8 @@ public class Battle extends Application {
 			ShipImage = new Image("file:///" + shipImg.getCanonicalFile() + imagePath);
 
 			/**
-			 * @throws io
-			 *             exception
+			 * @throws io exception
+			 *             
 			 */
 		} catch (IOException e) {
 
@@ -1972,9 +1934,9 @@ public class Battle extends Application {
 
 				curTime = Integer.parseInt(timer1.getText().split(":")[0]) * 60
 						+ Integer.parseInt(timer1.getText().split(":")[1]);
-				// System.out.println(curTime - prevTime);
+				
 				if (curTime - prevTime > 5) {
-					System.out.println("After 10 and check");
+					System.out.println("After 5 and check");
 					exit = true;
 				}
 				if (!checkTimeForSug) {
@@ -1993,8 +1955,8 @@ public class Battle extends Application {
 	}
 
 	/**
-	 * This Method Will call the initialise method to set up the Stage.
-	 * {@inheritDoc}
+	 * This Method Will call the initialize method to set up the Stage.
+	 * 
 	 */
 	@Override
 	public void start(Stage primaryStage) throws Exception {

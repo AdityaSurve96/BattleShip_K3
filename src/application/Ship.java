@@ -18,7 +18,6 @@ public class Ship extends Parent {
 
 	public int type;
 	public boolean direction = true;
-	double mouseX,mouseY;
 	public int percentageDestroyed;
 
 	/**
@@ -44,8 +43,9 @@ public class Ship extends Parent {
 	 * This method decrements the ship health by one each time a ship is hit
 	 */
 	public void shipPartHit() {
-
-		percentageDestroyed--;
+		if(percentageDestroyed>0) {
+			percentageDestroyed--;
+		}
 
 	}
 

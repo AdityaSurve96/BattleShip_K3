@@ -22,7 +22,7 @@ public class AI {
     private int lastDir = 0;
 
     /**
-     * 
+     * Constructor
      */
     public AI() {
         this.generate();
@@ -240,16 +240,4 @@ public class AI {
         }
     }
 
-    void printCurrentData(){
-        System.out.println("X: " + x);
-        System.out.println("Y: " + y);
-        System.out.println("Last Guess Hit: " + lastGuessHit);
-        System.out.println("StartSearchX: " + startSearchX);
-        System.out.println("StartSearchY: " + startSearchY);
-        System.out.println("LastX: " + lastX);
-        System.out.println("LastY: " + lastY);
-        System.out.println("LastDir: " + lastDir);
-        System.out.println("Stack: " + stack);
-        System.out.println("---------------------------------");
-    }
 }
