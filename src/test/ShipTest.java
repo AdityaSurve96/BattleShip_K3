@@ -47,6 +47,13 @@ public class ShipTest {
 	}
 	
 	@Test
+	public void testshipPartHitSuccess2() {
+		ship.percentageDestroyed++;
+		ship.shipPartHit();
+		assertNotEquals(2, ship.percentageDestroyed);
+	}
+	
+	@Test
 	public void testShipIsAliveFailure() {
 		ship.percentageDestroyed -= 1;
 	
