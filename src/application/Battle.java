@@ -106,7 +106,7 @@ public class Battle extends Application {
 	};
 
 	private int currentShip = 0;
-	
+
 	private boolean opponentTurn = false;
 
 	File shipFile = new File(".");
@@ -256,7 +256,7 @@ public class Battle extends Application {
 		root.setPrefSize(1300, 800);
 
 		Text battle = new Text();
-		battle.setText("BATTLESHIP GAME--PLAYER 2");
+		battle.setText("BATTLESHIP GAME--PLAYER 1");
 		battle.setFill(Color.BLACK);
 		battle.setStrokeWidth(2);
 		battle.setStroke(Color.WHITE);
@@ -424,7 +424,8 @@ public class Battle extends Application {
 						numberOfShots.clear();
 					}
 				} else {
-					udpSend("shootShip->(" + cell.row + "-" + cell.col + ")");
+					// udpSend("shootShip->(" + cell.row + "-" + cell.col + ")");
+
 					previoustime2 = Integer.parseInt(timer2.getText().split(":")[0]) * 60
 							+ Integer.parseInt(timer2.getText().split(":")[1]);
 					if (normalGame) {
@@ -874,7 +875,9 @@ public class Battle extends Application {
 		for (Cell cell : cellHits) {
 			if (cell.targetHit)
 				return;
-
+			
+			if(twoPlayer)
+				udpSend("shootShip->(" + cell.row + "-" + cell.col + ")");
 			// System.out.println("Player Shooting");
 			opponentTurn = !cell.shoot();
 			// System.out.println("Player Shot done");
@@ -896,12 +899,11 @@ public class Battle extends Application {
 					checkTimeForSug = false;
 				}
 
-				
 				if (!twoPlayer) {
 					opponentNormalMove(personStage);
-				}else {
+				} else {
 					opponentBoard.setDisable(true);
-					//opponentNormalMove(personStage);
+					// opponentNormalMove(personStage);
 				}
 			} else {
 				Rectangle deleteCell = null;
@@ -964,8 +966,17 @@ public class Battle extends Application {
 	 */
 	public void shootSalvationShip(ArrayList<Cell> cellHits, Stage personStage) {
 		currenttime = Integer.parseInt(timer1.getText().split(":")[1]);
+		String sendString ="shootShip->";
+		
 		for (Cell cell : cellHits) {
-
+			sendString = sendString + "(" + cell.row + "-" + cell.col + "),";
+		}
+		
+		if(twoPlayer)
+			udpSend(sendString);
+		
+		for (Cell cell : cellHits) {
+			
 			System.out.println("Player Shooting");
 			opponentTurn = !cell.shoot();
 			System.out.println("Player Shot done");
@@ -987,7 +998,8 @@ public class Battle extends Application {
 
 			}
 		}
-
+		
+		
 		displayScore("player1");
 
 		previoustime = currenttime;
@@ -997,7 +1009,10 @@ public class Battle extends Application {
 
 		hits = 1;
 		numberOfShots.clear();
-		opponentSalvationMove(personStage);
+		if(!twoPlayer)
+			opponentSalvationMove(personStage);
+		else
+			opponentBoard.setDisable(true);
 
 	}
 
@@ -1419,7 +1434,7 @@ public class Battle extends Application {
 
 	Runnable udp_task = new Runnable() {
 		public void run() {
-			System.out.println("System 2 Listening on 6000");
+			System.out.println("System 1 Listening on 6000");
 			udpReceive();
 		}
 	};
@@ -1444,7 +1459,7 @@ public class Battle extends Application {
 
 				aSocket.receive(reply);
 				// System.out.println("DATA FROM RAJ");
-				System.out.println("Player2 Playing Here");
+				System.out.println("Player1 Playing Here");
 				String receivedData[] = data(buffer).toString().split("->");
 
 				if (receivedData[0].trim().equals("playerShips")) {
@@ -1458,13 +1473,20 @@ public class Battle extends Application {
 
 				} else {
 					ArrayList<Cell> udpCell = new ArrayList<Cell>();
-					String udpTemp[] = receivedData[1].trim().substring(1, receivedData[1].length() - 1).split("-");
-					// for (int i = 0; i < udpData.length; i++) {
-					Cell c = firstPlayerBoard.getCell(Integer.parseInt(udpTemp[0].trim()),
-							Integer.parseInt(udpTemp[1].trim()));
-					udpCell.add(c);
-					// }
-					shootMultiPlayer(udpCell);
+					String udpData[] = receivedData[1].split(",");
+
+					for (int i = 0; i < udpData.length; i++) {
+						String udpTemp[] = udpData[i].trim().substring(1, udpData[1].length() - 1).split("-");
+						Cell c = firstPlayerBoard.getCell(Integer.parseInt(udpTemp[0].trim()),
+								Integer.parseInt(udpTemp[1].trim()));
+						udpCell.add(c);
+
+					}
+					if(udpCell.size()==1)
+						shootMultiPlayer(udpCell);
+					else{
+						shootMutliPlayerSal(udpCell);
+					}
 				}
 
 			}
@@ -1476,7 +1498,8 @@ public class Battle extends Application {
 			e.printStackTrace();
 		}
 	}
-
+	
+	
 	private void shootMultiPlayer(ArrayList<Cell> udpCell) {
 		// TODO Auto-generated method stub
 		for (Cell cell : udpCell) {
@@ -1542,6 +1565,40 @@ public class Battle extends Application {
 		}
 	}
 
+	
+	private void shootMutliPlayerSal(ArrayList<Cell> udpCell) {
+		
+	for (Cell cell : udpCell) {
+
+		System.out.println("Opponent Shooting");
+		opponentTurn = cell.shoot();
+		System.out.println("Opponent shot done");
+		if (opponentTurn) {
+			player2Score += 5;
+			displayScore("player2");
+		}
+		if (firstPlayerBoard.amountOfships == 0) {
+
+			String s = "You Lost This Game to the Computer";
+			finalResultDisplay(s, global_stage);
+
+		}
+
+	}
+	timelinePlayer2.pause();
+
+	timelinePlayer1.play();
+	numberOfShots.clear();
+	hits = 1;
+	opponentBoard.setDisable(false);
+	
+}
+	
+	
+	
+	
+	
+	
 	private void udpSend(String textToSend) {
 		// TODO Auto-generated method stub
 		byte[] message = textToSend.getBytes();
@@ -1694,20 +1751,6 @@ public class Battle extends Application {
 								Integer.parseInt(shipDetailsRec[3].trim()));
 					}
 				} else if (remainDetails[0].trim().equals("Board")) {
-					// File hitRate = new File(".");
-					// Image hitFile = null;
-					// try {
-					// hitFile = new Image("file:///" + hitRate.getCanonicalFile() +
-					// "/hitShip.png");
-					//
-					// /**
-					// * @throws io
-					// * exception
-					// */
-					// } catch (IOException e) {
-					//
-					// e.printStackTrace();
-					// }
 					String shipReceived[] = remainDetails[1].trim().split(",");
 					for (String shipDetailsR : shipReceived) {
 						shipDetailsR = shipDetailsR.substring(1, shipDetailsR.length() - 1);
@@ -1718,12 +1761,6 @@ public class Battle extends Application {
 							firstPlayerBoard.getCell(Integer.parseInt(shipDetailsRec[0].trim()),
 									Integer.parseInt(shipDetailsRec[1].trim())).setFill(Color.BLACK);
 						} else if (shipDetailsRec[2].trim().equals("hit")) {
-							// firstPlayerBoard.getCell(Integer.parseInt(shipDetailsRec[0].trim()),
-							// Integer.parseInt(shipDetailsRec[1].trim())).targetHit = true;
-							// firstPlayerBoard.getCell(Integer.parseInt(shipDetailsRec[0].trim()),
-							// Integer.parseInt(shipDetailsRec[1].trim())).ship.shotCellsOfShips
-							// .add(firstPlayerBoard.getCell(Integer.parseInt(shipDetailsRec[0].trim()),
-							// Integer.parseInt(shipDetailsRec[1].trim())));
 							firstPlayerBoard.getCell(Integer.parseInt(shipDetailsRec[0].trim()),
 									Integer.parseInt(shipDetailsRec[1].trim())).shoot();
 
@@ -1756,20 +1793,6 @@ public class Battle extends Application {
 								Integer.parseInt(shipDetailsRec[3].trim()));
 					}
 				} else if (remainDetails[0].trim().equals("Board")) {
-					// File hitRate = new File(".");
-					// Image hitFile = null;
-					// try {
-					// hitFile = new Image("file:///" + hitRate.getCanonicalFile() +
-					// "/hitShip.png");
-					//
-					// /**
-					// * @throws io
-					// * exception
-					// */
-					// } catch (IOException e) {
-					//
-					// e.printStackTrace();
-					// }
 					String shipReceived[] = remainDetails[1].trim().split(",");
 					for (String shipDetailsR : shipReceived) {
 						shipDetailsR = shipDetailsR.substring(1, shipDetailsR.length() - 1);
@@ -1780,13 +1803,6 @@ public class Battle extends Application {
 							opponentBoard.getCell(Integer.parseInt(shipDetailsRec[0].trim()),
 									Integer.parseInt(shipDetailsRec[1].trim())).setFill(Color.BLACK);
 						} else if (shipDetailsRec[2].trim().equals("hit")) {
-							// opponentBoard.getCell(Integer.parseInt(shipDetailsRec[0].trim()),
-							// Integer.parseInt(shipDetailsRec[1].trim())).targetHit = true;
-							//
-							// opponentBoard.getCell(Integer.parseInt(shipDetailsRec[0].trim()),
-							// Integer.parseInt(shipDetailsRec[1].trim())).ship.shotCellsOfShips
-							// .add(opponentBoard.getCell(Integer.parseInt(shipDetailsRec[0].trim()),
-							// Integer.parseInt(shipDetailsRec[1].trim())));
 							opponentBoard.getCell(Integer.parseInt(shipDetailsRec[0].trim()),
 									Integer.parseInt(shipDetailsRec[1].trim())).shoot();
 
