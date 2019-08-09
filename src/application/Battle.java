@@ -1703,9 +1703,11 @@ public class Battle extends Application {
 	}
 	
 	/**
-	 * //comment
-	 * @param a
-	 * @return
+	 * <p>
+	 * This mathod converts received data from byte to string 
+	 * @param a - message in bytes
+	 * @return - message in string
+	 *</p>
 	 */
 	public static StringBuilder data(byte[] a) {
 		if (a == null)
@@ -1720,8 +1722,11 @@ public class Battle extends Application {
 	}
 
 	/**
-	 * //comment
-	 * @param file
+	*<p>
+	 * This method writes data into the opened file.
+	 *The data is in string format
+	 * @param file - file in which data is to be written.
+	 *</p>
 	 */
 	private void saveTextToFile(File file) {
 		String playerBoardInfo = getBoardInformation(firstPlayerBoard);
@@ -1743,7 +1748,7 @@ public class Battle extends Application {
 		}
 	}
 	/**
-	 * //comment
+	 * 
 	 * @param playerCheck
 	 * @return
 	 */
