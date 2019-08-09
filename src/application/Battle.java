@@ -1748,9 +1748,11 @@ public class Battle extends Application {
 		}
 	}
 	/**
-	 * 
-	 * @param playerCheck
-	 * @return
+	 * <p>
+	 * This method takes player ship positions and appends them to a string.
+	 * @param playerCheck - To identify player or opponent.
+	 * @return - String containing ship position information.
+	* </p>
 	 */
 	private String getShiPosition(String playerCheck) {
 		String shipDetails = "";
@@ -1770,9 +1772,12 @@ public class Battle extends Application {
 		return shipDetails;
 	}
 	/**
-	 * //comment
-	 * @param boardDetails
-	 * @return
+	*<p>
+	 * This method takes the details of all cells in the board and converts them in to string.
+	 *</p>
+	 * @param boardDetails - player board and opponent board
+	 * @return - string containing board details
+	 
 	 */
 	public String getBoardInformation(Board boardDetails) {
 		
@@ -1796,8 +1801,10 @@ public class Battle extends Application {
 	}
 	
 	/**
-	 * //comment
-	 * @param file
+	*<p>
+	 * This method opens file in which data is to be written.
+	 *</p>
+	 * @param file - file to be opened.
 	 */
 	private void openFile(File file) {
 		BufferedReader reader = null;
@@ -1828,8 +1835,10 @@ public class Battle extends Application {
 	}
 	
 	/**
-	 * //comment
-	 * @param line
+	*<p>
+	 * This method loads the board details. 
+	 *</p>
+	 * @param line - string containing board information
 	 */
 	private void loading(String line) {
 		
@@ -1922,11 +1931,12 @@ public class Battle extends Application {
 	}
 
 	/**
-	 * //comment
-	 * @param string
-	 * @param string2
-	 * @param string3
-	 * @param string4
+	 * This method calls the positionShip method.
+	 * @param name - player 1 and player 2
+	 * @param xCor - x coordinate of the ship
+	 * @param yCor - y coordinate of the ship
+	 * @param orient -  horizontal or vertical
+	 *@param len - length of the ship
 	 */
 	private void callPostionShip(String name, int xCor, int yCor, boolean orient, int len) {
 		if (name.trim().equals("Player_1")) {
@@ -1940,9 +1950,9 @@ public class Battle extends Application {
 	}
 	
 	/**
-	 * //comment
-	 * @param ships
-	 * @param imagePath
+	 * This method paints the ship rectangles.
+	 * @param ships - selected ship
+	 * @param imagePath - path of the image
 	 */
 	public void paintShip(ArrayList<Rectangle> ships, String imagePath) {
 		File shipImg = new File(".");
