@@ -180,7 +180,7 @@ public class Battle extends Application {
 	// Map to match the selected ship to its properties
 	Map<Rectangle, String> dragAndDropShips = new HashMap<Rectangle, String>();
 	
-	//comment
+	// map to store the opponent ships and their coordinates
 	Map<Integer, String> opponetShipDetails = new HashMap<Integer, String>();
 
 	// for Suggestion Salva
@@ -1239,7 +1239,7 @@ public class Battle extends Application {
 	}
 
 	/**
-	 * //comment
+	 * this method shows the different gameplay options
 	 */
 	private void showGameMessage() {
 		
@@ -1274,7 +1274,7 @@ public class Battle extends Application {
 		}
 		String playerBoardInfo = getShiPosition("player");
 		
-		//comment
+	
 		udpSend(playerBoardInfo);
 
 		executing = true;
@@ -1448,7 +1448,7 @@ public class Battle extends Application {
 			adjustShips();
 		});
 
-		//comment
+		//starting 2 player mode
 		p2p.setOnAction(e -> {
 			if (numberOfShips == 0) {
 				System.out.println("2 Player Mode Started");
@@ -1478,7 +1478,9 @@ public class Battle extends Application {
 	};
 
 	/**
-	 * //comment
+	 * <p>
+	 * Starting the thread containing udpReceive method
+	 * </p>
 	 */
 	public void runInit() {
 		Thread thread = new Thread(udp_task);
@@ -1486,7 +1488,14 @@ public class Battle extends Application {
 	}
 
 	/**
-	 * //comment
+	 * <p>
+	 * This method is used  to receive the data from opponent player.
+	 * Data contains -
+	 * <ol>
+	 * <li>Coordinates select by another player</li>
+	 * <li>Feedback received from another player</li>
+	 * </ol>
+	 * </p>
 	 */
 	private void udpReceive() {
 	
@@ -1503,7 +1512,7 @@ public class Battle extends Application {
 
 				aSocket.receive(reply);
 			
-				System.out.println("Darshan Playing Here");
+				System.out.println("player1 playing here");
 				String receivedData[] = data(buffer).toString().split("->");
 
 				if (receivedData[0].trim().equals("playerShips")) {
@@ -1553,9 +1562,13 @@ public class Battle extends Application {
 	}
 
 	/**
-	 * //comment
-	 * @param udpCell
+	 * <p>
+	 * This method is called when normal mode is ON.
+	 * This method takes the cells to be shot as input and calls the shoot method.
+	 * @param udpCell - The list of cells selected by another player.
+	 * </p>
 	 */
+	
 	private void shootMultiPlayer(ArrayList<Cell> udpCell) {
 		
 		for (Cell cell : udpCell) {
@@ -1602,9 +1615,13 @@ public class Battle extends Application {
 	}
 
 	/**
-	 * //comment
-	 * @param udpCell
+	 * <p>
+	 * This method is called when Salva mode is ON.
+	 * This method takes the cells to be shot as input and calls the shoot method.
+	 * @param udpCell - The list of cells selected by another player.
+	 * </p>
 	 */
+	
 	private void shootMutliPlayerSal(ArrayList<Cell> udpCell) {
 
 		for (Cell cell : udpCell) {
@@ -1633,14 +1650,22 @@ public class Battle extends Application {
 
 	}
 
-
-
-
-
+	
+	
 	/**
-	 * //comment
-	 * @param textToSend
+	 * <p>
+	 * This method is used to send the data to opponent player.
+	 * Data contains -
+	 * <ol>
+	 * <li>Coordinates select by  player1</li>
+	 * <li>Feedback to be sent to player 2</li>
+	 * </ol>
+	 * </p>
 	 */
+
+
+
+	
 	private void udpSend(String textToSend) {
 		
 		byte[] message = textToSend.getBytes();
