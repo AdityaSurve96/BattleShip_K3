@@ -343,6 +343,9 @@ public class Board extends Parent {
 
 			setFill(Color.WHITE);
 			setStroke(Color.BLACK);
+			setArcWidth(10.0);
+			setArcHeight(10.0);
+			
 
 		}
 

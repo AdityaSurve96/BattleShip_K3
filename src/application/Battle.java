@@ -267,10 +267,10 @@ public class Battle extends Application {
 		battle.setFill(Color.BLACK);
 		battle.setStrokeWidth(2);
 		battle.setStroke(Color.WHITE);
-		battle.setFont(Font.font("Verdana", FontWeight.BOLD, FontPosture.REGULAR, 30));
+		battle.setFont(Font.font("Verdana", FontWeight.EXTRA_BOLD, FontPosture.REGULAR, 35));
 
-		battle.setX(500);
-		battle.setY(30);
+		battle.setX(350);
+		battle.setY(50);
 		battle.setUnderline(true);
 
 		Text player1 = new Text();
@@ -339,6 +339,7 @@ public class Battle extends Application {
 		VBox player1Details = new VBox(20, player1Summary, hBox, hBox1);
 		player1Details.setLayoutX(50);
 		player1Details.setLayoutY(100);
+		
 
 		root.getChildren().add(player1Details);
 
