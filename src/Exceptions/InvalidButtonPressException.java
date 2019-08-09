@@ -6,6 +6,11 @@ package Exceptions;
  *
  */
 public class InvalidButtonPressException extends Exception{
+	
+	/**
+	 * Constructor to handle the Message String
+	 * @param s - This is a String Message.
+	 */
 	public InvalidButtonPressException(String s) {
 		super(s);
 	}

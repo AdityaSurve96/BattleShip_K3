@@ -7,6 +7,11 @@ package Exceptions;
  *
  */
 public class InvalidDataReceivedException extends Exception{
+	
+	/**
+	 * Constructor to handle the Message String
+	 * @param s - This is a String Message.
+	 */
 	public InvalidDataReceivedException(String s) {
 		super(s);
 	}

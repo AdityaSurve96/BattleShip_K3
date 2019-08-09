@@ -8,6 +8,10 @@ package Exceptions;
  */
 public class InvalidShipPlacementException extends Exception{
 
+	/**
+	 * Constructor to handle the Message String
+	 * @param s - This is a String Message.
+	 */
 	public InvalidShipPlacementException(String s){  
 		  super(s);  
 	}  

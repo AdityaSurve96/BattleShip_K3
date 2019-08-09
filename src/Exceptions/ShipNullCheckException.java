@@ -8,6 +8,11 @@ package Exceptions;
  *
  */
 public class ShipNullCheckException extends Exception{
+	
+	/**
+	 * Constructor to handle the Message String
+	 * @param s - This is a String Message.
+	 */
 		public ShipNullCheckException(String s) {
 			super(s);
 		}

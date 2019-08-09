@@ -7,6 +7,11 @@ package Exceptions;
  *
  */
 public class DataNotSentException extends Exception{
+	
+	/**
+	 * Constructor to handle the Message String
+	 * @param s - This is a String Message.
+	 */
 	public DataNotSentException(String s) {
 		super(s);
 	}

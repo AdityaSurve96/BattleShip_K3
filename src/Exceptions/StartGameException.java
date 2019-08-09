@@ -7,6 +7,11 @@ package Exceptions;
  *
  */
 public class StartGameException extends Exception {
+	
+	/**
+	 * Constructor to handle the Message String
+	 * @param s - This is a String Message.
+	 */
 	public StartGameException(String s) {
 		super(s);
 	}

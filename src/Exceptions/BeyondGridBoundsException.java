@@ -7,6 +7,11 @@ package Exceptions;
  *
  */
 public class BeyondGridBoundsException extends Exception{
+	
+	/**
+	 * Constructor to handle the Message String
+	 * @param s - This is a String Message.
+	 */
 	public BeyondGridBoundsException(String s) {
 		super(s);
 	}
