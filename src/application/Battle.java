@@ -179,7 +179,8 @@ public class Battle extends Application {
 
 	// Map to match the selected ship to its properties
 	Map<Rectangle, String> dragAndDropShips = new HashMap<Rectangle, String>();
-
+	
+	//comment
 	Map<Integer, String> opponetShipDetails = new HashMap<Integer, String>();
 
 	// for Suggestion Salva
@@ -458,7 +459,7 @@ public class Battle extends Application {
 		installBoatListeners(ship4);
 		installBoatListeners(ship5);
 
-		// setBackgroundShip();
+		
 		opponentBoard = new Board(true, event);
 
 		firstPlayerBoard = new Board(false, null);
@@ -1237,6 +1238,9 @@ public class Battle extends Application {
 
 	}
 
+	/**
+	 * //comment
+	 */
 	private void showGameMessage() {
 		
 		Alert gameModeAlert = new Alert(AlertType.INFORMATION);
@@ -1269,6 +1273,8 @@ public class Battle extends Application {
 			t1.start();
 		}
 		String playerBoardInfo = getShiPosition("player");
+		
+		//comment
 		udpSend(playerBoardInfo);
 
 		executing = true;
@@ -1312,7 +1318,7 @@ public class Battle extends Application {
 	 * Method will reset the Game by initializing all the related Nodes.
 	 * </p>
 	 * 
-	 * @param primaryStage
+	 * @param primaryStage -- (root) JavaFX Stage
 	 */
 	private void restart(Stage primaryStage) {
 
@@ -1442,6 +1448,7 @@ public class Battle extends Application {
 			adjustShips();
 		});
 
+		//comment
 		p2p.setOnAction(e -> {
 			if (numberOfShips == 0) {
 				System.out.println("2 Player Mode Started");
@@ -1470,11 +1477,17 @@ public class Battle extends Application {
 		}
 	};
 
+	/**
+	 * //comment
+	 */
 	public void runInit() {
 		Thread thread = new Thread(udp_task);
 		thread.start();
 	}
 
+	/**
+	 * //comment
+	 */
 	private void udpReceive() {
 	
 		byte[] buffer = new byte[1000];
@@ -1539,7 +1552,10 @@ public class Battle extends Application {
 		}
 	}
 
-
+	/**
+	 * //comment
+	 * @param udpCell
+	 */
 	private void shootMultiPlayer(ArrayList<Cell> udpCell) {
 		
 		for (Cell cell : udpCell) {
@@ -1585,7 +1601,10 @@ public class Battle extends Application {
 		}
 	}
 
-
+	/**
+	 * //comment
+	 * @param udpCell
+	 */
 	private void shootMutliPlayerSal(ArrayList<Cell> udpCell) {
 
 		for (Cell cell : udpCell) {
@@ -1618,7 +1637,10 @@ public class Battle extends Application {
 
 
 
-
+	/**
+	 * //comment
+	 * @param textToSend
+	 */
 	private void udpSend(String textToSend) {
 		
 		byte[] message = textToSend.getBytes();
@@ -1654,7 +1676,12 @@ public class Battle extends Application {
 			e.printStackTrace();
 		}
 	}
-
+	
+	/**
+	 * //comment
+	 * @param a
+	 * @return
+	 */
 	public static StringBuilder data(byte[] a) {
 		if (a == null)
 			return null;
@@ -1667,6 +1694,10 @@ public class Battle extends Application {
 		return ret;
 	}
 
+	/**
+	 * //comment
+	 * @param file
+	 */
 	private void saveTextToFile(File file) {
 		String playerBoardInfo = getBoardInformation(firstPlayerBoard);
 		String opponentBoardInfo = getBoardInformation(opponentBoard);
@@ -1686,7 +1717,11 @@ public class Battle extends Application {
 			Logger.getLogger(Battle.class.getName()).log(Level.SEVERE, null, ex);
 		}
 	}
-
+	/**
+	 * //comment
+	 * @param playerCheck
+	 * @return
+	 */
 	private String getShiPosition(String playerCheck) {
 		String shipDetails = "";
 		if (playerCheck.equals("player")) {
@@ -1704,7 +1739,11 @@ public class Battle extends Application {
 		
 		return shipDetails;
 	}
-
+	/**
+	 * //comment
+	 * @param boardDetails
+	 * @return
+	 */
 	public String getBoardInformation(Board boardDetails) {
 		
 		String finalDetails = "";
@@ -1725,7 +1764,11 @@ public class Battle extends Application {
 
 		return finalDetails;
 	}
-
+	
+	/**
+	 * //comment
+	 * @param file
+	 */
 	private void openFile(File file) {
 		BufferedReader reader = null;
 		try {
@@ -1753,7 +1796,11 @@ public class Battle extends Application {
 		}
 
 	}
-
+	
+	/**
+	 * //comment
+	 * @param line
+	 */
 	private void loading(String line) {
 		
 		String tme[] = line.split("@");
@@ -1845,7 +1892,7 @@ public class Battle extends Application {
 	}
 
 	/**
-	 * 
+	 * //comment
 	 * @param string
 	 * @param string2
 	 * @param string3
@@ -1861,7 +1908,12 @@ public class Battle extends Application {
 		}
 
 	}
-
+	
+	/**
+	 * //comment
+	 * @param ships
+	 * @param imagePath
+	 */
 	public void paintShip(ArrayList<Rectangle> ships, String imagePath) {
 		File shipImg = new File(".");
 
