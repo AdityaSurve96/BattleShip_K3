@@ -957,7 +957,7 @@ public class Battle extends Application {
 	 * 
 	 * @param cellHits
 	 *            -
-	 * @param personStage
+	 * @param personStage - root / JavaFX Stage
 	 */
 	public void shootSalvationShip(ArrayList<Cell> cellHits, Stage personStage) {
 		currenttime = Integer.parseInt(timer1.getText().split(":")[1]);
@@ -1239,7 +1239,7 @@ public class Battle extends Application {
 	}
 
 	/**
-	 * this method shows the different gameplay options
+	 * <p>this method shows the different gameplay options</p>
 	 */
 	private void showGameMessage() {
 		
@@ -1704,7 +1704,7 @@ public class Battle extends Application {
 	
 	/**
 	 * <p>
-	 * This mathod converts received data from byte to string 
+	 * This method converts received data from byte to string 
 	 * @param a - message in bytes
 	 * @return - message in string
 	 *</p>
