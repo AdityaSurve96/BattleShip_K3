@@ -1252,7 +1252,7 @@ public class Battle extends Application {
 		gameModeAlert.setTitle("SELECT GAME MODE");
 
 		gameModeAlert.setContentText("Click on the desired button to choose game mode");
-		gameModeAlert.getButtonTypes().setAll(buttonSalva, buttonSuggSalva, buttonNormal);
+		gameModeAlert.getButtonTypes().setAll(buttonSalva,buttonNormal);
 
 		Optional<ButtonType> result = gameModeAlert.showAndWait();
 
