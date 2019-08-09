@@ -1,8 +1,8 @@
 package Exceptions;
 
 /**
- * This Custom Exception Class Handles UDP data sent between two Players.
- * This calls the super exception to print the message.
+ * <p>This Custom Exception Class Handles UDP data sent between two Players.
+ * This calls the super exception to print the message.</p>
  * @author K3
  *
  */

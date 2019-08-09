@@ -2,7 +2,7 @@ package Exceptions;
 
 
 /**
- * This Custom Exception Class Handles All the Grid Bound Exceptions 
+ * <p>This Custom Exception Class Handles All the Grid Bound Exceptions </p>
  * @author K3
  *
  */
